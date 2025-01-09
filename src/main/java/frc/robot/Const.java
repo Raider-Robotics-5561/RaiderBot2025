@@ -16,16 +16,21 @@ public final class Const {
     // TODO Lets Double Check everything in here
    public static CANBus CANivore = new CANBus("Drive");
 //Front Left SensortoWheelRotation = 6.53;
-   public static double FLSensorToWheelInch = 0.5199;
+   public static double FLSensorToWheelInch = 0.519;
+   public static double FLSensorInchToMeter = 0.013;
 
 //Front RightSensorToWheelRotation= 6.572
   public static double FRSensorToWheelInch = 0.524;
+  public static double FRSensorInchToMeter = 0.013;
 
 //Back Right SensorToRotation = 6.630
   public static double BRSensorToWheelInch = 0.529;
+  public static double BRSensorInchToMeter = 0.013;
 
 // Back Left SensorToRotation = 6.619
 public static double BLSensorToWheelInch = 0.528;
+public static double BLSensorInchToMeter = 0.013;
+
     public static final class Swerve {
       
       //Our Serve Module Offsets
