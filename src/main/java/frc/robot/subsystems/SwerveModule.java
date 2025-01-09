@@ -1,12 +1,17 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.sensors.CANCoderJNI;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
-
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Const;
 import frc.robot.Const.DriveConstants;
 import frc.robot.Const.ModuleConstants;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -16,10 +21,11 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 public class SwerveModule {
 
-    private final SparkMax driveMotor;
+    private final TalonFX driveMotor;
+    private final TalonFXConfiguration driveMotor_cfg; 
     private final SparkMax turningMotor;
 
-    private final RelativeEncoder driveEncoder;
+    //private final RelativeEncoder driveEncoder;
     private final RelativeEncoder turningEncoder;
 
     private final PIDController turningPidController;
@@ -40,13 +46,21 @@ public class SwerveModule {
 
         SteerCANcoder = new CANcoder(CANcoderId);
 
-        driveMotor = new SparkMax(driveMotorId, MotorType.kBrushless);
+        driveMotor_cfg = new TalonFXConfiguration();
+        driveMotor_cfg.Feedback.FeedbackRemoteSensorID = CANcoderId;
+        driveMotor_cfg.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
+
+
+        // driveMotor = new SparkMax(driveMotorId, MotorType.kBrushless);
+        driveMotor = new TalonFX(driveMotorId, Const.CANivore);
+        driveMotor.getConfigurator().apply(driveMotor_cfg);
+
         turningMotor = new SparkMax(turningMotorId, MotorType.kBrushless);
 
         driveMotor.setInverted(driveMotorReversed);
         turningMotor.setInverted(turningMotorReversed);
 
-        driveEncoder = driveMotor.getEncoder();
+        
         turningEncoder = turningMotor.getEncoder();
 
         // NOTE: These mothods don't seem to exist any more, not sure what this will screw up
@@ -62,7 +76,8 @@ public class SwerveModule {
     }
 
     public double getDrivePosition() {
-        return driveEncoder.getPosition();
+        //return driveEncoder.getPosition();
+        return driveMotor.getPosition().getValueAsDouble();
     }
 
     public double getTurningPosition() {
@@ -70,7 +85,7 @@ public class SwerveModule {
     }
 
     public double getDriveVelocity() {
-        return driveEncoder.getVelocity();
+        return driveMotor.getVelocity().getValueAsDouble();
     }
 
     public double getTurningVelocity() {
@@ -79,7 +94,7 @@ public class SwerveModule {
 
     public SwerveModulePosition getPosition() {
     return new SwerveModulePosition(
-        driveEncoder.getPosition(), new Rotation2d(turningEncoder.getPosition()));
+        driveMotor.getPosition().getValueAsDouble(), new Rotation2d(turningEncoder.getPosition()));
     }
 
     public double getAbsoluteEncoderRad() {
@@ -93,7 +108,7 @@ public class SwerveModule {
     }
 
     public void resetEncoders() {
-        driveEncoder.setPosition(0);
+        driveMotor.setPosition(0);
         turningEncoder.setPosition(getAbsoluteEncoderRad());
     }
 

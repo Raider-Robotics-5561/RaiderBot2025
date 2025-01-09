@@ -1,5 +1,8 @@
 package frc.robot;
 
+import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.CANBus.CANBusStatus;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
@@ -11,7 +14,14 @@ import edu.wpi.first.math.util.Units;
 
 public final class Const {
     // TODO Lets Double Check everything in here
+   public static CANBus CANivore = new CANBus("Drive");
+//    Front Left SensortoWheelRotation = 6.53;
+//    Front Left SensorToWheelInch = 0.5199
+//    Front Right SensorToWheelInch 
+//     Front RightSensorToWheelRotation= 6.572
+//  Back Right SensorToRotation = 6.630
 
+// Back Left SensorToRotation = 6.619
     public static final class Swerve {
       
       //Our Serve Module Offsets
@@ -111,6 +121,10 @@ public final class Const {
         public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 3;
         public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 3;
     }
+
+    
+
+  
 
     public static final class AutoConstants {
         public static final double kMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 4;
