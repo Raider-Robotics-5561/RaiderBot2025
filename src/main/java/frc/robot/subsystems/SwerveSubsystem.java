@@ -30,11 +30,9 @@ import edu.wpi.first.networktables.StructArrayPublisher;
  * Basic simulation of a swerve subsystem with the methods needed by PathPlanner
  */
 public class SwerveSubsystem extends SubsystemBase {
-    private SimSwerveModule[] modules;
+    private SwerveModule[] modules;
     private SwerveDriveKinematics kinematics;
     private SwerveDriveOdometry odometry;
-  
-    private SimGyro gyro2;
     
     private Field2d field = new Field2d();
     
@@ -42,13 +40,6 @@ public class SwerveSubsystem extends SubsystemBase {
     StructArrayPublisher<SwerveModuleState> publisher = NetworkTableInstance.getDefault().getStructArrayTopic("MyStates", SwerveModuleState.struct).publish();
     
     public SwerveSubsystem() {
-      gyro2 = new SimGyro();
-      modules = new SimSwerveModule[]{
-        new SimSwerveModule(),
-        new SimSwerveModule(),
-        new SimSwerveModule(),
-        new SimSwerveModule()
-      };
       kinematics = new SwerveDriveKinematics(
         Const.Swerve.flModuleOffset, 
         Const.Swerve.frModuleOffset, 
@@ -167,8 +158,6 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
 
-        gyro2.updateRotation(getSpeeds().omegaRadiansPerSecond);
-
         odometry.update(gyro.getRotation2d(), getPositions());
     
         field.setRobotPose(getPose());
@@ -223,52 +212,5 @@ public class SwerveSubsystem extends SubsystemBase {
         positions[i] = modules[i].getPosition();
       }
       return positions;
-    }
-
-    class SimSwerveModule {
-        private SwerveModulePosition currentPosition = new SwerveModulePosition();
-        private SwerveModuleState currentState = new SwerveModuleState();
-    
-        public SwerveModulePosition getPosition() {
-          return currentPosition;
-        }
-
-    public SwerveModuleState getState() {
-        return currentState;
-      }
-  
-      public void setTargetState(SwerveModuleState targetState) {
-        // Optimize the state
-        currentState = SwerveModuleState.optimize(targetState, currentState.angle);
-  
-        currentPosition = new SwerveModulePosition(currentPosition.distanceMeters + (currentState.speedMetersPerSecond * 0.02), currentState.angle);
-      }
-
-    public void stopModules() {
-        frontLeft.stop();
-        frontRight.stop();
-        backLeft.stop();
-        backRight.stop();
-    }
-
-    public void setModuleStates(SwerveModuleState[] desiredStates) {
-        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
-        
-        frontLeft.setDesiredState(desiredStates[0]);
-        frontRight.setDesiredState(desiredStates[1]);
-        backLeft.setDesiredState(desiredStates[2]);
-        backRight.setDesiredState(desiredStates[3]);
-    }
-    }
-    class SimGyro {
-        private Rotation2d currentRotation = new Rotation2d();
-    
-        public Rotation2d getRotation2d() {
-          return currentRotation;
-        }
-    
-        public void updateRotation(double angularVelRps){
-          currentRotation = currentRotation.plus(new Rotation2d(angularVelRps * 0.02));
-        }
     }
 }

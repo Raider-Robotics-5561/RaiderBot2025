@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.sensors.CANCoderJNI;
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -60,7 +58,6 @@ public class SwerveModule {
         driveMotor.setInverted(driveMotorReversed);
         turningMotor.setInverted(turningMotorReversed);
 
-        
         turningEncoder = turningMotor.getEncoder();
 
         // NOTE: These mothods don't seem to exist any more, not sure what this will screw up
@@ -74,10 +71,12 @@ public class SwerveModule {
 
         resetEncoders();
     }
-public double sensorRotationToMeters(double sensorvalue){
-    // 6.5765;
-    return sensorvalue / 51.9;
-}
+
+    public double sensorRotationToMeters(double sensorvalue){
+        // 6.5765;
+        return sensorvalue / 51.9;
+    }
+    
     public double getDrivePosition() {
         //return driveEncoder.getPosition();
         return driveMotor.getPosition().getValueAsDouble() / 51.9;
@@ -113,6 +112,10 @@ public double sensorRotationToMeters(double sensorvalue){
     public void resetEncoders() {
         driveMotor.setPosition(0);
         turningEncoder.setPosition(getAbsoluteEncoderRad());
+    }
+
+    public SwerveModuleState getState() {
+        return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getTurningPosition()));
     }
 
     public void setDesiredState(SwerveModuleState state) {
