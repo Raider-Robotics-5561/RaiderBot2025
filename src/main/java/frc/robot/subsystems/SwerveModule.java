@@ -74,10 +74,13 @@ public class SwerveModule {
 
         resetEncoders();
     }
-
+public double sensorRotationToMeters(double sensorvalue){
+    // 6.5765;
+    return sensorvalue / 51.9;
+}
     public double getDrivePosition() {
         //return driveEncoder.getPosition();
-        return driveMotor.getPosition().getValueAsDouble();
+        return driveMotor.getPosition().getValueAsDouble() / 51.9;
     }
 
     public double getTurningPosition() {
