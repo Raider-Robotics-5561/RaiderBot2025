@@ -15,22 +15,30 @@ import edu.wpi.first.math.util.Units;
 public final class Const {
     // TODO Lets Double Check everything in here
    public static CANBus CANivore = new CANBus("Drive");
-//Front Left SensortoWheelRotation = 6.53;
-   public static double FLSensorToWheelInch = 0.519;
-   public static double FLSensorInchToMeter = 0.013;
+  //  NOTE I dont think we need this but I will leave it here for now.
+// //Front Left SensortoWheelRotation = 6.53;
+//    public static double FLSensorToWheelInch = 0.519;
+//    public static double FLSensorInchToMeter = 0.013;
 
-//Front RightSensorToWheelRotation= 6.572
-  public static double FRSensorToWheelInch = 0.524;
-  public static double FRSensorInchToMeter = 0.013;
+// //Front RightSensorToWheelRotation= 6.572
+//   public static double FRSensorToWheelInch = 0.524;
+//   public static double FRSensorInchToMeter = 0.013;
 
-//Back Right SensorToRotation = 6.630
-  public static double BRSensorToWheelInch = 0.529;
-  public static double BRSensorInchToMeter = 0.013;
+// //Back Right SensorToRotation = 6.630
+//   public static double BRSensorToWheelInch = 0.529;
+//   public static double BRSensorInchToMeter = 0.013;
 
-// Back Left SensorToRotation = 6.619
-public static double BLSensorToWheelInch = 0.528;
-public static double BLSensorInchToMeter = 0.013;
+// // Back Left SensorToRotation = 6.619
+// public static double BLSensorToWheelInch = 0.528;
+// public static double BLSensorInchToMeter = 0.013;
+// ENDNOTE
 
+// TODO Add all CAN IDs here.
+public static final class CANIDs {
+  public static final int UnderbellyIntakeID = 13;
+  public static final int UnderbellyIntakeAssistID = 24;
+  
+}
     public static final class Swerve {
       
       //Our Serve Module Offsets
@@ -47,7 +55,7 @@ public static double BLSensorInchToMeter = 0.013;
     public static final class PathPlannerConfig {
       // NOTE: Check what order are we feeding our last param 
       // TODO: Update params
-      public static final RobotConfig robotconfig = new RobotConfig(0, 0, null, null);
+     // public static final RobotConfig robotconfig = new RobotConfig(0, 0, null, null);
       
       //Our PIDS to use for path Following
       // NOTE: Will need to be changed
@@ -92,9 +100,9 @@ public static double BLSensorInchToMeter = 0.013;
         public static final int kFrontRightDriveMotorPort = 2;
         public static final int kBackRightDriveMotorPort = 6;
 
-        public static final int kFrontLeftTurningMotorPort = 4;
+        public static final int kFrontLeftTurningMotorPort = 1;
         public static final int kBackLeftTurningMotorPort = 7;
-        public static final int kFrontRightTurningMotorPort = 23;
+        public static final int kFrontRightTurningMotorPort = 4;
         public static final int kBackRightTurningMotorPort = 5;
 
         public static final boolean kFrontLeftTurningEncoderReversed = true;

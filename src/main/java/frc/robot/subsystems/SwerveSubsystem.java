@@ -30,7 +30,7 @@ import edu.wpi.first.networktables.StructArrayPublisher;
  * Basic simulation of a swerve subsystem with the methods needed by PathPlanner
  */
 public class SwerveSubsystem extends SubsystemBase {
-    private SwerveModule[] modules;
+    // private SwerveModule[] modules = { frontLeft, frontRight, backLeft, backRight };
     private SwerveDriveKinematics kinematics;
     private SwerveDriveOdometry odometry;
     
@@ -49,26 +49,26 @@ public class SwerveSubsystem extends SubsystemBase {
       odometry = new SwerveDriveOdometry(kinematics, gyro.getRotation2d(), getPositions());
   
       // Configure AutoBuilder
-      AutoBuilder.configure(
-        this::getPose, 
-        this::resetPose, 
-        this::getSpeeds, 
-        this::driveRobotRelative, // TODO: Check our order on this too
-        Const.PathPlannerConfig.pathFollowerConfig,
-        Const.PathPlannerConfig.robotconfig,
-        () -> {
-            // Boolean supplier that controls when the path will be mirrored for the red alliance
-            // This will flip the path being followed to the red side of the field.
-            // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+      // AutoBuilder.configure(
+      //   this::getPose, 
+      //   this::resetPose, 
+      //   this::getSpeeds, 
+      //   this::driveRobotRelative, // TODO: Check our order on this too
+      //   Const.PathPlannerConfig.pathFollowerConfig,
+      //   Const.PathPlannerConfig.robotconfig,
+      //   () -> {
+      //       // Boolean supplier that controls when the path will be mirrored for the red alliance
+      //       // This will flip the path being followed to the red side of the field.
+      //       // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
   
-            var alliance = DriverStation.getAlliance();
-            if (alliance.isPresent()) {
-                return alliance.get() == DriverStation.Alliance.Red;
-            }
-            return false;
-        },
-        this
-      );
+      //       var alliance = DriverStation.getAlliance();
+      //       if (alliance.isPresent()) {
+      //           return alliance.get() == DriverStation.Alliance.Red;
+      //       }
+      //       return false;
+      //   },
+      //   this
+      // );
   
       // Set up custom logging to add the current path to a field 2d widget
       PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
@@ -86,7 +86,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
 
-    private final SwerveModule frontLeft = new SwerveModule(
+    public final SwerveModule frontLeft = new SwerveModule(
             DriveConstants.kFrontLeftDriveMotorPort,
             DriveConstants.kFrontLeftTurningMotorPort,
             DriveConstants.kFrontLeftDriveEncoderReversed,
@@ -122,6 +122,8 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kBackRightDriveAbsoluteEncoderOffsetRad,
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
 
+    private SwerveModule[] modules = { frontLeft, frontRight, backLeft, backRight };
+
     private SwerveModulePosition[] swerveModulePos = new SwerveModulePosition[] {
                                                     frontLeft.getPosition(),
                                                     frontRight.getPosition(),
@@ -155,8 +157,8 @@ public class SwerveSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         odometer.update(getRotation2d(), swerveModulePos);
-        SmartDashboard.putNumber("Robot Heading", getHeading());
-        SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
+        //SmartDashboard.putNumber("Robot Heading", getHeading());
+        //SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
 
         odometry.update(gyro.getRotation2d(), getPositions());
     

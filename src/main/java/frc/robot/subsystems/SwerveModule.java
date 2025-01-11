@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -19,7 +20,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 public class SwerveModule {
 
-    private final TalonFX driveMotor;
+    public final TalonFX driveMotor;
     private final TalonFXConfiguration driveMotor_cfg; 
     private final SparkMax turningMotor;
 
@@ -30,6 +31,7 @@ public class SwerveModule {
 
     //private final AnalogInput absoluteEncoder;
     private final CANcoder SteerCANcoder;
+    private final CANcoder DriveCANcoder;
     private final boolean absoluteEncoderReversed;
     private final double absoluteEncoderOffsetRad;
 
@@ -41,18 +43,29 @@ public class SwerveModule {
         
         //Switch over to absolute encoder from analog input to CANCoder 
         //absoluteEncoder = new AnalogInput(absoluteEncoderId);
-
+        driveMotor = new TalonFX(driveMotorId, Const.CANivore);
         SteerCANcoder = new CANcoder(CANcoderId);
+        DriveCANcoder = new CANcoder(driveMotorId);
 
         driveMotor_cfg = new TalonFXConfiguration();
-        driveMotor_cfg.Feedback.FeedbackRemoteSensorID = CANcoderId;
+        // driveMotor_cfg.Feedback.FeedbackRemoteSensorID = driveMotorId;
+        var slot0Configs = driveMotor_cfg.Slot0;
+        slot0Configs.kS = 0.05; // Add 0.05 V output to overcome static friction
+        slot0Configs.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
+        slot0Configs.kP = 0.11; // An error of 1 rps results in 0.11 V output
+        slot0Configs.kI = 0; // no output for integrated error
+        slot0Configs.kD = 0; // no output for error derivative
+
+        driveMotor_cfg.TorqueCurrent.PeakForwardTorqueCurrent = 40;
+        driveMotor_cfg.TorqueCurrent.PeakReverseTorqueCurrent = -40;
+
+        driveMotor_cfg.Voltage.PeakForwardVoltage = 8;
+        driveMotor_cfg.Voltage.PeakReverseVoltage = -8;
         driveMotor_cfg.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
-
-
+        driveMotor_cfg.Feedback.withFusedCANcoder(DriveCANcoder);
+        
         // driveMotor = new SparkMax(driveMotorId, MotorType.kBrushless);
-        driveMotor = new TalonFX(driveMotorId, Const.CANivore);
         driveMotor.getConfigurator().apply(driveMotor_cfg);
-
         turningMotor = new SparkMax(turningMotorId, MotorType.kBrushless);
 
         driveMotor.setInverted(driveMotorReversed);
@@ -79,6 +92,7 @@ public class SwerveModule {
     
     public double getDrivePosition() {
         //return driveEncoder.getPosition();
+        
         return driveMotor.getPosition().getValueAsDouble() / 51.9;
     }
 
@@ -87,7 +101,9 @@ public class SwerveModule {
     }
 
     public double getDriveVelocity() {
-        return driveMotor.getVelocity().getValueAsDouble();
+      double RPM =  driveMotor.getVelocity().getValueAsDouble();
+        double Real_RPM = RPM * 60;
+       return Real_RPM;
     }
 
     public double getTurningVelocity() {
@@ -100,6 +116,7 @@ public class SwerveModule {
     }
 
     public double getAbsoluteEncoderRad() {
+
         double angle = SteerCANcoder.getPosition().getValueAsDouble();
         SmartDashboard.putString("Swerve[" + SteerCANcoder.getDeviceID() + "] angle", String.valueOf(angle));
         angle *= 2.0 * Math.PI;
@@ -123,10 +140,31 @@ public class SwerveModule {
             stop();
             return;
         }
+        SmartDashboard.putNumber("Swerve Raw Power[" + driveMotor.getDeviceID() + "]", driveMotor.get());
         state = SwerveModuleState.optimize(state, new Rotation2d(getTurningPosition()));
-        driveMotor.set(state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+        driveMotor.set(state.speedMetersPerSecond);
+        if (state.speedMetersPerSecond >= 0.1) {
+            driveMotor.set(0.1);
+        }
+        else{
+            driveMotor.set(state.speedMetersPerSecond);
+        }
+
+        if (state.speedMetersPerSecond <= -0.1) {
+            driveMotor.set(-0.1);
+        }
+        else{
+            driveMotor.set(state.speedMetersPerSecond);
+        }
+        // DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
         turningMotor.set(turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));
         SmartDashboard.putString("Swerve[" + SteerCANcoder.getDeviceID() + "] state", state.toString());
+        SmartDashboard.putNumber("SwerveDrive Drive Velocity[" + driveMotor.getDeviceID() + "] state", getDriveVelocity());
+        SmartDashboard.putNumber("SwerveDrive Drive Position[" + driveMotor.getDeviceID() + "] state", getDrivePosition());
+        SmartDashboard.putNumber("SwerveDrive Steer Velocity[" + turningMotor.getDeviceId() + "] state", getTurningVelocity());
+        SmartDashboard.putNumber("SwerveDrive Steer Position[" + turningMotor.getDeviceId() + "] state", getTurningPosition());
+        System.out.println("Drive Velocity: " + driveMotor.getDeviceID() + " | " + DriveCANcoder.getVelocity().getValueAsDouble());
+        
     }
 
     public void stop() {
