@@ -105,7 +105,7 @@ public class SwerveModule {
     public double getDriveVelocity() {
         driveMotor.getRotorVelocity().refresh();
       double RPM =  driveMotor.getRotorVelocity().getValueAsDouble();
-        double Real_RPM = RPM * 60;
+        double Real_RPM = RPM / 60;
        return Real_RPM;
     }
 
