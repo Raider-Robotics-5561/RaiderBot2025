@@ -8,6 +8,7 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Const;
@@ -19,7 +20,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 public class SwerveModule {
-
+    // TODO: Clean up this file and make it more readable.
     public final TalonFX driveMotor;
     private final TalonFXConfiguration driveMotor_cfg; 
     private final SparkMax turningMotor;
@@ -31,9 +32,10 @@ public class SwerveModule {
 
     //private final AnalogInput absoluteEncoder;
     private final CANcoder SteerCANcoder;
-    private final CANcoder DriveCANcoder;
+    // private final CANcoder DriveCANcoder;
     private final boolean absoluteEncoderReversed;
     private final double absoluteEncoderOffsetRad;
+    // public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM, maxVel, minVel, maxAcc, allowedErr; - For Neo if we decide to use revs PIDcontroller
 
     public SwerveModule(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed,
             int CANcoderId, double absoluteEncoderOffset, boolean absoluteEncoderReversed) {
@@ -45,7 +47,9 @@ public class SwerveModule {
         //absoluteEncoder = new AnalogInput(absoluteEncoderId);
         driveMotor = new TalonFX(driveMotorId, Const.CANivore);
         SteerCANcoder = new CANcoder(CANcoderId);
-        DriveCANcoder = new CANcoder(driveMotorId);
+        // DriveCANcoder = new CANcoder(driveMotorId);
+
+        // SECTION: TALON FX CONFIGURATION.
 
         driveMotor_cfg = new TalonFXConfiguration();
         // driveMotor_cfg.Feedback.FeedbackRemoteSensorID = driveMotorId;
@@ -61,11 +65,9 @@ public class SwerveModule {
 
         driveMotor_cfg.Voltage.PeakForwardVoltage = 8;
         driveMotor_cfg.Voltage.PeakReverseVoltage = -8;
-        // driveMotor_cfg.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
-        // driveMotor_cfg.Feedback.withRemoteCANcoder(DriveCANcoder);
-        
-        // driveMotor = new SparkMax(driveMotorId, MotorType.kBrushless);
         driveMotor.getConfigurator().apply(driveMotor_cfg);
+        // ENDSECTION
+
         turningMotor = new SparkMax(turningMotorId, MotorType.kBrushless);
 
         driveMotor.setInverted(driveMotorReversed);
@@ -81,10 +83,12 @@ public class SwerveModule {
         //turningEncoder.setPositionConversionFactor(ModuleConstants.kTurningEncoderRot2Rad);
         //turningEncoder.setVelocityConversionFactor(ModuleConstants.kTurningEncoderRPM2RadPerS ec);
 
-        turningPidController = new PIDController(ModuleConstants.kPTurning, 0, 0);
+        turningPidController = new PIDController(ModuleConstants.kPTurning, 0.0002, 0.001);
         turningPidController.enableContinuousInput(-Math.PI, Math.PI);
 
         resetEncoders();
+        
+
     }
 
     public double sensorRotationToMeters(double sensorvalue){
@@ -95,7 +99,7 @@ public class SwerveModule {
     public double getDrivePosition() {
         // return driveEncoder.getPosition();
         
-        return driveMotor.getRotorPosition().getValueAsDouble() / 51.9;
+        return driveMotor.getRotorPosition().refresh().getValueAsDouble() / 51.9;
     }
 
     public double getTurningPosition() {
@@ -103,6 +107,7 @@ public class SwerveModule {
     }
 
     public double getDriveVelocity() {
+        // NOTE: This gets the original value which is in RPS and converts it to RPM.
         driveMotor.getRotorVelocity().refresh();
       double RPM =  driveMotor.getRotorVelocity().getValueAsDouble();
         double Real_RPM = RPM / 60;
@@ -115,7 +120,7 @@ public class SwerveModule {
 
     public SwerveModulePosition getPosition() {
     return new SwerveModulePosition(
-        driveMotor.getRotorPosition().getValueAsDouble(), new Rotation2d(turningEncoder.getPosition()));
+        driveMotor.getRotorPosition().refresh().getValueAsDouble(), new Rotation2d(turningEncoder.getPosition()));
     }
 
     public double getAbsoluteEncoderRad() {
