@@ -75,7 +75,7 @@ public static final class CANIDs {
         public static final double kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter / 60;
         public static final double kTurningEncoderRPM2RadPerSec = kTurningEncoderRot2Rad / 60;
 
-        public static final double kPTurning = 0.001;
+        public static final double kPTurning = 0.004;
 
       }
     
@@ -163,9 +163,9 @@ public static final class CANIDs {
 
         public static final int kDriverYAxis = 1;
         public static final int kDriverXAxis = 0;
-        public static final int kDriverRotAxis = 3;
+        public static final int kDriverRotAxis = 5;
         public static final int kDriverFieldOrientedButtonIdx = 1;
-        public static final int kzeroGyroButtonIdx = 5; //REVIEW - Update this value
+        public static final int kzeroGyroButtonIdx = 8; //REVIEW - Update this value
 
         public static final double kDeadband = 0.05;
     }

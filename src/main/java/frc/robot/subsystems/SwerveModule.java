@@ -83,7 +83,7 @@ public class SwerveModule {
         //turningEncoder.setPositionConversionFactor(ModuleConstants.kTurningEncoderRot2Rad);
         //turningEncoder.setVelocityConversionFactor(ModuleConstants.kTurningEncoderRPM2RadPerS ec);
 
-        turningPidController = new PIDController(ModuleConstants.kPTurning, 0.0002, 0.001);
+        turningPidController = new PIDController(ModuleConstants.kPTurning, 0.00001, 0.004, 1);
         turningPidController.enableContinuousInput(-Math.PI, Math.PI);
 
         resetEncoders();
