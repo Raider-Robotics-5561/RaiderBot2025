@@ -55,18 +55,20 @@ public class SwerveJoystickCmd extends Command {
         SmartDashboard.putNumber("Cntrl xSpeed", xSpeed);
         SmartDashboard.putNumber("Cntrl ySpeed", ySpeed);
         SmartDashboard.putNumber("Cntrl turnSpeed", turningSpeed);
-        SmartDashboard.putNumber("poobah", swerveSubsystem.frontLeft.getDriveVelocity());
 
         // 2. Apply deadband
         xSpeed = Math.abs(xSpeed) > OIConstants.kDeadband ? xSpeed : 0.0;
         ySpeed = Math.abs(ySpeed) > OIConstants.kDeadband ? ySpeed : 0.0;
         turningSpeed = Math.abs(turningSpeed) > OIConstants.kDeadband ? turningSpeed : 0.0;
 
+        SmartDashboard.putNumber("Post2 turningSpeed:", ySpeed);
+
         // 3. Make the driving smoother
         xSpeed = xLimiter.calculate(xSpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
         ySpeed = yLimiter.calculate(ySpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
-        turningSpeed = turningLimiter.calculate(turningSpeed)
-                * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
+        turningSpeed = turningLimiter.calculate(turningSpeed) * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond; // NOTE Turning Calc starts here
+
+        SmartDashboard.putNumber("Post3 turningSpeed:", ySpeed);
 
         // 4. Construct desired chassis speeds
         ChassisSpeeds chassisSpeeds;
@@ -78,6 +80,8 @@ public class SwerveJoystickCmd extends Command {
             // Relative to robot
             chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
         }
+
+        SmartDashboard.putNumber("Post4 chassisSpeeds.omegaRadiansPerSecond:", chassisSpeeds.omegaRadiansPerSecond);
 
         // 5. Convert chassis speeds to individual module states
         SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
