@@ -155,6 +155,13 @@ public class SwerveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+      
+      SmartDashboard.putString("Swerve FL" + frontLeft.SteerCANcoder.getDeviceID() , String.valueOf(frontLeft.SteerCANcoder.getPosition().refresh().getValueAsDouble()));
+      SmartDashboard.putString("Swerve FR" + frontRight.SteerCANcoder.getDeviceID() , String.valueOf(frontRight.SteerCANcoder.getPosition().refresh().getValueAsDouble()));
+      SmartDashboard.putString("Swerve BL" + backLeft.SteerCANcoder.getDeviceID() , String.valueOf(backLeft.SteerCANcoder.getPosition().refresh().getValueAsDouble()));
+      SmartDashboard.putString("Swerve BR" + backRight.SteerCANcoder.getDeviceID() , String.valueOf(backRight.SteerCANcoder.getPosition().refresh().getValueAsDouble()));
+
+
         odometer.update(getRotation2d(), swerveModulePos);
         //SmartDashboard.putNumber("Robot Heading", getHeading());
         //SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());

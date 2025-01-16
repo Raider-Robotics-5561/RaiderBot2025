@@ -26,7 +26,7 @@ public class SwerveModule {
     private final PIDController turningPidController;
 
     //private final AnalogInput absoluteEncoder;
-    private final CANcoder SteerCANcoder;
+    public final CANcoder SteerCANcoder;
     // private final CANcoder DriveCANcoder;
     private final boolean absoluteEncoderReversed;
     private final double absoluteEncoderOffsetRad;
@@ -80,7 +80,7 @@ public class SwerveModule {
         //turningEncoder.setPositionConversionFactor(ModuleConstants.kTurningEncoderRot2Rad);
         //turningEncoder.setVelocityConversionFactor(ModuleConstants.kTurningEncoderRPM2RadPerS ec);
 
-        turningPidController = new PIDController(ModuleConstants.kPTurning, 0.00001, 0.004, 1);
+        turningPidController = new PIDController(ModuleConstants.kPTurning, 0.001, 0.004, 1);
         turningPidController.enableContinuousInput(-Math.PI, Math.PI);
 
         resetEncoders();
@@ -104,7 +104,8 @@ public class SwerveModule {
     }
 
     public double getTurningVelocity() {
-        return turningEncoder.getVelocity();
+        System.out.println("Turning Velocity: " + turningMotor.getDeviceId() + " | " + turningMotor.getEncoder().getVelocity());
+        return turningMotor.getEncoder().getVelocity();
     }
 
     public SwerveModulePosition getPosition() {
@@ -118,8 +119,7 @@ public class SwerveModule {
         angle *= 2.0 * Math.PI;
         angle -= absoluteEncoderOffsetRad;
         SmartDashboard.putString("Swerve[" + SteerCANcoder.getDeviceID() + "] angle Calced", String.valueOf(angle * (absoluteEncoderReversed ? -1.0 : 1.0)));
-        return angle * (absoluteEncoderReversed ? -1.0 : 1.0);
-        
+        return angle * (absoluteEncoderReversed ? -1.0 : 1.0);   
     }
 
     public void resetEncoders() {
@@ -129,6 +129,7 @@ public class SwerveModule {
 
     public SwerveModuleState getState() {
         return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getTurningPosition()));
+        
     }
 
     public void setDesiredState(SwerveModuleState state) {
@@ -153,13 +154,19 @@ public class SwerveModule {
             driveMotor.set(state.speedMetersPerSecond);
         }
 
-        turningMotor.set(turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));
+        System.out.println("State.ange.getRadians(): " + state.angle.getRadians());
+
+        double turningpidout = turningPidController.calculate(getTurningPosition(), state.angle.getRadians());
+
+        System.out.println("turningpidout:" + turningpidout);
+        turningMotor.set(turningpidout);
         SmartDashboard.putString("Swerve[" + SteerCANcoder.getDeviceID() + "] state", state.toString());
         SmartDashboard.putNumber("SwerveDrive Drive Velocity[" + driveMotor.getDeviceID() + "] state", driveMotor.getRotorVelocity().refresh().getValueAsDouble());
         SmartDashboard.putNumber("SwerveDrive Drive Position[" + driveMotor.getDeviceID() + "] state", driveMotor.getRotorPosition().refresh().getValueAsDouble());
         SmartDashboard.putNumber("SwerveDrive Steer Velocity[" + turningMotor.getDeviceId() + "] state", getTurningVelocity());
         SmartDashboard.putNumber("SwerveDrive Steer Position[" + turningMotor.getDeviceId() + "] state", getTurningPosition());
         System.out.println("Drive Velocity: " + driveMotor.getDeviceID() + " | " + driveMotor.getRotorVelocity().refresh().getValueAsDouble());
+        
         
     }
 
