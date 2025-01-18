@@ -7,6 +7,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Const;
 import frc.robot.Const.ModuleConstants;
@@ -17,10 +18,10 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 public class SwerveModule {
     // TODO: Clean up this file and make it more readable.
-    private final TalonFX driveMotor;
+    public final TalonFX driveMotor;
     private final TalonFXConfiguration driveMotor_cfg; 
 
-    private final SparkMax turningMotor;
+    public final SparkMax turningMotor;
     private final RelativeEncoder turningEncoder;
 
     private final PIDController turningPidController;
@@ -34,6 +35,8 @@ public class SwerveModule {
 
     public SwerveModule(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed,
             int CANcoderId, double absoluteEncoderOffset, boolean absoluteEncoderReversed) {
+
+        System.out.println("Swerve Module Made"+driveMotorId);
 
         this.absoluteEncoderOffsetRad = absoluteEncoderOffset;
         this.absoluteEncoderReversed = absoluteEncoderReversed;
@@ -63,6 +66,8 @@ public class SwerveModule {
         driveMotor_cfg.Voltage.PeakForwardVoltage = 8;
         driveMotor_cfg.Voltage.PeakReverseVoltage = -8;
         driveMotor.getConfigurator().apply(driveMotor_cfg);
+        
+        
 
         // ENDSECTION
 
@@ -95,7 +100,8 @@ public class SwerveModule {
     }
 
     public double getTurningPosition() {
-        return turningEncoder.getPosition();
+        double rad = turningEncoder.getPosition() * 2 * Math.PI;
+        return rad * Const.ModuleConstants.kTurningMotorGearRatio;
     }
 
     public double getDriveVelocity() {
@@ -104,7 +110,7 @@ public class SwerveModule {
     }
 
     public double getTurningVelocity() {
-        System.out.println("Turning Velocity: " + turningMotor.getDeviceId() + " | " + turningMotor.getEncoder().getVelocity());
+        //System.out.println("Turning Velocity: " + turningMotor.getDeviceId() + " | " + turningMotor.getEncoder().getVelocity());
         return turningMotor.getEncoder().getVelocity();
     }
 
@@ -114,7 +120,7 @@ public class SwerveModule {
     }
 
     public double getAbsoluteEncoderRad() {
-        double angle = SteerCANcoder.getPosition().getValueAsDouble();
+        double angle = SteerCANcoder.getAbsolutePosition().getValueAsDouble();
         SmartDashboard.putString("Swerve[" + SteerCANcoder.getDeviceID() + "] angle", String.valueOf(angle));
         angle *= 2.0 * Math.PI;
         angle -= absoluteEncoderOffsetRad;
@@ -123,8 +129,9 @@ public class SwerveModule {
     }
 
     public void resetEncoders() {
+        System.out.println("Resetting Encoders");
         driveMotor.setPosition(0);
-        turningEncoder.setPosition(getAbsoluteEncoderRad());
+        turningEncoder.setPosition(getAbsoluteEncoderRad() / Const.ModuleConstants.kTurningMotorGearRatio);
     }
 
     public SwerveModuleState getState() {
@@ -154,18 +161,18 @@ public class SwerveModule {
             driveMotor.set(state.speedMetersPerSecond);
         }
 
-        System.out.println("State.ange.getRadians(): " + state.angle.getRadians());
+        //System.out.println("State.ange.getRadians(): " + state.angle.getRadians());
 
         double turningpidout = turningPidController.calculate(getTurningPosition(), state.angle.getRadians());
 
-        System.out.println("turningpidout:" + turningpidout);
+        //System.out.println("turningpidout:" + turningpidout);
         turningMotor.set(turningpidout);
         SmartDashboard.putString("Swerve[" + SteerCANcoder.getDeviceID() + "] state", state.toString());
         SmartDashboard.putNumber("SwerveDrive Drive Velocity[" + driveMotor.getDeviceID() + "] state", driveMotor.getRotorVelocity().refresh().getValueAsDouble());
         SmartDashboard.putNumber("SwerveDrive Drive Position[" + driveMotor.getDeviceID() + "] state", driveMotor.getRotorPosition().refresh().getValueAsDouble());
         SmartDashboard.putNumber("SwerveDrive Steer Velocity[" + turningMotor.getDeviceId() + "] state", getTurningVelocity());
         SmartDashboard.putNumber("SwerveDrive Steer Position[" + turningMotor.getDeviceId() + "] state", getTurningPosition());
-        System.out.println("Drive Velocity: " + driveMotor.getDeviceID() + " | " + driveMotor.getRotorVelocity().refresh().getValueAsDouble());
+        //System.out.println("Drive Velocity: " + driveMotor.getDeviceID() + " | " + driveMotor.getRotorVelocity().refresh().getValueAsDouble());
         
         
     }

@@ -36,8 +36,10 @@ public class SwerveSubsystem extends SubsystemBase {
     private Field2d field = new Field2d();
     
     //This is used to publish swerve state data to adantage scope
-    StructArrayPublisher<SwerveModuleState> publisher = NetworkTableInstance.getDefault().getStructArrayTopic("MyStates", SwerveModuleState.struct).publish();
-    
+    StructArrayPublisher<SwerveModuleState> publisher_swrv_desired = NetworkTableInstance.getDefault().getStructArrayTopic("Swerve Desired", SwerveModuleState.struct).publish();
+    StructArrayPublisher<SwerveModuleState> publisher_swrv_actual = NetworkTableInstance.getDefault().getStructArrayTopic("Swerve Actual", SwerveModuleState.struct).publish();
+
+
     public SwerveSubsystem() {
       kinematics = new SwerveDriveKinematics(
         Const.Swerve.flModuleOffset, 
@@ -124,7 +126,7 @@ public class SwerveSubsystem extends SubsystemBase {
     private SwerveModule[] modules = { frontLeft, frontRight, backLeft, backRight };
 
     private SwerveModulePosition[] swerveModulePos = new SwerveModulePosition[] {
-                                                    frontLeft.getPosition(),
+                                                      frontLeft.getPosition(),
                                                     frontRight.getPosition(),
                                                     backLeft.getPosition(),
                                                     backRight.getPosition()
@@ -136,8 +138,8 @@ public class SwerveSubsystem extends SubsystemBase {
                                                                         swerveModulePos);
 
 
-
     public void zeroHeading() {
+      System.out.println("Resetting Heading");
         gyro.reset();
     }
 
@@ -150,17 +152,27 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void resetOdometry(Pose2d pose) {
+      System.out.println("Resetting ODometry");
         odometer.resetPosition(getRotation2d(), swerveModulePos, pose);
     }
 
     @Override
     public void periodic() {
       
-      SmartDashboard.putString("Swerve FL" + frontLeft.SteerCANcoder.getDeviceID() , String.valueOf(frontLeft.SteerCANcoder.getPosition().refresh().getValueAsDouble()));
-      SmartDashboard.putString("Swerve FR" + frontRight.SteerCANcoder.getDeviceID() , String.valueOf(frontRight.SteerCANcoder.getPosition().refresh().getValueAsDouble()));
-      SmartDashboard.putString("Swerve BL" + backLeft.SteerCANcoder.getDeviceID() , String.valueOf(backLeft.SteerCANcoder.getPosition().refresh().getValueAsDouble()));
-      SmartDashboard.putString("Swerve BR" + backRight.SteerCANcoder.getDeviceID() , String.valueOf(backRight.SteerCANcoder.getPosition().refresh().getValueAsDouble()));
+      SmartDashboard.putString("Swerve FL" + frontLeft.turningMotor.getDeviceId() , String.valueOf(frontLeft.turningMotor.getEncoder().getPosition()));
+      SmartDashboard.putString("Swerve FR" + frontRight.turningMotor.getDeviceId() , String.valueOf(frontRight.turningMotor.getEncoder().getPosition()));
+      SmartDashboard.putString("Swerve BL" + backLeft.turningMotor.getDeviceId() , String.valueOf(backLeft.turningMotor.getEncoder().getPosition()));
+      SmartDashboard.putString("Swerve BR" + backRight.turningMotor.getDeviceId() , String.valueOf(backRight.turningMotor.getEncoder().getPosition()));
 
+      SmartDashboard.putString("Swerve FL abs" + frontLeft.SteerCANcoder.getDeviceID() , String.valueOf(frontLeft.getAbsoluteEncoderRad()));
+      SmartDashboard.putString("Swerve FR abs" + frontRight.SteerCANcoder.getDeviceID() , String.valueOf(frontRight.getAbsoluteEncoderRad()));
+      SmartDashboard.putString("Swerve BL abs" + backLeft.SteerCANcoder.getDeviceID() , String.valueOf(backLeft.getAbsoluteEncoderRad()));
+      SmartDashboard.putString("Swerve BR abs" + backRight.SteerCANcoder.getDeviceID() , String.valueOf(backRight.getAbsoluteEncoderRad()));
+
+      SmartDashboard.putNumber("Swerve FL Position[" + frontLeft.driveMotor.getDeviceID() + "] state", frontLeft.driveMotor.getRotorPosition().refresh().getValueAsDouble());
+      SmartDashboard.putNumber("Swerve FR Position[" + frontRight.driveMotor.getDeviceID() + "] state", frontRight.driveMotor.getRotorPosition().refresh().getValueAsDouble());
+      SmartDashboard.putNumber("Swerve BL Position[" + backLeft.driveMotor.getDeviceID() + "] state", backLeft.driveMotor.getRotorPosition().refresh().getValueAsDouble());
+      SmartDashboard.putNumber("Swerve BR Position[" + backRight.driveMotor.getDeviceID() + "] state", backRight.driveMotor.getRotorPosition().refresh().getValueAsDouble());
 
         odometer.update(getRotation2d(), swerveModulePos);
         //SmartDashboard.putNumber("Robot Heading", getHeading());
@@ -170,6 +182,8 @@ public class SwerveSubsystem extends SubsystemBase {
     
         field.setRobotPose(getPose());
 
+        publisher_swrv_actual.set(getModuleStates());
+
     }
 
     public Pose2d getPose() {
@@ -177,6 +191,7 @@ public class SwerveSubsystem extends SubsystemBase {
       }
       
     public void resetPose(Pose2d pose) {
+        System.out.println("Resetting Pose");
         odometry.resetPosition(gyro.getRotation2d(), getPositions(), pose);
     }
 
@@ -203,7 +218,7 @@ public class SwerveSubsystem extends SubsystemBase {
       backLeft.setDesiredState(targetStates[2]);
       backRight.setDesiredState(targetStates[3]);
 
-      publisher.set(targetStates);
+      publisher_swrv_desired.set(targetStates);
     }
 
     public SwerveModuleState[] getModuleStates() {
