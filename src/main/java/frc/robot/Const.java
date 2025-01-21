@@ -71,12 +71,13 @@ public final class Const {
     public static final double kWheelDiameterMeters = Units.inchesToMeters(4);
     public static final double kDriveMotorGearRatio = 1 / 6.12;
     public static final double kTurningMotorGearRatio = 1 / 21.43;
+    public static final double kSwerveSteerAbsToRel = 2.0 * Math.PI / kTurningMotorGearRatio;
     public static final double kDriveEncoderRot2Meter = kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters;
     public static final double kTurningEncoderRot2Rad = kTurningMotorGearRatio * 2 * Math.PI;
     public static final double kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter / 60;
     public static final double kTurningEncoderRPM2RadPerSec = kTurningEncoderRot2Rad / 60;
 
-        public static final double kPTurning = 0.1;
+        public static final double kPTurning = 0.001;
 
   }
     
@@ -125,10 +126,10 @@ public final class Const {
     public static final boolean kFrontRightDriveAbsoluteEncoderReversed = false;  
     public static final boolean kBackRightDriveAbsoluteEncoderReversed = false;
 
-    public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = 0.7669;
-    public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = -1.966;
-    public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = 3.0219;
-    public static final double kBackRightDriveAbsoluteEncoderOffsetRad = 1.4051;
+    public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = 47.548; // 0.7669;
+    public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = -111.708; //-1.966;
+    public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = 174.02343; //3.0219;
+    public static final double kBackRightDriveAbsoluteEncoderOffsetRad =  80.1 ; //1.4051
 
     public static final double kPhysicalMaxSpeedMetersPerSecond = 5;
     public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;

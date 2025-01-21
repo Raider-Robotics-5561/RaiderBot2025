@@ -164,10 +164,15 @@ public class SwerveSubsystem extends SubsystemBase {
       SmartDashboard.putString("Swerve BL" + backLeft.turningMotor.getDeviceId() , String.valueOf(backLeft.turningMotor.getEncoder().getPosition()));
       SmartDashboard.putString("Swerve BR" + backRight.turningMotor.getDeviceId() , String.valueOf(backRight.turningMotor.getEncoder().getPosition()));
 
-      SmartDashboard.putString("Swerve FL abs" + frontLeft.SteerCANcoder.getDeviceID() , String.valueOf(frontLeft.getAbsoluteEncoderRad()));
-      SmartDashboard.putString("Swerve FR abs" + frontRight.SteerCANcoder.getDeviceID() , String.valueOf(frontRight.getAbsoluteEncoderRad()));
-      SmartDashboard.putString("Swerve BL abs" + backLeft.SteerCANcoder.getDeviceID() , String.valueOf(backLeft.getAbsoluteEncoderRad()));
-      SmartDashboard.putString("Swerve BR abs" + backRight.SteerCANcoder.getDeviceID() , String.valueOf(backRight.getAbsoluteEncoderRad()));
+      SmartDashboard.putString("Swerve FL rel" , String.valueOf(frontLeft.turningEncoder.getPosition()));
+      SmartDashboard.putString("Swerve FR rel", String.valueOf(frontRight.turningEncoder.getPosition()));
+      SmartDashboard.putString("Swerve BL rel", String.valueOf(backLeft.turningEncoder.getPosition()));
+      SmartDashboard.putString("Swerve BR rel", String.valueOf(backRight.turningEncoder.getPosition()));
+
+      SmartDashboard.putString("Swerve FL abs" + frontLeft.SteerCANcoder.getDeviceID() , String.valueOf(frontLeft.getAbsoluteEncoderDeg()));
+      SmartDashboard.putString("Swerve FR abs" + frontRight.SteerCANcoder.getDeviceID() , String.valueOf(frontRight.getAbsoluteEncoderDeg()));
+      SmartDashboard.putString("Swerve BL abs" + backLeft.SteerCANcoder.getDeviceID() , String.valueOf(backLeft.getAbsoluteEncoderDeg()));
+      SmartDashboard.putString("Swerve BR abs" + backRight.SteerCANcoder.getDeviceID() , String.valueOf(backRight.getAbsoluteEncoderDeg()));
 
       SmartDashboard.putNumber("Swerve FL Position[" + frontLeft.driveMotor.getDeviceID() + "] state", frontLeft.driveMotor.getRotorPosition().refresh().getValueAsDouble());
       SmartDashboard.putNumber("Swerve FR Position[" + frontRight.driveMotor.getDeviceID() + "] state", frontRight.driveMotor.getRotorPosition().refresh().getValueAsDouble());
@@ -212,13 +217,15 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void setStates(SwerveModuleState[] targetStates) {
       SwerveDriveKinematics.desaturateWheelSpeeds(targetStates, Const.Swerve.maxModuleSpeed);
+      
+      publisher_swrv_desired.set(targetStates);
 
       frontLeft.setDesiredState(targetStates[0]);
       frontRight.setDesiredState(targetStates[1]);
       backLeft.setDesiredState(targetStates[2]);
       backRight.setDesiredState(targetStates[3]);
 
-      publisher_swrv_desired.set(targetStates);
+      
     }
 
     public SwerveModuleState[] getModuleStates() {
