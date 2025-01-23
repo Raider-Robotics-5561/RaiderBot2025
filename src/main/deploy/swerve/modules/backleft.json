@@ -2,7 +2,7 @@
     "drive": {
       "type": "talonfx",
       "id": 8,
-      "canbus": "drive"
+      "canbus": "Drive"
     },
     "angle": {
       "type": "sparkmax_neo",
@@ -18,9 +18,9 @@
       "drive": false,
       "angle": false
     },
-    "absoluteEncoderOffset": 0,
+    "absoluteEncoderOffset": -111.708,
     "location": {
-      "front": 0,
-      "left": 0
+      "front": -10.375,
+      "left": 10.375
     }
   }
