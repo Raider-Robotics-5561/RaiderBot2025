@@ -1,10 +1,9 @@
 Raider Bot 2025
 
+Completed:
+    - YAGSL Swerve
 In Progress:
-    - Swerve with Kraken drive, Neo steer.
-    - PathPlanner Integration
+    -Elevator Subsytem.
 
 Need to do:
-    - Possible 2024 robot intake and shooter.
-    - Need to work on using YAGSL for swwerve.
     
