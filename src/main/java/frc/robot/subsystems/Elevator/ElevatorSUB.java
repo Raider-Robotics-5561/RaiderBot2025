@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
-public class ElevatorSubsystem extends SubsystemBase {
+public class ElevatorSUB extends SubsystemBase {
 
 	public enum State {
 		STOWED(0),
@@ -33,7 +33,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 	private final ElevatorBaseIO.ElevatorInputs inputs = new ElevatorBaseIO.ElevatorInputs();
 
-	public ElevatorSubsystem(ElevatorBaseIO io) {
+	public ElevatorSUB(ElevatorBaseIO io) {
 		this.io = io;
 	}
 

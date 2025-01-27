@@ -16,8 +16,8 @@ public class ElevatorRealIO implements ElevatorBaseIO {
 
 	public ElevatorRealIO() {
 
-		ElevatormotorLeft = new SparkMax(0, MotorType.kBrushless);
-		ElevatormotorRight = new SparkMax(0, MotorType.kBrushless);
+		ElevatormotorLeft = new SparkMax(10, MotorType.kBrushless);
+		ElevatormotorRight = new SparkMax(11, MotorType.kBrushless);
 
 		SparkMaxConfig globalConfig = new  SparkMaxConfig();
 		SparkMaxConfig ElevatorLeftConfig = new SparkMaxConfig();
