@@ -6,13 +6,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
 public class ElevatorSUB extends SubsystemBase {
-
+//TODO - Need to add the height in meters.
 	public enum State {
 		STOWED(0),
 		CORAL_STATION(0),
-		ALGAE_GROUND(0),
+		// ALGAE_GROUND(0),
 		ALGAE_PROCESSOR(0),
-		ALGAE_BARGE(0),
+		// ALGAE_BARGE(0),
 		L1_SCORING(0),
 		L2_SCORING(0),
 		L3_SCORING(0),
@@ -43,7 +43,7 @@ public class ElevatorSUB extends SubsystemBase {
 		// Update inputs
 		io.updateInputs(inputs);
 
-		// GetEncoderPOS();
+		
 
 		// Process inputs
 		Logger.processInputs("Elevator", inputs);

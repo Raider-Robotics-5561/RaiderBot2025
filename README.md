@@ -5,6 +5,9 @@ Completed:
     
 In Progress:
     -Elevator Subsytem.
+    -Gripper/Intake Subsytem.
 
 Need to do:
+    -LEDS
+    -Climber
     
