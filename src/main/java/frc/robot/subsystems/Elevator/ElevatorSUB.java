@@ -43,8 +43,12 @@ public class ElevatorSUB extends SubsystemBase {
 		// Update inputs
 		io.updateInputs(inputs);
 
+		// GetEncoderPOS();
+
 		// Process inputs
 		Logger.processInputs("Elevator", inputs);
+		// Gets the distance traveled
+		
 	}
 
 	public Command setState(State state) {
