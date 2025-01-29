@@ -18,7 +18,7 @@ import swervelib.math.Matter;
  * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
-public final class Constants
+public final class miscConstants
 {
 
   public static CANBus Drive = new CANBus("Drive");
@@ -34,13 +34,6 @@ public final class Constants
 //    public static final PIDConstants TRANSLATION_PID = new PIDConstants(0.7, 0, 0);
 //    public static final PIDConstants ANGLE_PID       = new PIDConstants(0.4, 0, 0.01);
 //  }
-
-  public static final class DrivebaseConstants
-  {
-
-    // Hold time on motor brakes when disabled
-    public static final double WHEEL_LOCK_TIME = 1; // seconds
-  }
 
   public static class OperatorConstants
   {
