@@ -5,7 +5,7 @@ public final class miscConstants
 
 
 
-
+    public static final int ThroughBoreEncoderDIOPort = 0; //TODO CHANGE ME
 
     // Joystick Deadband
     public static final double DEADBAND        = 0.1;

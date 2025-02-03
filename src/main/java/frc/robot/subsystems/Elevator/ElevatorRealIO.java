@@ -5,7 +5,10 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import frc.robot.miscConstants;
+
 // import edu.wpi.first.wpilibj.Encoder;
 // import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.SparkMax;
@@ -18,13 +21,18 @@ public class ElevatorRealIO implements ElevatorBaseIO {
 
 	private SparkMax ElevatormotorLeft;
 	private SparkMax ElevatormotorRight;
+	private DigitalInput ThroughBoreEncoderDIO;
+	private DutyCycleEncoder ThroughBoreEncoder;
 	public double ElevatorENCPOS;
+
 
 	public ElevatorRealIO() {
 
 		ElevatormotorLeft = new SparkMax(10, MotorType.kBrushless);
 		ElevatormotorRight = new SparkMax(11, MotorType.kBrushless);
 
+		ThroughBoreEncoderDIO = new DigitalInput(miscConstants.ThroughBoreEncoderDIOPort);
+		ThroughBoreEncoder = new DutyCycleEncoder(ThroughBoreEncoderDIO);
 
 		SparkMaxConfig globalConfig = new  SparkMaxConfig();
 		SparkMaxConfig ElevatorLeftConfig = new SparkMaxConfig();

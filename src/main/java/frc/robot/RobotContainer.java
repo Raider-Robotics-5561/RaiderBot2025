@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 // import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.miscConstants;
+import frc.robot.subsystems.Elevator.ElevatorRealIO;
+import frc.robot.subsystems.Elevator.ElevatorSUB;
 import frc.robot.subsystems.Swerve.SwerveSubsystem;
 // import edu.wpi.first.wpilibj.Joystick;
 // import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
@@ -34,6 +36,9 @@ public class RobotContainer
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve"));
+
+  private final ElevatorRealIO ElevatorIO = new ElevatorRealIO();
+  private final ElevatorSUB ElevatorSubsystem = new ElevatorSUB(ElevatorIO);
 
   /**
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
@@ -159,7 +164,7 @@ public class RobotContainer
               new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
                               );
       driverJoystick.button(8).whileTrue(Commands.none());
-      driverJoystick.button(7).whileTrue(Commands.none());
+      driverJoystick.button(7).onTrue(ElevatorSubsystem.setState(ElevatorSUB.State.STOWED));
       // driverJoystick.getThrottle(2).whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
       
       // driverXbox.button(8).onTrue((Commands.runOnce(drivebase::zeroGyro)));
