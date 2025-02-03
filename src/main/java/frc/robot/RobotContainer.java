@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 // import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.miscConstants.OperatorConstants;
+import frc.robot.miscConstants;
 import frc.robot.subsystems.Swerve.SwerveSubsystem;
 // import edu.wpi.first.wpilibj.Joystick;
 // import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
@@ -45,7 +45,7 @@ public class RobotContainer
                                                                 () -> driverJoystick.getRawAxis(1) * -1,
                                                                 () -> driverJoystick.getRawAxis(0) * -1)
                                                             .withControllerRotationAxis(driverJoystick::getX)
-                                                            .deadband(OperatorConstants.DEADBAND)
+                                                            .deadband(miscConstants.DEADBAND)
                                                             .scaleTranslation(0.8)
                                                             .allianceRelativeControl(true);
 
@@ -71,7 +71,7 @@ public class RobotContainer
                                                                         () -> -driverJoystick.getRawAxis(0))
                                                                     .withControllerRotationAxis(() -> driverJoystick.getRawAxis(
                                                                         2))
-                                                                    .deadband(OperatorConstants.DEADBAND)
+                                                                    .deadband(miscConstants.DEADBAND)
                                                                     .scaleTranslation(0.8)
                                                                     .allianceRelativeControl(true);
   // Derive the heading axis with math!
