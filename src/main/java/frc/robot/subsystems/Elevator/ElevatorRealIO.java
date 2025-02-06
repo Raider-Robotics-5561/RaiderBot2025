@@ -15,7 +15,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 
-//TODO - ADD THROUGH BORE ENCODER
+//REVIEW - ADD THROUGH BORE ENCODER
 
 public class ElevatorRealIO implements ElevatorBaseIO {
 

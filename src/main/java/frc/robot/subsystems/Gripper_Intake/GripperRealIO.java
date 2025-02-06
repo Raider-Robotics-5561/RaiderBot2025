@@ -1,8 +1,14 @@
 package frc.robot.subsystems.Gripper_Intake;
 
+import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.ClosedLoopConfig;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.SparkMaxConfig;
+
+// import edu.wpi.first.units.measure.Angle;
 import frc.robot.subsystems.misc.IRBeam;
 
 public class GripperRealIO implements GripperBaseIO {
@@ -17,6 +23,32 @@ public class GripperRealIO implements GripperBaseIO {
 		AngleGripper = new SparkMax(12, MotorType.kBrushless);
 		wheelMotor = new SparkMax(13, MotorType.kBrushless);
 		toggleSensor = new IRBeam(0);
+
+		SparkMaxConfig wheelSparkMaxConfig = new SparkMaxConfig();
+		wheelSparkMaxConfig.smartCurrentLimit(55);
+		wheelMotor.configure(
+				wheelSparkMaxConfig,
+				SparkBase.ResetMode.kNoResetSafeParameters,
+				SparkBase.PersistMode.kPersistParameters);
+
+		SparkMaxConfig gripperAngleSparkMaxConfig = new SparkMaxConfig();
+		gripperAngleSparkMaxConfig.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
+		gripperAngleSparkMaxConfig.inverted(true);
+
+		ClosedLoopConfig closedLoopConfig = new ClosedLoopConfig();
+
+		closedLoopConfig.p(0.013);
+
+		closedLoopConfig.i(0);
+		closedLoopConfig.d(0);
+
+		gripperAngleSparkMaxConfig.apply(closedLoopConfig);
+
+		AngleGripper.configure(
+			gripperAngleSparkMaxConfig,
+			SparkBase.ResetMode.kNoResetSafeParameters,
+			SparkBase.PersistMode.kPersistParameters);
+
 	}
 
 	@Override
