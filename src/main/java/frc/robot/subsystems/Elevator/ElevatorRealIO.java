@@ -72,7 +72,7 @@ public class ElevatorRealIO implements ElevatorBaseIO {
 
 	@Override
 	public void updateInputs(ElevatorInputs inputs) {
-		inputs.heightM = ElevatormotorLeft.getEncoder().getPosition();
+		inputs.heightIN = ElevatormotorLeft.getEncoder().getPosition();
 		inputs.velocityMPS = ElevatormotorLeft.getEncoder().getVelocity();
 		inputs.ElevatormotorLeftCurrent = ElevatormotorLeft.getOutputCurrent();
 		inputs.ElevatormotorRightCurrent = ElevatormotorRight.getOutputCurrent();
@@ -81,9 +81,9 @@ public class ElevatorRealIO implements ElevatorBaseIO {
 	}
 
 	@Override
-	public void setPositionM(double positionM) {
+	public void setPositionIN(double positionIN) {
 		// positionM = ElevatormotorLeft.getAbsoluteEncoder().getPosition();
-		ElevatormotorLeft.set(positionM);
+		ElevatormotorLeft.set(positionIN);
 		
 	}
 }

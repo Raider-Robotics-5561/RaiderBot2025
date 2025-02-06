@@ -10,22 +10,25 @@ public class ElevatorSUB extends SubsystemBase {
 	public enum State {
 		STOWED(0),
 		CORAL_STATION(0),
+		//NOTE - No Ground intake planned.
 		// ALGAE_GROUND(0),
 		ALGAE_PROCESSOR(0),
+		//NOTE - Barge may also be affected by the elevator height.
 		// ALGAE_BARGE(0),
 		L1_SCORING(0),
 		L2_SCORING(0),
 		L3_SCORING(0),
+		//NOTE - L4 might not be able to be scored for Algae
 		L4_SCORING(0);
 
-		private final double heightM;
+		private final double heightIN;
 
-		State(double heightM) {
-			this.heightM = heightM;
+		State(double heightIN) {
+			this.heightIN = heightIN;
 		}
 
-		public double getHeightM() {
-			return heightM;
+		public double getHeightIN() {
+			return heightIN;
 		}
 	}
 
@@ -54,7 +57,7 @@ public class ElevatorSUB extends SubsystemBase {
 	public Command setState(State state) {
 		return new InstantCommand(
 				() -> {
-					io.setPositionM(state.getHeightM());
+					io.setPositionIN(state.getHeightIN());
 				});
 	}
 }
