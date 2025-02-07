@@ -28,8 +28,8 @@ public class ElevatorRealIO implements ElevatorBaseIO {
 
 	public ElevatorRealIO() {
 
-		ElevatormotorLeft = new SparkMax(10, MotorType.kBrushless);
-		ElevatormotorRight = new SparkMax(11, MotorType.kBrushless);
+		// ElevatormotorLeft = new SparkMax(30, MotorType.kBrushless);
+		// ElevatormotorRight = new SparkMax(29, MotorType.kBrushless);
 
 		ThroughBoreEncoderDIO = new DigitalInput(miscConstants.ThroughBoreEncoderDIOPort);
 		ThroughBoreEncoder = new DutyCycleEncoder(ThroughBoreEncoderDIO);
