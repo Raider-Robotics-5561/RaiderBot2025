@@ -166,7 +166,7 @@ public class RobotContainer
       // driverJoystick.button(8).whileTrue(Commands.none());
       // driverJoystick.button(7).onTrue(ElevatorSubsystem.setState(ElevatorSUB.State.STOWED));
       // driverJoystick.getThrottle(2).whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-      // driverXbox.leftTrigger().onTrue(ClimberRealIO.RunRPM());
+      // driverXbox.a().whileTrue(ClimberRealIO.RunRPM());
       driverXbox.button(8).onTrue((Commands.runOnce(drivebase::zeroGyro)));
       driverXbox.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
       driverXbox.y().whileTrue(
