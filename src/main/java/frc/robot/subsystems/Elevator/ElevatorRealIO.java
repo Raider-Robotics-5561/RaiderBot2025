@@ -72,8 +72,9 @@ public class ElevatorRealIO implements ElevatorBaseIO {
 
 	@Override
 	public void updateInputs(ElevatorInputs inputs) {
+		//REVIEW - change value
 		inputs.heightIN = ElevatormotorLeft.getEncoder().getPosition();
-		inputs.velocityMPS = ElevatormotorLeft.getEncoder().getVelocity();
+		//inputs.velocityRPM = ElevatormotorLeft.getEncoder().getVelocity();
 		inputs.ElevatormotorLeftCurrent = ElevatormotorLeft.getOutputCurrent();
 		inputs.ElevatormotorRightCurrent = ElevatormotorRight.getOutputCurrent();
 
