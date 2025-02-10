@@ -1,12 +1,13 @@
-package frc.robot.subsystems.SuperStructure;
+package frc.robot.SuperStructure;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.SuperStructure.SuperstructureState.State;
 import frc.robot.commands.generic.CMD_Superstructure;
 import frc.robot.subsystems.Elevator.ElevatorSUB;
 import frc.robot.subsystems.Gripper_Intake.GripperSUB;
-import frc.robot.subsystems.SuperStructure.SuperstructureState.State;
+
 import org.littletonrobotics.junction.Logger;
 
 public class SUB_Superstructure extends SubsystemBase {
