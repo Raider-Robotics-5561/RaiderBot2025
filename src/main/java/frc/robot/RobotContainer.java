@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.miscConstants;
+import frc.robot.subsystems.Climber.ClimberRealIO;
 // import frc.robot.subsystems.Elevator.ElevatorRealIO;
 // import frc.robot.subsystems.Elevator.ElevatorSUB;
 import frc.robot.subsystems.Swerve.SwerveSubsystem;
@@ -30,7 +31,6 @@ import swervelib.SwerveInputStream;
 public class RobotContainer
 {
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
   final         CommandXboxController driverXbox = new CommandXboxController(0);
   // final         CommandJoystick driverJoystick = new CommandJoystick(0);
   // The robot's subsystems and commands are defined here...
@@ -166,6 +166,7 @@ public class RobotContainer
       // driverJoystick.button(8).whileTrue(Commands.none());
       // driverJoystick.button(7).onTrue(ElevatorSubsystem.setState(ElevatorSUB.State.STOWED));
       // driverJoystick.getThrottle(2).whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+      // driverXbox.a().whileTrue(ClimberRealIO.RunRPM());
       driverXbox.button(8).onTrue((Commands.runOnce(drivebase::zeroGyro)));
       driverXbox.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
       driverXbox.y().whileTrue(
