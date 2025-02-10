@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 // import org.littletonrobotics.junction.Logger;
 import frc.robot.subsystems.Climber.ClimberBaseIO;
+import frc.robot.subsystems.SuperStructure.SuperstructureState;
 
 public class CilmberSUB extends SubsystemBase{
     
@@ -36,7 +37,8 @@ public class CilmberSUB extends SubsystemBase{
 	private final ClimberBaseIO io;
 
 	private final ClimberBaseIO.ClimberInputs inputs = new ClimberBaseIO.ClimberInputs();
-
+	private SuperstructureState.State localState = SuperstructureState.IDLE;
+	
     	public CilmberSUB(ClimberBaseIO io) {
 		this.io = io;
 	}
@@ -53,6 +55,14 @@ public class CilmberSUB extends SubsystemBase{
 		Logger.processInputs("Climber", inputs);
 		// Gets the distance traveled
 		
+	}
+
+		public void updateLocalState(SuperstructureState.State newLocalState) {
+		localState = newLocalState;
+	}
+
+	public SuperstructureState.State getCurrentLocalState() {
+		return localState;
 	}
 
 	public Command setState(State state) {

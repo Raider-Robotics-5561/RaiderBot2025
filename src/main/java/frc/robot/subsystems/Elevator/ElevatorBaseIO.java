@@ -20,14 +20,14 @@ public interface ElevatorBaseIO {
 	public static class ElevatorInputs implements LoggableInputs {
 
 		public double heightIN = 0.0;
-		public double velocityMPS = 0.0;
+		public double velocityRPM = 0.0;
 		public double ElevatormotorLeftCurrent = 0.0;
 		public double ElevatormotorRightCurrent = 0.0;
 
 		@Override
 		public void toLog(LogTable table) {
 			table.put("heightM", heightIN);
-			table.put("velocityMPS", velocityMPS);
+			table.put("velocityMPS", velocityRPM);
 			table.put("leftMotorCurrent", ElevatormotorLeftCurrent);
 			table.put("rightMotorCurrent", ElevatormotorRightCurrent);
 		}
@@ -35,7 +35,7 @@ public interface ElevatorBaseIO {
 		@Override
 		public void fromLog(LogTable table) {
 			heightIN = table.get("heightM", heightIN);
-			velocityMPS = table.get("velocityMPS", velocityMPS);
+			velocityRPM = table.get("velocityMPS", velocityRPM);
 			ElevatormotorLeftCurrent = table.get("leftMotorCurrent", ElevatormotorLeftCurrent);
 			ElevatormotorRightCurrent = table.get("rightMotorCurrent", ElevatormotorRightCurrent);
 		}

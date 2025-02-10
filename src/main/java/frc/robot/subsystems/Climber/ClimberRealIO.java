@@ -54,13 +54,13 @@ public ClimberRealIO(){
       .p(0.0001)
       .i(0)
       .d(0)
-      .outputRange(-1, 1)
-      // Set PID values for velocity control in slot 1
-      .p(0.001, ClosedLoopSlot.kSlot1)
-      .i(0, ClosedLoopSlot.kSlot1)
-      .d(0, ClosedLoopSlot.kSlot1)
-      .velocityFF(1.0 / 5767, ClosedLoopSlot.kSlot1)
-      .outputRange(-1, 1, ClosedLoopSlot.kSlot1);
+      .outputRange(-1, 1);
+      // // Set PID values for velocity control in slot 1
+      // .p(0.001, ClosedLoopSlot.kSlot1)
+      // .i(0, ClosedLoopSlot.kSlot1)
+      // .d(0, ClosedLoopSlot.kSlot1)
+      // .velocityFF(1.0 / 5767, ClosedLoopSlot.kSlot1)
+      // .outputRange(-1, 1, ClosedLoopSlot.kSlot1);
 
       ClimberMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 

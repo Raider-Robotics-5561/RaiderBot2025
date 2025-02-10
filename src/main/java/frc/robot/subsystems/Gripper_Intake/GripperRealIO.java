@@ -25,7 +25,7 @@ public class GripperRealIO implements GripperBaseIO {
 		toggleSensor = new IRBeam(0);
 
 		SparkMaxConfig wheelSparkMaxConfig = new SparkMaxConfig();
-		wheelSparkMaxConfig.smartCurrentLimit(55);
+		wheelSparkMaxConfig.smartCurrentLimit(40);
 		wheelMotor.configure(
 				wheelSparkMaxConfig,
 				SparkBase.ResetMode.kNoResetSafeParameters,
@@ -38,7 +38,6 @@ public class GripperRealIO implements GripperBaseIO {
 		ClosedLoopConfig closedLoopConfig = new ClosedLoopConfig();
 
 		closedLoopConfig.p(0.013);
-
 		closedLoopConfig.i(0);
 		closedLoopConfig.d(0);
 
@@ -71,4 +70,6 @@ public class GripperRealIO implements GripperBaseIO {
 	public void setIntakeSpeed(double speed) {
 		wheelMotor.set(speed);
 	}
+
+	
 }
