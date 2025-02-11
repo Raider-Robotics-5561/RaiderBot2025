@@ -22,7 +22,9 @@ import frc.robot.subsystems.Swerve.SwerveSubsystem;
 // import java.util.function.BooleanSupplier;
 import java.io.File;
 import swervelib.SwerveInputStream;
-
+import frc.robot.commands.generic.ClimberDownCommand;
+import frc.robot.commands.generic.ClimberUpCommand;
+import frc.robot.subsystems.Climber.TestClimberSub;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
  * little robot logic should actually be handled in the {@link Robot} periodic methods (other than the scheduler calls).
@@ -36,6 +38,7 @@ public class RobotContainer
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve"));
+  public final TestClimberSub m_climber = new TestClimberSub();
 
   // private final ElevatorRealIO ElevatorIO = new ElevatorRealIO();
   // private final ElevatorSUB ElevatorSubsystem = new ElevatorSUB(ElevatorIO);
@@ -157,6 +160,8 @@ public class RobotContainer
       driverXbox.rightBumper().onTrue(Commands.none());
     } else
     {
+      driverXbox.pov(0).whileTrue(new ClimberUpCommand(m_climber));
+      driverXbox.pov(180).whileTrue(new ClimberDownCommand(m_climber));
       // driverJoystick.button(8).onTrue(Commands.runOnce(drivebase::zeroGyro));
       // driverJoystick.button(3).onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
       // driverJoystick.button(2).whileTrue(
