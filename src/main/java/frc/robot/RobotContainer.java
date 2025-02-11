@@ -22,9 +22,10 @@ import frc.robot.subsystems.Swerve.SwerveSubsystem;
 // import java.util.function.BooleanSupplier;
 import java.io.File;
 import swervelib.SwerveInputStream;
-import frc.robot.commands.generic.ClimberDownCommand;
-import frc.robot.commands.generic.ClimberUpCommand;
-import frc.robot.subsystems.Climber.TestClimberSub;
+
+import frc.robot.commands.ClimberUpCommand;
+import frc.robot.commands.ClimberDownCommand;
+import frc.robot.subsystems.Climber.ClimbSubsystem;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
  * little robot logic should actually be handled in the {@link Robot} periodic methods (other than the scheduler calls).
@@ -38,7 +39,7 @@ public class RobotContainer
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve"));
-  public final TestClimberSub m_climber = new TestClimberSub();
+  public final ClimbSubsystem m_climber = new ClimbSubsystem();
 
   // private final ElevatorRealIO ElevatorIO = new ElevatorRealIO();
   // private final ElevatorSUB ElevatorSubsystem = new ElevatorSUB(ElevatorIO);

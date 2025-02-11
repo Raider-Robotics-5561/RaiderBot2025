@@ -7,34 +7,34 @@
 
 package frc.robot.commands.generic;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.SuperStructure.SUB_Superstructure;
-import frc.robot.SuperStructure.SuperstructureState;
+// import edu.wpi.first.wpilibj2.command.Command;
+// import frc.robot.SuperStructure.SUB_Superstructure;
+// import frc.robot.SuperStructure.SuperstructureState;
 
-public class CMD_Superstructure extends Command {
-	private final SUB_Superstructure superstructure;
-	private final SuperstructureState.State newSuperstructureState;
+// public class CMD_Superstructure extends Command {
+// 	private final SUB_Superstructure superstructure;
+// 	private final SuperstructureState.State newSuperstructureState;
 
-	public CMD_Superstructure(
-			SUB_Superstructure superstructure, SuperstructureState.State newSuperstructureState) {
-		this.superstructure = superstructure;
-		this.newSuperstructureState = newSuperstructureState;
-		addRequirements(superstructure);
-	}
+// 	public CMD_Superstructure(
+// 			SUB_Superstructure superstructure, SuperstructureState.State newSuperstructureState) {
+// 		this.superstructure = superstructure;
+// 		this.newSuperstructureState = newSuperstructureState;
+// 		addRequirements(superstructure);
+// 	}
 
-	@Override
-	public void initialize() {
-		superstructure.updateSuperstructureState(newSuperstructureState);
-	}
+// 	@Override
+// 	public void initialize() {
+// 		superstructure.updateSuperstructureState(newSuperstructureState);
+// 	}
 
-	@Override
-	public void execute() {}
+// 	@Override
+// 	public void execute() {}
 
-	@Override
-	public boolean isFinished() {
-		return true;
-	}
+// 	@Override
+// 	public boolean isFinished() {
+// 		return true;
+// 	}
 
-	@Override
-	public void end(boolean interrupted) {}
-}
+// 	@Override
+// 	public void end(boolean interrupted) {}
+// }

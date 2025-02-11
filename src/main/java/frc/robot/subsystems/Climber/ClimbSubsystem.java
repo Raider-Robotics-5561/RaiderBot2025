@@ -10,21 +10,16 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class TestClimberSub extends SubsystemBase {
+import frc.robot.miscConstants.ClimberConstants;
+
+public class ClimbSubsystem extends SubsystemBase {
 
     private final SparkMax climbMotor;
 
-    public static final class ClimberConstants {
-        public static final int CLIMBER_MOTOR_ID = 14;
-        public static final int CLIMBER_MOTOR_CURRENT_LIMIT = 30;
-        public static final double CLIMBER_MOTOR_VOLTAGE_COMP = 12;
-        public static final double CLIMBER_SPEED_DOWN = -0.5;
-        public static final double CLIMBER_SPEED_UP = 0.5;
-      }
     /**
      * This subsytem that controls the climber.
      */
-    public TestClimberSub () {
+    public ClimbSubsystem () {
 
     // Set up the climb motor as a brushless motor
     climbMotor = new SparkMax(ClimberConstants.CLIMBER_MOTOR_ID, MotorType.kBrushless);
@@ -42,6 +37,7 @@ public class TestClimberSub extends SubsystemBase {
     climbConfig.voltageCompensation(ClimberConstants.CLIMBER_MOTOR_VOLTAGE_COMP);
     climbConfig.smartCurrentLimit(ClimberConstants.CLIMBER_MOTOR_CURRENT_LIMIT);
     climbConfig.idleMode(IdleMode.kBrake);
+    
     climbMotor.configure(climbConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 

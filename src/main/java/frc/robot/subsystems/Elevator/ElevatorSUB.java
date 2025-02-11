@@ -3,7 +3,7 @@ package frc.robot.subsystems.Elevator;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.SuperStructure.SuperstructureState;
+// import frc.robot.SuperStructure.SuperstructureState;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -37,7 +37,7 @@ public class ElevatorSUB extends SubsystemBase {
 	private final ElevatorBaseIO io;
 
 	private final ElevatorBaseIO.ElevatorInputs inputs = new ElevatorBaseIO.ElevatorInputs();
-	private SuperstructureState.State localState = SuperstructureState.IDLE;
+	// private SuperstructureState.State localState = SuperstructureState.IDLE;
 	
 	public ElevatorSUB(ElevatorBaseIO io) {
 		this.io = io;
@@ -64,11 +64,11 @@ public class ElevatorSUB extends SubsystemBase {
 				});
 	}
 
-		public void updateLocalState(SuperstructureState.State newLocalState) {
-		localState = newLocalState;
-	}
+	// 	public void updateLocalState(SuperstructureState.State newLocalState) {
+	// 	localState = newLocalState;
+	// }
 
-	public SuperstructureState.State getCurrentLocalState() {
-		return localState;
-	}
+	// public SuperstructureState.State getCurrentLocalState() {
+	// 	return localState;
+	// }
 }

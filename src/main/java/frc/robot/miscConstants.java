@@ -3,7 +3,13 @@ package frc.robot;
 public final class miscConstants
 {
 
-
+  public static final class ClimberConstants {
+    public static final int CLIMBER_MOTOR_ID = 14;
+    public static final int CLIMBER_MOTOR_CURRENT_LIMIT = 30;
+    public static final double CLIMBER_MOTOR_VOLTAGE_COMP = 12;
+    public static final double CLIMBER_SPEED_DOWN = -0.5;
+    public static final double CLIMBER_SPEED_UP = 0.5;
+  }
 
     public static final int ThroughBoreEncoderDIOPort = 0; //TODO CHANGE ME
 
