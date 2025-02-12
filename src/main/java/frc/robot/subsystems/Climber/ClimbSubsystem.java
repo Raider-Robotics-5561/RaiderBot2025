@@ -27,7 +27,8 @@ public class ClimbSubsystem extends SubsystemBase {
     // Set can timeout. Because this project only sets parameters once on
     // construction, the timeout can be long without blocking robot operation. Code
     // which sets or gets parameters during operation may need a shorter timeout.
-    climbMotor.setCANTimeout(250);
+    //NOTE - may be needed
+    // climbMotor.setCANTimeout(250);
 
     // Create and apply configuration for climb motor. Voltage compensation helps
     // the climb behave the same as the battery

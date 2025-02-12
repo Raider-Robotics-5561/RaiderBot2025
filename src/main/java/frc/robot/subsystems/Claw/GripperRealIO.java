@@ -1,4 +1,4 @@
-package frc.robot.subsystems.Gripper_Intake;
+package frc.robot.subsystems.Claw;
 
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkBase.ControlType;
