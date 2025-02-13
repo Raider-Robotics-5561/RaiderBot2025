@@ -123,46 +123,12 @@ public class RobotContainer
    */
   private void configureBindings()
   {
-    // Command driveFieldOrientedDirectAngle      = drivebase.driveFieldOriented(driveDirectAngle);
-    Command driveFieldOrientedAnglularVelocity = drivebase.driveFieldOriented(driveAngularVelocity);
-    // Command driveRobotOrientedAngularVelocity  = drivebase.driveFieldOriented(driveRobotOriented);
-    // Command driveSetpointGen = drivebase.driveWithSetpointGeneratorFieldRelative(
-        // driveDirectAngle);
-    Command driveFieldOrientedDirectAngleKeyboard      = drivebase.driveFieldOriented(driveDirectAngleKeyboard);
-    // Command driveFieldOrientedAnglularVelocityKeyboard = drivebase.driveFieldOriented(driveAngularVelocityKeyboard);
-    // Command driveSetpointGenKeyboard = drivebase.driveWithSetpointGeneratorFieldRelative(
-        // driveDirectAngleKeyboard);
-        
-    if (RobotBase.isSimulation())
-    {
-      drivebase.setDefaultCommand(driveFieldOrientedDirectAngleKeyboard);
-    } else
-    {
-      drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
-    }
 
-    if (Robot.isSimulation())
-    {
-      // driverJoystick.button(1).whileTrue(drivebase.sysIdDriveMotorCommand());
-      // driverJoystick.button(8).onTrue(Commands.runOnce(() -> drivebase.resetOdometry(new Pose2d(3, 3, new Rotation2d()))));
-      DriveController.start().onTrue(Commands.runOnce(() -> drivebase.resetOdometry(new Pose2d(3, 3, new Rotation2d()))));
-      DriveController.button(1).whileTrue(drivebase.sysIdDriveMotorCommand());
+      OporatorController.povUp().whileTrue(new ClimberUpCommand(m_climber));
+      OporatorController.povDown().whileTrue(new ClimberDownCommand(m_climber));
+      
 
-    }
-    if (DriverStation.isTest())
-    {
-      drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity); // Overrides drive command above!
 
-      DriveController.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-      DriveController.y().whileTrue(drivebase.driveToDistanceCommand(1.0, 0.2));
-      DriveController.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-      DriveController.back().whileTrue(drivebase.centerModulesCommand());
-      DriveController.leftBumper().onTrue(Commands.none());
-      DriveController.rightBumper().onTrue(Commands.none());
-    } else
-    {
-      OporatorController.pov(0).whileTrue(new ClimberUpCommand(m_climber));
-      OporatorController.pov(180).whileTrue(new ClimberDownCommand(m_climber));
       DriveController.button(8).onTrue((Commands.runOnce(drivebase::zeroGyro)));
       DriveController.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
       DriveController.y().whileTrue(
@@ -173,7 +139,7 @@ public class RobotContainer
       DriveController.back().whileTrue(Commands.none());
       DriveController.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
       DriveController.rightBumper().onTrue(Commands.none());
-    }
+    
     
   }
 
