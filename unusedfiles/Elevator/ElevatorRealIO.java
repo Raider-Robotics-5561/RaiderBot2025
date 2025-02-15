@@ -104,7 +104,9 @@ public class ElevatorRealIO implements ElevatorBaseIO {
 
 	@Override
 	public void setPositionIN(double positionIN) {
-		// positionM = ElevatormotorLeft.getAbsoluteEncoder().getPosition();
+		
+		positionIN = ElevatormotorLeft.getAbsoluteEncoder().getPosition();
+
 		ElevatormotorLeft.set(positionIN);
 		
 	}

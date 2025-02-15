@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.SuperStructure.SuperstructureState.State;
 import frc.robot.subsystems.Claw.GripperSUB;
 // import frc.robot.commands.generic.CMD_Superstructure;
-import frc.robot.subsystems.Elevator.ElevatorSUB;
+// import frc.robot.subsystems.Elevator.ElevatorSUB;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -18,13 +18,14 @@ public class SUB_Superstructure extends SubsystemBase {
 			SuperstructureState.createState("EJECT_DYNAMIC", 0.5, 135, 18);
 
 	public GripperSUB intake;
-	public ElevatorSUB elevator;
+	// public ElevatorSUB elevator;
 
 	private boolean previousIntakeSensorState = false;
 
-	public SUB_Superstructure(GripperSUB intake, ElevatorSUB elevator) {
+	public SUB_Superstructure(GripperSUB intak){ //ElevatorSUB elevator) {
 		this.intake = intake;
-		this.elevator = elevator;	}
+	}
+		// this.elevator = elevator;	}
 
 	public void updateSuperstructureState(SuperstructureState.State newSuperstructureState) {
 		previousSuperstructureState = currentSuperstructureState;
