@@ -1,4 +1,4 @@
-package frc.robot.subsystems.Gripper_Intake;
+package frc.robot.subsystems.Claw;
 
 import org.littletonrobotics.junction.AutoLog;
 import org.littletonrobotics.junction.LogTable;

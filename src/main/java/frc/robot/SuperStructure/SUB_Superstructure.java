@@ -4,9 +4,9 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.SuperStructure.SuperstructureState.State;
-import frc.robot.commands.generic.CMD_Superstructure;
+import frc.robot.subsystems.Claw.GripperSUB;
+// import frc.robot.commands.generic.CMD_Superstructure;
 import frc.robot.subsystems.Elevator.ElevatorSUB;
-import frc.robot.subsystems.Gripper_Intake.GripperSUB;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -30,8 +30,8 @@ public class SUB_Superstructure extends SubsystemBase {
 		previousSuperstructureState = currentSuperstructureState;
 		currentSuperstructureState = newSuperstructureState;
 
-		elevator.updateLocalState(currentSuperstructureState);
-		intake.updateLocalState(currentSuperstructureState);
+		// elevator.updateLocalState(currentSuperstructureState);
+		// intake.updateLocalState(currentSuperstructureState);
 
 		Logger.recordOutput("Superstructure/State", currentSuperstructureState.toString());
 		Logger.recordOutput("Superstructure/Name", currentSuperstructureState.getName());
@@ -62,8 +62,8 @@ public class SUB_Superstructure extends SubsystemBase {
 				&& intake.getSensorState()
 				&& DriverStation.isEnabled()
 				&& currentSuperstructureState == SuperstructureState.CORAL_STATION) {
-			CommandScheduler.getInstance()
-					.schedule(new CMD_Superstructure(this, SuperstructureState.IDLE));
+			// CommandScheduler.getInstance()
+			// 		.schedule(new CMD_Superstructure(this, SuperstructureState.IDLE));
 		}
 
 		/*

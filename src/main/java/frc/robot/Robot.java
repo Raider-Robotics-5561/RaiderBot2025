@@ -37,10 +37,6 @@ public class Robot extends TimedRobot
 
   private Timer disabledTimer;
 
-  public SparkMax ClimberMotor;
-  public SparkMaxConfig ClimberConfig;
-  public SparkClosedLoopController closedLoopController;
-  public RelativeEncoder climberencoder;
   public Robot()
   {
     
@@ -58,35 +54,6 @@ public class Robot extends TimedRobot
   @Override
   public void robotInit()
   {
-     //  SparkMaxConfig globalConfig = new  SparkMaxConfig();
-  SparkMaxConfig config = new SparkMaxConfig();
-  closedLoopController = ClimberMotor.getClosedLoopController();
-
-  config.encoder
-      .positionConversionFactor(1)
-      .velocityConversionFactor(1);
-
-  config
-  .smartCurrentLimit(30)
-  .idleMode(IdleMode.kBrake);
-
-   config.closedLoop
-      .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-      // Set PID values for position control. We don't need to pass a closed loop
-      // slot, as it will default to slot 0.
-      .p(0.0001)
-      .i(0)
-      .d(0)
-      .outputRange(-1, 1)
-      // Set PID values for velocity control in slot 1
-      .p(0.001, ClosedLoopSlot.kSlot1)
-      .i(0, ClosedLoopSlot.kSlot1)
-      .d(0, ClosedLoopSlot.kSlot1)
-      .velocityFF(1.0 / 5767, ClosedLoopSlot.kSlot1)
-      .outputRange(-1, 1, ClosedLoopSlot.kSlot1);
-
-      ClimberMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();

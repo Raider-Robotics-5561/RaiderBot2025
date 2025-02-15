@@ -32,5 +32,7 @@ public interface ClimberBaseIO{
 
 	public void setClimberPos(double Pos);
 
-	public void setIntakeSpeed(double speed);
+    public void setClimberSpeed(double speed);
+
+    public void stopClimber();
 }

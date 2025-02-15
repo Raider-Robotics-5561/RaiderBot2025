@@ -3,8 +3,13 @@ package frc.robot.subsystems.Climber;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 // import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.LimitSwitchConfig;
 // import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
+
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import frc.robot.subsystems.Climber.ClimberBaseIO.ClimberInputs;
+
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 // import edu.wpi.first.wpilibj.DigitalInput;
@@ -19,6 +24,7 @@ import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkLimitSwitch;
 
 
 public class ClimberRealIO{ //implements ClimberBaseIO{
@@ -27,7 +33,7 @@ public class ClimberRealIO{ //implements ClimberBaseIO{
   public SparkMaxConfig ClimberConfig;
   public SparkClosedLoopController closedLoopController;
   public RelativeEncoder climberencoder;
-
+  private final SparkLimitSwitch limitSwitch;
   
 public ClimberRealIO(){
 
@@ -44,9 +50,14 @@ public ClimberRealIO(){
       .velocityConversionFactor(1);
 
   config
-  .smartCurrentLimit(30)
+  .smartCurrentLimit(20)
   .idleMode(IdleMode.kBrake);
 
+  config.limitSwitch
+  .forwardLimitSwitchEnabled(true);
+  limitSwitch = ClimberMotor.getForwardLimitSwitch();
+    
+  
    config.closedLoop
       .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
       // Set PID values for position control. We don't need to pass a closed loop
@@ -64,11 +75,12 @@ public ClimberRealIO(){
 
       ClimberMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
+      
 }
 
-public void RunRPM(){
-
-
-
-}
+	public void GetEncoderPOS(double climberENCpos){
+    
+    climberencoder.getPosition();
+		
+	}
 }
