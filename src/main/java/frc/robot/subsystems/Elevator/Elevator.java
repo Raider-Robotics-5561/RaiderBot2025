@@ -6,6 +6,7 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -14,6 +15,7 @@ import frc.robot.util.TunableNumber;
 
 public class Elevator extends SubsystemBase {
   private final SparkMax mElevatorSparkMax;
+  private final SparkMax mElevatorSparkMaxFollower;
   private final SparkClosedLoopController mElevatorController;
   private final RelativeEncoder mEncoder;
   private double motorVoltage = 0;
@@ -23,8 +25,17 @@ public class Elevator extends SubsystemBase {
 
   public Elevator() {
     mElevatorSparkMax = new SparkMax(ElevatorConstants.kMotorID, MotorType.kBrushless);
+    mElevatorSparkMaxFollower = new SparkMax(10, MotorType.kBrushless);
     mEncoder = mElevatorSparkMax.getEncoder();
     mElevatorController = mElevatorSparkMax.getClosedLoopController();
+
+    ElevatorConstants.mElevatorSparkMaxFollowerconfig
+    .follow(ElevatorConstants.kMotorID, true);
+    
+    mElevatorSparkMax.configure(ElevatorConstants.mElevatorSparkMaxFollowerconfig,
+      ResetMode.kResetSafeParameters,
+      PersistMode.kNoPersistParameters);
+
 
     mElevatorSparkMax.configure(
         ElevatorConstants.kElevatorConfig.inverted(true),

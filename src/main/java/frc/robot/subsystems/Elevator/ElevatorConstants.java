@@ -1,5 +1,7 @@
 package frc.robot.subsystems.Elevator;
 
+import org.xml.sax.SAXNotRecognizedException;
+
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
@@ -7,10 +9,12 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 // import edu.wpi.first.math.util.Units;
 
 public class ElevatorConstants {
-  public static int kMotorID = 41;
+  public static int kMotorID = 0;
   public static MotorType kMotorType = MotorType.kBrushless;
   public static IdleMode kIdleMode = IdleMode.kBrake;
-  public static int kCurrentLimit = 80;
+  public static int kCurrentLimit = 40;
+  public static double kMinHeight = 0;
+  public static double kMaxHeight = 0;
   public static double kP = 1.5; // TODO: Configure me!
   public static double kI = 0.0;
   public static double kD = 0.08; // TODO: Configure me!
@@ -33,17 +37,21 @@ public class ElevatorConstants {
   public static double kV = 0.0;
   public static double kA = 0.0;
 
-  public static double kPositionConversionFactor = 1.21875; // 1.0 / kDrumCircumference
+  public static double kPositionConversionFactor = 1;
   public static double kVelocityConversionFactor = kPositionConversionFactor / 60.0; // RPM -> MPS
 
   public static final SparkMaxConfig kElevatorConfig = new SparkMaxConfig();
+  public static final SparkMaxConfig mElevatorSparkMaxFollowerconfig = new SparkMaxConfig();
 
-  enum Positions {
+  public enum Positions {
     BOTTOM(0),
-    L1(0),
+    PREINTAKE(0),
+    POSTINTAKE(0),
+    L1(1),
     L2(0),
     L3(0),
     L4(0),
+    SCORE(0),
     BARGE(0);
 
     public final double position;

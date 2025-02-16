@@ -6,26 +6,25 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.miscConstants;
-// import frc.robot.subsystems.Climber.ClimberRealIO;
-// import frc.robot.subsystems.Elevator.ElevatorRealIO;
-// import frc.robot.subsystems.Elevator.ElevatorSUB;
-import frc.robot.subsystems.Swerve.SwerveSubsystem;
-// import edu.wpi.first.wpilibj.Joystick;
-// import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
-// import java.util.function.BooleanSupplier;
 import java.io.File;
 import swervelib.SwerveInputStream;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 
 import frc.robot.commands.ClimberUpCommand;
 import frc.robot.commands.ClimberDownCommand;
 import frc.robot.subsystems.Climber.ClimbSubsystem;
+import frc.robot.miscConstants;
+import frc.robot.subsystems.Elevator.Elevator;
+import frc.robot.subsystems.Elevator.ElevatorConstants;
+import frc.robot.subsystems.Elevator.ElevatorFFCommand;
+import frc.robot.subsystems.Elevator.ElevatorPIDCommand;
+import frc.robot.subsystems.Swerve.SwerveSubsystem;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
  * little robot logic should actually be handled in the {@link Robot} periodic methods (other than the scheduler calls).
@@ -41,19 +40,13 @@ public class RobotContainer
                                                                                 "swerve"));
   public final ClimbSubsystem m_climber = new ClimbSubsystem();
 
-  // private final ElevatorRealIO ElevatorIO = new ElevatorRealIO();
-  // private final ElevatorSUB ElevatorSubsystem = new ElevatorSUB(ElevatorIO);
+  private final Elevator elevator;
 
-  /**
-   * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
-   */
+
   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
                                                              () -> DriveController.getLeftY() * -1,
                                                              () -> DriveController.getLeftX() * -1)
                                                             .withControllerRotationAxis(DriveController::getRightX)
-                                                            //     () -> driverJoystick.getRawAxis(1) * -1,
-                                                            //     () -> driverJoystick.getRawAxis(0) * -1)
-                                                            // .withControllerRotationAxis(driverJoystick::getX)
                                                             .deadband(miscConstants.DEADBAND)
                                                             .scaleTranslation(0.8)
                                                             .allianceRelativeControl(true);
@@ -108,7 +101,8 @@ public class RobotContainer
    */
   public RobotContainer()
   {
-    // Configure the trigger bindings
+    elevator = new Elevator();
+
     configureBindings();
     DriverStation.silenceJoystickConnectionWarning(true);
     NamedCommands.registerCommand("test", Commands.print("I EXIST"));
@@ -126,7 +120,31 @@ public class RobotContainer
 
       OporatorController.povUp().whileTrue(new ClimberUpCommand(m_climber));
       OporatorController.povDown().whileTrue(new ClimberDownCommand(m_climber));
-      
+
+          OporatorController
+        .y()
+        .onTrue(
+            new ParallelCommandGroup(
+                new ElevatorPIDCommand(ElevatorConstants.Positions.L4, elevator)))
+        .onFalse(
+            new ParallelCommandGroup(new ElevatorFFCommand(elevator)));
+
+    OporatorController
+        .b()
+        .onTrue(
+            new ParallelCommandGroup(
+                new ElevatorPIDCommand(ElevatorConstants.Positions.L1, elevator)))
+        .onFalse(
+            new ParallelCommandGroup(new ElevatorFFCommand(elevator)));
+
+            OporatorController
+        .x()
+        .onTrue(
+            new ParallelCommandGroup(
+                new ElevatorPIDCommand(ElevatorConstants.Positions.POSTINTAKE, elevator)))
+        .onFalse(
+            new ParallelCommandGroup(
+                new ElevatorFFCommand(elevator)));
 
 
       DriveController.button(8).onTrue((Commands.runOnce(drivebase::zeroGyro)));

@@ -27,7 +27,7 @@ public class ElevatorFFCommand extends Command {
             ElevatorConstants.kS, ElevatorConstants.kG, ElevatorConstants.kV, ElevatorConstants.kA);
     System.out.println(
         String.format(
-            "<<< %s - %s is STARTING :D >>>\n",
+            "<<< %s - %s is STARTING! >>>\n",
             this.getClass().getSimpleName(), mElevatorFeedforward.getClass().getSimpleName()));
   }
 
@@ -44,7 +44,7 @@ public class ElevatorFFCommand extends Command {
   public void end(boolean interrupted) {
     System.out.println(
         String.format(
-            "<<< %s - %s is ENDING :C >>>\n",
+            "<<< %s - %s is ENDING! >>>\n",
             this.getClass().getSimpleName(), mElevatorFeedforward.getClass().getSimpleName()));
   }
 

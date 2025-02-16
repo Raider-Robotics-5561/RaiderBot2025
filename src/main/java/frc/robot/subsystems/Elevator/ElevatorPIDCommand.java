@@ -55,7 +55,7 @@ public class ElevatorPIDCommand extends Command {
     mProfiledPIDController.reset(getMeasurement());
     System.out.println(
         String.format(
-            "<<< %s - %s is STARTING :D >>>\n",
+            "<<< %s - %s is STARTING! >>>\n",
             this.getClass().getSimpleName(), mProfiledPIDController.getClass().getSimpleName()));
   }
 
@@ -82,7 +82,7 @@ public class ElevatorPIDCommand extends Command {
     mElevatorSubsystem.setMotorVoltage(0);
     System.out.println(
         String.format(
-            "<<< %s - %s is ENDING :C >>>\n",
+            "<<< %s - %s is ENDING! >>>\n",
             this.getClass().getSimpleName(), mProfiledPIDController.getClass().getSimpleName()));
   }
 
