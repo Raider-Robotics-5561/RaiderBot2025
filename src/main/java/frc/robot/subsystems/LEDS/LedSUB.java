@@ -13,7 +13,7 @@ public class LedSUB {
   public LedSUB(){
     led = new AddressableLED (0);
     ledBuffer = new AddressableLEDBuffer(20);
-    led.setLength(20);
+    led.setLength(500);
     led.setLength(ledBuffer.getLength());
     led.start();
     

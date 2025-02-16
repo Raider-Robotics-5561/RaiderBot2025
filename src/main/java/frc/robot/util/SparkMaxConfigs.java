@@ -1,4 +1,4 @@
-package frc.robot.subsystems.misc;
+package frc.robot.util;
 import com.revrobotics.spark.SparkMax;
 
 public class SparkMaxConfigs {
