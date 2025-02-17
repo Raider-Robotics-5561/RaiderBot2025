@@ -36,7 +36,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.Swerve.Vision.Cameras;
+// import frc.robot.subsystems.Swerve.Vision.Cameras;
 import frc.robot.util.Constants.SwerveConstants;
 
 import java.io.File;
@@ -76,7 +76,7 @@ public class SwerveSubsystem extends SubsystemBase
   /**
    * PhotonVision class to keep an accurate odometry.
    */
-  private Vision vision;
+  // private Vision vision;
 
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
@@ -107,12 +107,12 @@ public class SwerveSubsystem extends SubsystemBase
     swerveDrive.setModuleEncoderAutoSynchronize(false,
                                                 1); // Enable if you want to resynchronize your absolute encoders and motor encoders periodically when they are not moving.
 //    swerveDrive.pushOffsetsToEncoders(); // Set the absolute encoder to be used over the internal encoder and push the offsets onto it. Throws warning if not possible
-    if (visionDriveTest)
-    {
-      setupPhotonVision();
-      // Stop the odometry thread if we are using vision that way we can synchronize updates better.
-      swerveDrive.stopOdometryThread();
-    }
+    // if (visionDriveTest)
+    // {
+    //   setupPhotonVision();
+    //   // Stop the odometry thread if we are using vision that way we can synchronize updates better.
+    //   swerveDrive.stopOdometryThread();
+    // }
     setupPathPlanner();
   }
 
@@ -134,20 +134,20 @@ public class SwerveSubsystem extends SubsystemBase
   /**
    * Setup the photon vision class.
    */
-  public void setupPhotonVision()
-  {
-    vision = new Vision(swerveDrive::getPose, swerveDrive.field);
-  }
+  // public void setupPhotonVision()
+  // {
+    // vision = new Vision(swerveDrive::getPose, swerveDrive.field);
+  // }
 
   @Override
   public void periodic()
   {
     // When vision is enabled we must manually update odometry in SwerveDrive
-    if (visionDriveTest)
-    {
-      swerveDrive.updateOdometry();
-      vision.updatePoseEstimation(swerveDrive);
-    }
+    // if (visionDriveTest)
+    // {
+    //   swerveDrive.updateOdometry();
+    //   vision.updatePoseEstimation(swerveDrive);
+    // }
   }
 
   @Override
@@ -231,24 +231,24 @@ public class SwerveSubsystem extends SubsystemBase
    *
    * @return A {@link Command} which will run the alignment.
    */
-  public Command aimAtTarget(Cameras camera)
-  {
+  // public Command aimAtTarget(Cameras camera)
+  // {
 
-    return run(() -> {
-      Optional<PhotonPipelineResult> resultO = camera.getBestResult();
-      if (resultO.isPresent())
-      {
-        var result = resultO.get();
-        if (result.hasTargets())
-        {
-          drive(getTargetSpeeds(0,
-                                0,
-                                Rotation2d.fromDegrees(result.getBestTarget()
-                                                             .getYaw()))); // Not sure if this will work, more math may be required.
-        }
-      }
-    });
-  }
+  //   return run(() -> {
+  //     Optional<PhotonPipelineResult> resultO = camera.getBestResult();
+  //     if (resultO.isPresent())
+  //     {
+  //       var result = resultO.get();
+  //       if (result.hasTargets())
+  //       {
+  //         drive(getTargetSpeeds(0,
+  //                               0,
+  //                               Rotation2d.fromDegrees(result.getBestTarget()
+  //                                                            .getYaw()))); // Not sure if this will work, more math may be required.
+  //       }
+  //     }
+  //   });
+  // }
 
   /**
    * Get the path follower with events.
@@ -272,7 +272,7 @@ public class SwerveSubsystem extends SubsystemBase
   {
 // Create the constraints to use while pathfinding
     PathConstraints constraints = new PathConstraints(
-        swerveDrive.getMaximumChassisVelocity(), 1.0,
+        swerveDrive.getMaximumChassisVelocity(), 0.75,
         swerveDrive.getMaximumChassisAngularVelocity(), Units.degreesToRadians(720));
 
 // Since AutoBuilder is configured, we can use it to build pathfinding commands

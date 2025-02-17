@@ -1,5 +1,6 @@
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -7,6 +8,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -14,6 +16,9 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import java.io.File;
+
+import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+
 import swervelib.SwerveInputStream;
 import swervelib.parser.json.modules.DriveConversionFactorsJson;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -21,6 +26,7 @@ import edu.wpi.first.wpilibj.XboxController;
 
 import frc.robot.commands.ClimberUpCommand;
 import frc.robot.commands.ClimberDownCommand;
+import frc.robot.subsystems.Claw.Claw;
 import frc.robot.subsystems.Climber.ClimbSubsystem;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorFFCommand;
@@ -29,6 +35,7 @@ import frc.robot.subsystems.Swerve.SwerveSubsystem;
 import frc.robot.util.Constants.ElevatorConstants;
 import frc.robot.util.Constants.SwerveConstants;
 import frc.robot.util.Constants.miscConstants;
+import frc.robot.commands.swervedrive.drivebase.*;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
  * little robot logic should actually be handled in the {@link Robot} periodic methods (other than the scheduler calls).
@@ -38,14 +45,17 @@ public class RobotContainer
 {
 
   final         CommandXboxController DriveController = new CommandXboxController(0);
-  final         CommandXboxController OporatorController = new CommandXboxController(1);
+  final         CommandXboxController OPController = new CommandXboxController(1);
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve"));
   public final ClimbSubsystem m_climber = new ClimbSubsystem();
 
-  private final Elevator elevator;
 
+  // private final Claw claw;
+  // private final Elevator elevator;
+  // Dashboard inputs
+  private final LoggedDashboardChooser<Command> autoChooser;
 
   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
                                                              () -> DriveController.getLeftY() * -1,
@@ -107,60 +117,92 @@ public class RobotContainer
    */
   public RobotContainer()
   {
-    elevator = new Elevator();
+    // elevator = new Elevator();
+    // claw     = new Claw();
+
+    // Set up auto routines
+    autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
     configureBindings();
-    DriverStation.silenceJoystickConnectionWarning(true);
-    NamedCommands.registerCommand("test", Commands.print("I EXIST"));
-  }
+    DriverStation.silenceJoystickConnectionWarning(false);
+   
 
-  /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary predicate, or via the
-   * named factories in {@link edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for
-   * {@link CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller PS4}
-   * controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight joysticks}.
-   */
+  }
   private void configureBindings()
   {
 
-      OporatorController.povUp().whileTrue(new ClimberUpCommand(m_climber));
-      OporatorController.povDown().whileTrue(new ClimberDownCommand(m_climber));
+    OPController.povUp().whileTrue(new ClimberUpCommand(m_climber));
+    OPController.povDown().whileTrue(new ClimberDownCommand(m_climber));
 
-          OporatorController
-        .y()
-        .onTrue(
-            new ParallelCommandGroup(
-                new ElevatorPIDCommand(ElevatorConstants.Positions.L4, elevator)))
-        .onFalse(
-            new ParallelCommandGroup(new ElevatorFFCommand(elevator)));
+    // OPController
+    //     .y()
+    //     .onTrue(
+    //         new ParallelCommandGroup(
+    //             new ElevatorPIDCommand(ElevatorConstants.Positions.L4, elevator)))
+    //     .onFalse(
+    //         new ParallelCommandGroup(new ElevatorFFCommand(elevator)));
 
-    OporatorController
-        .b()
-        .onTrue(
-            new ParallelCommandGroup(
-                new ElevatorPIDCommand(ElevatorConstants.Positions.L1, elevator)))
-        .onFalse(
-            new ParallelCommandGroup(new ElevatorFFCommand(elevator)));
+    //         OPController
+    //     .b()
+    //     .onTrue(
+    //         new ParallelCommandGroup(
+    //             new ElevatorPIDCommand(ElevatorConstants.Positions.L1, elevator)))
+    //     .onFalse(
+    //         new ParallelCommandGroup(new ElevatorFFCommand(elevator)));
 
-            OporatorController
-        .x()
-        .onTrue(
-            new ParallelCommandGroup(
-                new ElevatorPIDCommand(ElevatorConstants.Positions.POSTINTAKE, elevator)))
-        .onFalse(
-            new ParallelCommandGroup(
-                new ElevatorFFCommand(elevator)));
+            // OPController
+        // .x()
+        // .onTrue(
+        //     new ParallelCommandGroup(
+        //         new ElevatorPIDCommand(ElevatorConstants.Positions.POSTINTAKE, elevator)))
+        // .onFalse(
+        //     new ParallelCommandGroup(
+        //         new ElevatorFFCommand(elevator)));
+ // Command driveFieldOrientedDirectAngle      = drivebase.driveFieldOriented(driveDirectAngle);
+ Command driveFieldOrientedAnglularVelocity = drivebase.driveFieldOriented(driveAngularVelocity);
+ // Command driveRobotOrientedAngularVelocity  = drivebase.driveFieldOriented(driveRobotOriented);
+ // Command driveSetpointGen = drivebase.driveWithSetpointGeneratorFieldRelative(
+     // driveDirectAngle);
+ Command driveFieldOrientedDirectAngleKeyboard      = drivebase.driveFieldOriented(driveDirectAngleKeyboard);
+ // Command driveFieldOrientedAnglularVelocityKeyboard = drivebase.driveFieldOriented(driveAngularVelocityKeyboard);
+ // Command driveSetpointGenKeyboard = drivebase.driveWithSetpointGeneratorFieldRelative(
+     // driveDirectAngleKeyboard);
 
+   if (RobotBase.isSimulation())
+    {
+      drivebase.setDefaultCommand(driveFieldOrientedDirectAngleKeyboard);
+    } else
+    {
+      drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
+    }
 
+    if (Robot.isSimulation())
+    {
+      // driverJoystick.button(1).whileTrue(drivebase.sysIdDriveMotorCommand());
+      // driverJoystick.button(8).onTrue(Commands.runOnce(() -> drivebase.resetOdometry(new Pose2d(3, 3, new Rotation2d()))));
+      DriveController.start().onTrue(Commands.runOnce(() -> drivebase.resetOdometry(new Pose2d(3, 3, new Rotation2d()))));
+      DriveController.button(1).whileTrue(drivebase.sysIdDriveMotorCommand());
+
+    }
+    if (DriverStation.isTest())
+    {
+      drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity); // Overrides drive command above!
+
+      DriveController.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+      DriveController.y().whileTrue(drivebase.driveToDistanceCommand(1.0, 0.2));
+      DriveController.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
+      DriveController.back().whileTrue(drivebase.centerModulesCommand());
+      DriveController.leftBumper().onTrue(Commands.none());
+      DriveController.rightBumper().onTrue(Commands.none());
+    } else
+    {
       DriveController.button(8).onTrue((Commands.runOnce(drivebase::zeroGyro)));
+
       DriveController.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
+
       DriveController.y().whileTrue(
-          drivebase.driveToPose(
-              new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
-                              );
-      DriveController.start().whileTrue(Commands.none());
-      DriveController.back().whileTrue(Commands.none());
+      drivebase.driveToPose(new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0))));
+
       DriveController.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
 
 
@@ -168,13 +210,11 @@ public class RobotContainer
 
       DriveController
       .rightTrigger(miscConstants.DEADBAND)
-      .onTrue(
-          Commands.runOnce(() -> {driveAngularVelocity.scaleTranslation(SwerveConstants.kUnboostScalar);
-          }))
-      .onFalse(
-        Commands.runOnce(() -> {driveAngularVelocity.scaleTranslation(SwerveConstants.kMaxSpeedScalar);
-          
-          }));
+      .whileTrue(Commands.runOnce(() -> {driveAngularVelocity.scaleTranslation(SwerveConstants.kMaxSpeedScalar);
+      }))
+      .whileFalse(Commands.runOnce(() -> {driveAngularVelocity.scaleTranslation(SwerveConstants.kUnboostScalar);
+       }));
+      }
 
     
   }
