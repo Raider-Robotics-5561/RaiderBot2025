@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.SuperStructure.SuperstructureState.State;
-import frc.robot.subsystems.Claw.GripperSUB;
+// import frc.robot.subsystems.Claw.GripperSUB;
 // import frc.robot.commands.generic.CMD_Superstructure;
 // import frc.robot.subsystems.Elevator.ElevatorSUB;
 
@@ -17,14 +17,14 @@ public class SUB_Superstructure extends SubsystemBase {
 	public State currentDynamicEjectState =
 			SuperstructureState.createState("EJECT_DYNAMIC", 0.5, 135, 18);
 
-	public GripperSUB intake;
+	// public GripperSUB intake;
 	// public ElevatorSUB elevator;
 
 	private boolean previousIntakeSensorState = false;
 
-	public SUB_Superstructure(GripperSUB intak){ //ElevatorSUB elevator) {
-		this.intake = intake;
-	}
+	// public SUB_Superstructure(GripperSUB intak){ //ElevatorSUB elevator) {
+	// 	this.intake = intake;
+	// }
 		// this.elevator = elevator;	}
 
 	public void updateSuperstructureState(SuperstructureState.State newSuperstructureState) {
@@ -60,7 +60,7 @@ public class SUB_Superstructure extends SubsystemBase {
 
 		// Check for sensor state change from false to true
 		if (!previousIntakeSensorState
-				&& intake.getSensorState()
+				// && intake.getSensorState()
 				&& DriverStation.isEnabled()
 				&& currentSuperstructureState == SuperstructureState.CORAL_STATION) {
 			// CommandScheduler.getInstance()

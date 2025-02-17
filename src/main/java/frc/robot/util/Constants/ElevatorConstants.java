@@ -1,4 +1,4 @@
-package frc.robot.subsystems.Elevator;
+package frc.robot.util.Constants;
 
 import org.xml.sax.SAXNotRecognizedException;
 
@@ -9,7 +9,8 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 // import edu.wpi.first.math.util.Units;
 
 public class ElevatorConstants {
-  public static int kMotorID = 0;
+  public static int kMotorID = 10;
+  public static int kFollowerMotorID = 11;
   public static MotorType kMotorType = MotorType.kBrushless;
   public static IdleMode kIdleMode = IdleMode.kBrake;
   public static int kCurrentLimit = 40;
@@ -41,7 +42,7 @@ public class ElevatorConstants {
   public static double kVelocityConversionFactor = kPositionConversionFactor / 60.0; // RPM -> MPS
 
   public static final SparkMaxConfig kElevatorConfig = new SparkMaxConfig();
-  public static final SparkMaxConfig mElevatorSparkMaxFollowerconfig = new SparkMaxConfig();
+  public static final SparkMaxConfig kElevatorFollowerConfig = new SparkMaxConfig();
 
   public enum Positions {
     BOTTOM(0),
@@ -66,6 +67,11 @@ public class ElevatorConstants {
   };
 
   static {
+    kElevatorFollowerConfig
+    .follow(kMotorID, true)
+    .idleMode(kIdleMode)
+    .smartCurrentLimit(kCurrentLimit);
+
     kElevatorConfig.idleMode(kIdleMode).smartCurrentLimit(kCurrentLimit);
 
     kElevatorConfig

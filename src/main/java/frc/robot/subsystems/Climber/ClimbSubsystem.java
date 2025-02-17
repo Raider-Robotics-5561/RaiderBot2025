@@ -9,8 +9,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-import frc.robot.miscConstants.ClimberConstants;
+import frc.robot.util.Constants.miscConstants.ClimberConstants;
 
 public class ClimbSubsystem extends SubsystemBase {
 

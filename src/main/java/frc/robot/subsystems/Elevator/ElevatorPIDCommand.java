@@ -10,7 +10,8 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Elevator.ElevatorConstants.Positions;
+import frc.robot.util.Constants.ElevatorConstants;
+import frc.robot.util.Constants.ElevatorConstants.Positions;
 
 public class ElevatorPIDCommand extends Command {
   private final Elevator mElevatorSubsystem;

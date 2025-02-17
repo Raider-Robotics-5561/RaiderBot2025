@@ -4,6 +4,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -14,17 +15,20 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import java.io.File;
 import swervelib.SwerveInputStream;
+import swervelib.parser.json.modules.DriveConversionFactorsJson;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj.XboxController;
 
 import frc.robot.commands.ClimberUpCommand;
 import frc.robot.commands.ClimberDownCommand;
 import frc.robot.subsystems.Climber.ClimbSubsystem;
-import frc.robot.miscConstants;
 import frc.robot.subsystems.Elevator.Elevator;
-import frc.robot.subsystems.Elevator.ElevatorConstants;
 import frc.robot.subsystems.Elevator.ElevatorFFCommand;
 import frc.robot.subsystems.Elevator.ElevatorPIDCommand;
 import frc.robot.subsystems.Swerve.SwerveSubsystem;
+import frc.robot.util.Constants.ElevatorConstants;
+import frc.robot.util.Constants.SwerveConstants;
+import frc.robot.util.Constants.miscConstants;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
  * little robot logic should actually be handled in the {@link Robot} periodic methods (other than the scheduler calls).
@@ -48,8 +52,10 @@ public class RobotContainer
                                                              () -> DriveController.getLeftX() * -1)
                                                             .withControllerRotationAxis(DriveController::getRightX)
                                                             .deadband(miscConstants.DEADBAND)
-                                                            .scaleTranslation(0.8)
+                                                            .scaleTranslation(SwerveConstants.kMaxSpeedScalar)
                                                             .allianceRelativeControl(true);
+            
+ 
 
   /**
    * Clone's the angular velocity input stream and converts it to a fieldRelative input stream.
@@ -156,8 +162,20 @@ public class RobotContainer
       DriveController.start().whileTrue(Commands.none());
       DriveController.back().whileTrue(Commands.none());
       DriveController.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-      DriveController.rightBumper().onTrue(Commands.none());
-    
+
+
+
+
+      DriveController
+      .rightTrigger(miscConstants.DEADBAND)
+      .onTrue(
+          Commands.runOnce(() -> {driveAngularVelocity.scaleTranslation(SwerveConstants.kUnboostScalar);
+          }))
+      .onFalse(
+        Commands.runOnce(() -> {driveAngularVelocity.scaleTranslation(SwerveConstants.kMaxSpeedScalar);
+          
+          }));
+
     
   }
 

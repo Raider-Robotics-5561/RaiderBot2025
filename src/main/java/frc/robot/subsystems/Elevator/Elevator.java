@@ -12,6 +12,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.TunableNumber;
+import frc.robot.util.Constants.ElevatorConstants;
 
 public class Elevator extends SubsystemBase {
   private final SparkMax mElevatorSparkMax;
@@ -29,10 +30,10 @@ public class Elevator extends SubsystemBase {
     mEncoder = mElevatorSparkMax.getEncoder();
     mElevatorController = mElevatorSparkMax.getClosedLoopController();
 
-    ElevatorConstants.mElevatorSparkMaxFollowerconfig
+    ElevatorConstants.kElevatorFollowerConfig
     .follow(ElevatorConstants.kMotorID, true);
     
-    mElevatorSparkMax.configure(ElevatorConstants.mElevatorSparkMaxFollowerconfig,
+    mElevatorSparkMax.configure(ElevatorConstants.kElevatorFollowerConfig,
       ResetMode.kResetSafeParameters,
       PersistMode.kNoPersistParameters);
 
