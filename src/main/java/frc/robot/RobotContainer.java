@@ -49,7 +49,8 @@ public class RobotContainer
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve"));
-  public final ClimbSubsystem m_climber = new ClimbSubsystem();
+  public final ClimbSubsystem 
+  m_climber = new ClimbSubsystem();
 
 
   // private final Claw claw;
@@ -62,7 +63,8 @@ public class RobotContainer
                                                              () -> DriveController.getLeftX() * -1)
                                                             .withControllerRotationAxis(DriveController::getRightX)
                                                             .deadband(miscConstants.DEADBAND)
-                                                            .scaleTranslation(SwerveConstants.kMaxSpeedScalar)
+                                                            .scaleTranslation(0.25)
+                                                            .scaleRotation(0.15)
                                                             .allianceRelativeControl(true);
             
  
@@ -205,20 +207,22 @@ public class RobotContainer
 
       DriveController.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
 
-
-      DriveController.rightTrigger().onChange(Commands.runOnce(() -> {
+      DriveController.axisGreaterThan(3, 0.01).onChange(Commands.runOnce(() -> {
         driveAngularVelocity.scaleTranslation(DriveController.getRightTriggerAxis() + 0.25);
-      }));
+        driveAngularVelocity.scaleRotation((DriveController.getRightTriggerAxis() * miscConstants.RotationSpeedScale) + 0.25);
+      }).repeatedly()).whileFalse(Commands.runOnce(() -> { 
+        driveAngularVelocity.scaleTranslation(0.25);
+        driveAngularVelocity.scaleRotation(0.15);
+      }).repeatedly());
 
 
-      
-      DriveController
-      .rightTrigger(miscConstants.DEADBAND)
-      .whileTrue(Commands.runOnce(() -> {driveAngularVelocity.scaleTranslation(SwerveConstants.kMaxSpeedScalar);
-      }))
-      .whileFalse(Commands.runOnce(() -> {driveAngularVelocity.scaleTranslation(SwerveConstants.kUnboostScalar);
-       }));
-      }
+      // DriveController
+      // .rightTrigger(miscConstants.DEADBAND)
+      // .whileTrue(Commands.runOnce(() -> {driveAngularVelocity.scaleTranslation(SwerveConstants.kMaxSpeedScalar);
+      // }))
+      // .whileFalse(Commands.runOnce(() -> {driveAngularVelocity.scaleTranslation(SwerveConstants.kUnboostScalar);
+      //  }));
+       }
 
     
   }
