@@ -206,8 +206,12 @@ public class RobotContainer
       DriveController.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
 
 
+      DriveController.rightTrigger().onChange(Commands.runOnce(() -> {
+        driveAngularVelocity.scaleTranslation(DriveController.getRightTriggerAxis() + 0.25);
+      }));
 
 
+      
       DriveController
       .rightTrigger(miscConstants.DEADBAND)
       .whileTrue(Commands.runOnce(() -> {driveAngularVelocity.scaleTranslation(SwerveConstants.kMaxSpeedScalar);
