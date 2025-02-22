@@ -200,7 +200,7 @@ public class RobotContainer
       //         new ParallelCommandGroup(
       //             new ElevatorFFCommand(elevator)));
 
-      DriveController.button(8).onTrue((Commands.runOnce(drivebase::zeroGyro)));
+      DriveController.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
 
       DriveController.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
 
