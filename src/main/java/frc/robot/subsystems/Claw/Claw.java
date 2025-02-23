@@ -57,11 +57,11 @@ public class Claw extends SubsystemBase {
     // wristA.setDefault(0.0);
   }
 
-  public void setClaw(ClawRollerVolt pVoltage) {
-    setClaw(pVoltage.get());
+  public void setRollerPower(ClawRollerVolt pVoltage) {
+    setRollerPower(pVoltage.get());
   }
 
-  public void setClaw(double pVoltage) {
+  public void setRollerPower(double pVoltage) {
     kRollerID.setVoltage(filterVoltage(pVoltage));
   }
 
@@ -75,8 +75,9 @@ public class Claw extends SubsystemBase {
 
   public double getEncoderMeasurement() {
     double encoderMeasurement = mWristEncoder.getPosition();
-    if (encoderMeasurement > ClawConstants.Wrist.kPositionConversionFactor / 2.0)
-      encoderMeasurement -= ClawConstants.Wrist.kPositionConversionFactor;
+    // if (encoderMeasurement > ClawConstants.Wrist.kPositionConversionFactor / 2.0)
+    //   encoderMeasurement -= ClawConstants.Wrist.kPositionConversionFactor;
+    // Why would we want to do this? 
     return encoderMeasurement;
   }
 
@@ -88,16 +89,17 @@ public class Claw extends SubsystemBase {
   // }
 
   private double filterToLimits(double pInput) {
-    return (pInput > 0 && getEncoderMeasurement() >= ClawConstants.Wrist.kForwardSoftLimit)
-            || (pInput < 0 && getEncoderMeasurement() <= ClawConstants.Wrist.kReverseSoftLimit)
+    return (pInput > 0 && getEncoderMeasurement() <= ClawConstants.Wrist.kForwardSoftLimit)
+            || (pInput < 0 && getEncoderMeasurement() >= ClawConstants.Wrist.kReverseSoftLimit)
         ? 0.0
         : pInput;
   }
 
   private void stopIfLimit() {
     double motorOutput = getMotorOutput();
-    if ((motorOutput > 0 && getEncoderMeasurement() >= ClawConstants.Wrist.kForwardSoftLimit)
-        || (motorOutput < 0 && getEncoderMeasurement() <= ClawConstants.Wrist.kReverseSoftLimit)) {
+    if ((motorOutput > 0 && getEncoderMeasurement() <= ClawConstants.Wrist.kForwardSoftLimit)
+        || (motorOutput < 0 && getEncoderMeasurement() >= ClawConstants.Wrist.kReverseSoftLimit)) {
+      System.out.println("Claw Stop Limit Reached");
       setWrist(0);
     }
   }
@@ -107,13 +109,14 @@ public class Claw extends SubsystemBase {
   }
 
   public void goToSetpoint(double pSetpoint) {
-    mWristController.setReference(pSetpoint, ControlType.kMAXMotionPositionControl);
+    mWristController.setReference(pSetpoint, ControlType.kPosition);
   }
 
   @Override
   public void periodic() {
     stopIfLimit();
     SmartDashboard.putNumber("Wrist/Position", getEncoderMeasurement());
+    SmartDashboard.putNumber("Wrist/Position/Abs",  mWristEncoder.getPosition());
     SmartDashboard.putNumber("Wrist/Voltage", mWristSparkMax.getBusVoltage());
 
     if (wristP.hasChanged()) ClawConstants.Wrist.kP = wristP.get();

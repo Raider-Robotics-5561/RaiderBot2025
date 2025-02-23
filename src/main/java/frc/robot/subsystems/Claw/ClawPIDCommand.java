@@ -10,7 +10,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.util.Constants.ClawConstants.Wrist;
-import frc.robot.util.Constants.ClawConstants.Wrist.Positions;
+import frc.robot.util.Constants.ClawConstants.Wrist.ElevatorPositions;
 
 public class ClawPIDCommand extends Command {
   private final Claw mClawSubsystem;
@@ -21,7 +21,7 @@ public class ClawPIDCommand extends Command {
   private double elevatorSetpoint;
   private double pivotPosition;
 
-  public ClawPIDCommand(Positions pSetpoint, Claw pClawSubsystem) {
+  public ClawPIDCommand(ElevatorPositions pSetpoint, Claw pClawSubsystem) {
     this(false, pSetpoint.getPos(), pClawSubsystem);
   }
 
