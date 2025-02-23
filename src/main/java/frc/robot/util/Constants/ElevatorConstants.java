@@ -12,7 +12,7 @@ public class ElevatorConstants {
   public static int kMotorID = 10;
   public static int kFollowerMotorID = 11;
   public static MotorType kMotorType = MotorType.kBrushless;
-  public static IdleMode kIdleMode = IdleMode.kBrake;
+  public static IdleMode kIdleMode = IdleMode.kCoast;
   public static int kCurrentLimit = 40;
   public static double kMinHeight = 0;
   public static double kMaxHeight = 0;

@@ -54,7 +54,7 @@ public class RobotContainer
 
 
   // private final Claw claw;
-  // private final Elevator elevator;
+  //private final Elevator elevator;
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
 
@@ -119,47 +119,21 @@ public class RobotContainer
    */
   public RobotContainer()
   {
-    // elevator = new Elevator();
+    //elevator = new Elevator();
     // claw     = new Claw();
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
     configureBindings();
-    DriverStation.silenceJoystickConnectionWarning(false);
+    DriverStation.silenceJoystickConnectionWarning(true);
+    
    
 
   }
   private void configureBindings()
   {
-
-    OPController.povUp().whileTrue(new ClimberUpCommand(m_climber));
-    OPController.povDown().whileTrue(new ClimberDownCommand(m_climber));
-
-    // OPController
-    //     .y()
-    //     .onTrue(
-    //         new ParallelCommandGroup(
-    //             new ElevatorPIDCommand(ElevatorConstants.Positions.L4, elevator)))
-    //     .onFalse(
-    //         new ParallelCommandGroup(new ElevatorFFCommand(elevator)));
-
-    //         OPController
-    //     .b()
-    //     .onTrue(
-    //         new ParallelCommandGroup(
-    //             new ElevatorPIDCommand(ElevatorConstants.Positions.L1, elevator)))
-    //     .onFalse(
-    //         new ParallelCommandGroup(new ElevatorFFCommand(elevator)));
-
-            // OPController
-        // .x()
-        // .onTrue(
-        //     new ParallelCommandGroup(
-        //         new ElevatorPIDCommand(ElevatorConstants.Positions.POSTINTAKE, elevator)))
-        // .onFalse(
-        //     new ParallelCommandGroup(
-        //         new ElevatorFFCommand(elevator)));
+        
  // Command driveFieldOrientedDirectAngle      = drivebase.driveFieldOriented(driveDirectAngle);
  Command driveFieldOrientedAnglularVelocity = drivebase.driveFieldOriented(driveAngularVelocity);
  // Command driveRobotOrientedAngularVelocity  = drivebase.driveFieldOriented(driveRobotOriented);
@@ -198,6 +172,34 @@ public class RobotContainer
       DriveController.rightBumper().onTrue(Commands.none());
     } else
     {
+      OPController.povUp().whileTrue(new ClimberUpCommand(m_climber));
+      OPController.povDown().whileTrue(new ClimberDownCommand(m_climber));
+  
+      // OPController
+      //     .y()
+      //     .onTrue(
+      //         new ParallelCommandGroup(
+      //             new ElevatorPIDCommand(ElevatorConstants.Positions.L4, elevator)))
+      //     .onFalse(
+      //         new ParallelCommandGroup(new ElevatorFFCommand(elevator)));
+  
+      //         OPController
+      //     .b()
+      //     .onTrue(
+      //         new ParallelCommandGroup(
+      //             new ElevatorPIDCommand(ElevatorConstants.Positions.L1, elevator)))
+      //     .onFalse(
+      //         new ParallelCommandGroup(new ElevatorFFCommand(elevator)));
+  
+      //         OPController
+      //     .x()
+      //     .onTrue(
+      //         new ParallelCommandGroup(
+      //             new ElevatorPIDCommand(ElevatorConstants.Positions.POSTINTAKE, elevator)))
+      //     .onFalse(
+      //         new ParallelCommandGroup(
+      //             new ElevatorFFCommand(elevator)));
+
       DriveController.button(8).onTrue((Commands.runOnce(drivebase::zeroGyro)));
 
       DriveController.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
