@@ -9,7 +9,6 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkClosedLoopController;
-import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -38,9 +37,12 @@ public class Claw extends SubsystemBase {
     this.mWristController = mWristSparkMax.getClosedLoopController();
     this.mWristEncoder = mWristSparkMax.getAbsoluteEncoder();
 
-    mWristSparkMax.configure(
-        ClawConstants.Wrist.kWristConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
-    kRollerID.configure(
+      mWristSparkMax.configure(
+        ClawConstants.Wrist.kWristConfig, 
+        ResetMode.kResetSafeParameters, 
+        PersistMode.kNoPersistParameters);
+    
+      kRollerID.configure(
         ClawConstants.Roller.kRollerConfig,
         ResetMode.kResetSafeParameters,
         PersistMode.kNoPersistParameters);

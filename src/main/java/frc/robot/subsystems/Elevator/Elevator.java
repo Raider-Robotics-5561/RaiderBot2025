@@ -4,6 +4,7 @@ package frc.robot.subsystems.Elevator;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
 import com.revrobotics.spark.SparkMaxAlternateEncoder;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -26,10 +27,10 @@ public class Elevator extends SubsystemBase {
   private final SparkClosedLoopController mElevatorController;
   private final SparkAbsoluteEncoder elevatorAbsEncoder;
   private final RelativeEncoder elevatorRelEncoder;
-  //.Type.kQuadrature;
+  // private final AbsoluteEncoder m_alternateEncoder;
+  // private final double kCPR = 8192;
 
   private double motorVoltage = 0;
-
 
   private TunableNumber elevatorFF, elevatorP, elevatorI, elevatorD;
   private TunableNumber elevatorTunableSetpoint;
@@ -37,25 +38,29 @@ public class Elevator extends SubsystemBase {
   public Elevator() {
     mElevatorSparkMax = new SparkMax(ElevatorConstants.kMotorID, MotorType.kBrushless);
     mElevatorSparkMaxFollower = new SparkMax(11, MotorType.kBrushless);
+    // kAltEncType = com.rev
     elevatorRelEncoder = mElevatorSparkMax.getEncoder();
     mElevatorController = mElevatorSparkMax.getClosedLoopController();
     elevatorAbsEncoder = mElevatorSparkMax.getAbsoluteEncoder();
+    //  m_alternateEncoder = mElevatorSparkMax.GetAlternateEncoder(kAltEncType, kCPR);
+
  
     ElevatorConstants.kElevatorFollowerConfig
     .follow(ElevatorConstants.kMotorID, true);
     
-    mElevatorSparkMax.configure(ElevatorConstants.kElevatorFollowerConfig,
+    mElevatorSparkMaxFollower.configure(
+      ElevatorConstants.kElevatorFollowerConfig,
       ResetMode.kResetSafeParameters,
       PersistMode.kNoPersistParameters);
 
 
     mElevatorSparkMax.configure(
-        ElevatorConstants.kElevatorConfig.inverted(true),
+        ElevatorConstants.kElevatorConfig,
         ResetMode.kResetSafeParameters,
         PersistMode.kNoPersistParameters);
 
-    SmartDashboard.putNumber("Target Position", 0);
-    SmartDashboard.putNumber("Target Velocity", 0);
+    SmartDashboard.putNumber("Elevator Target Position", 0);
+    SmartDashboard.putNumber("Elevator Target Velocity", 0);
 
     elevatorFF = new TunableNumber("Elevator/Elevator FF");
     elevatorP = new TunableNumber("Elevator/Elevator P");
