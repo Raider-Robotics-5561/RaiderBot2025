@@ -1,6 +1,7 @@
 package frc.robot.util.Constants;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 // import edu.wpi.first.wpilibj.motorcontrol.Spark;
@@ -72,18 +73,18 @@ public class ClawConstants {
     public static int kMotorID = 12;
     public static MotorType kMotorType = MotorType.kBrushless;
     public static IdleMode kIdleMode = IdleMode.kBrake;
-    public static int kCurrentLimit = 80;
-    public static double kP = 0.08; // TODO: Configure me!
+    public static int kCurrentLimit = 20;
+    public static double kP = 0.001; // TODO: Configure me!
     public static double kD = 0.0; // TODO: Configure me!
     public static double kVelocityFF = 0.0; // TODO: Configure me!
 
-    public static double kMaxAcceleration = 100;
-    public static double kMaxVelocity = 100;
+    public static double kMaxAcceleration = 10;
+    public static double kMaxVelocity = 10;
     public static double kTolerance = 1;
 
-    public static double kForwardSoftLimit = 70;
-    public static double kReverseSoftLimit = -58;
-    public static double kGearRatio = 50.0 / 84.0;
+    public static double kForwardSoftLimit = 2.8;
+    public static double kReverseSoftLimit = 7.15;
+    public static double kGearRatio = 1 / 49.0;
 
     public static double kEncoderOffsetRev = 0.0623246; // In revolutions
 
@@ -98,10 +99,11 @@ public class ClawConstants {
     public static final SparkMaxConfig kWristConfig = new SparkMaxConfig();
 
     public enum ClawRollerVolt {
-      INTAKE_CORAL(1),
-      INTAKE_ALGAE(1),
-      OUTTAKE_REEF(-4),
-      OUTTAKE_BARGE(-5);
+      STOPPED(0),
+      INTAKE_CORAL(0.5),
+      INTAKE_ALGAE(0.5),
+      OUTTAKE_REEF(-0.5),
+      OUTTAKE_BARGE(-0.5);
 
       public final double voltage;
 
@@ -114,7 +116,25 @@ public class ClawConstants {
       }
     };
 
-    public enum Positions {
+    public enum WristPositions {
+      ZERO(3),
+      Home(3),
+      Coral_updown(5.18),
+      Max(3);
+
+
+      public final double position;
+
+      private WristPositions(double position) {
+        this.position = position;
+      }
+
+      public double get() {
+        return this.position;
+      }
+    };
+
+    public enum ElevatorPositions {
       BOTTOM(0),
       INTAKE(-50),
       L1(0),
@@ -126,7 +146,7 @@ public class ClawConstants {
 
       public final double position;
 
-      private Positions(double position) {
+      private ElevatorPositions(double position) {
         this.position = position;
       }
 
@@ -149,11 +169,11 @@ public class ClawConstants {
           .velocityConversionFactor(kVelocityConversionFactor)
           .zeroOffset(kEncoderOffsetRev);
 
-      // kWristConfig
-      //     .closedLoop
-      //     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-      //     .pidf(kP, 0.0, kD, kVelocityFF)
-      //     .outputRange(-1, 1);
+      kWristConfig
+          .closedLoop
+          .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
+          .pidf(kP, 0.0, kD, kVelocityFF)
+          .outputRange(-1, 1);
 
       // kWristConfig
       //     .closedLoop

@@ -29,6 +29,8 @@ import frc.robot.subsystems.Elevator.ElevatorPIDCommand;
 import frc.robot.subsystems.Swerve.SwerveSubsystem;
 import frc.robot.util.Constants.ElevatorConstants;
 import frc.robot.util.Constants.miscConstants;
+import frc.robot.util.Constants.ClawConstants.Wrist.ClawRollerVolt;
+import frc.robot.util.Constants.ClawConstants.Wrist.WristPositions;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
@@ -43,9 +45,8 @@ public class RobotContainer
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve"));
-  public final ClimbSubsystem 
-  m_climber = new ClimbSubsystem();
-
+  public final ClimbSubsystem m_climber = new ClimbSubsystem();
+  public final Claw sub_claw = new Claw();
 
   // private final Claw claw;
   private final Elevator elevator;
@@ -163,12 +164,31 @@ public class RobotContainer
       OPController.povUp().whileTrue(new ClimberUpCommand(m_climber));
       OPController.povDown().whileTrue(new ClimberDownCommand(m_climber));
   
-      OPController
-          .y()
-          .onTrue(
-            new ParallelCommandGroup(new ElevatorPIDCommand(ElevatorConstants.Positions.L4, elevator)))
-          .onFalse(
-            new ParallelCommandGroup(new ElevatorFFCommand(elevator)));
+      
+
+      OPController.b().whileTrue(Commands.run(() -> {
+        sub_claw.setRollerPower(ClawRollerVolt.INTAKE_ALGAE);
+      }));
+
+      OPController.x().whileTrue(Commands.run(() -> {
+        sub_claw.setRollerPower(ClawRollerVolt.OUTTAKE_BARGE);
+      }));
+
+      OPController.b().or(OPController.a()).whileFalse(Commands.run(() -> {
+        sub_claw.setRollerPower(ClawRollerVolt.STOPPED);
+      }));
+
+      OPController.y().onTrue(Commands.run(()-> { 
+        sub_claw.goToSetpoint(WristPositions.Coral_updown.get());
+      }));
+      
+      // OPController
+      //     .y()
+      //     .onTrue(
+      //         new ParallelCommandGroup(
+      //             new ElevatorPIDCommand(ElevatorConstants.Positions.L4, elevator)))
+      //     .onFalse(
+      //         new ParallelCommandGroup(new ElevatorFFCommand(elevator)));
   
         OPController
           .b()
@@ -184,7 +204,9 @@ public class RobotContainer
           .onFalse(
             new ParallelCommandGroup(new ElevatorFFCommand(elevator)));
 
-      DriveController.button(8).onTrue((Commands.runOnce(drivebase::zeroGyro)));
+      
+
+      DriveController.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
 
       // DriveController.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
 
