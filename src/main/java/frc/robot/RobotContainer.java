@@ -5,25 +5,19 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.io.File;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import swervelib.SwerveInputStream;
-import swervelib.parser.json.modules.DriveConversionFactorsJson;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj.XboxController;
+
 
 import frc.robot.commands.ClimberUpCommand;
 import frc.robot.commands.ClimberDownCommand;
@@ -34,11 +28,9 @@ import frc.robot.subsystems.Elevator.ElevatorFFCommand;
 import frc.robot.subsystems.Elevator.ElevatorPIDCommand;
 import frc.robot.subsystems.Swerve.SwerveSubsystem;
 import frc.robot.util.Constants.ElevatorConstants;
-import frc.robot.util.Constants.SwerveConstants;
 import frc.robot.util.Constants.miscConstants;
 import frc.robot.util.Constants.ClawConstants.Wrist.ClawRollerVolt;
 import frc.robot.util.Constants.ClawConstants.Wrist.WristPositions;
-import frc.robot.commands.swervedrive.drivebase.*;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
@@ -57,7 +49,7 @@ public class RobotContainer
   public final Claw sub_claw = new Claw();
 
   // private final Claw claw;
-  //private final Elevator elevator;
+  private final Elevator elevator;
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
 
@@ -122,7 +114,7 @@ public class RobotContainer
    */
   public RobotContainer()
   {
-    //elevator = new Elevator();
+    elevator = new Elevator();
     // claw     = new Claw();
 
     // Set up auto routines
@@ -137,15 +129,11 @@ public class RobotContainer
   private void configureBindings()
   {
         
- // Command driveFieldOrientedDirectAngle      = drivebase.driveFieldOriented(driveDirectAngle);
+
  Command driveFieldOrientedAnglularVelocity = drivebase.driveFieldOriented(driveAngularVelocity);
- // Command driveRobotOrientedAngularVelocity  = drivebase.driveFieldOriented(driveRobotOriented);
- // Command driveSetpointGen = drivebase.driveWithSetpointGeneratorFieldRelative(
-     // driveDirectAngle);
- Command driveFieldOrientedDirectAngleKeyboard      = drivebase.driveFieldOriented(driveDirectAngleKeyboard);
- // Command driveFieldOrientedAnglularVelocityKeyboard = drivebase.driveFieldOriented(driveAngularVelocityKeyboard);
- // Command driveSetpointGenKeyboard = drivebase.driveWithSetpointGeneratorFieldRelative(
-     // driveDirectAngleKeyboard);
+
+ Command driveFieldOrientedDirectAngleKeyboard  = drivebase.driveFieldOriented(driveDirectAngleKeyboard);
+
 
    if (RobotBase.isSimulation())
     {
@@ -157,8 +145,6 @@ public class RobotContainer
 
     if (Robot.isSimulation())
     {
-      // driverJoystick.button(1).whileTrue(drivebase.sysIdDriveMotorCommand());
-      // driverJoystick.button(8).onTrue(Commands.runOnce(() -> drivebase.resetOdometry(new Pose2d(3, 3, new Rotation2d()))));
       DriveController.start().onTrue(Commands.runOnce(() -> drivebase.resetOdometry(new Pose2d(3, 3, new Rotation2d()))));
       DriveController.button(1).whileTrue(drivebase.sysIdDriveMotorCommand());
 
@@ -196,9 +182,6 @@ public class RobotContainer
         sub_claw.goToSetpoint(WristPositions.Coral_updown.get());
       }));
       
-      SmartDashboard.putBoolean("Forward Limit Switch", sub_claw.getForwardLimitSwitch1());
-      SmartDashboard.putBoolean("Reverse Limit Switch", sub_claw.getReverseLimitSwitch1());
-      
       
       // OPController
       //     .y()
@@ -208,28 +191,25 @@ public class RobotContainer
       //     .onFalse(
       //         new ParallelCommandGroup(new ElevatorFFCommand(elevator)));
   
-      //         OPController
-      //     .b()
-      //     .onTrue(
-      //         new ParallelCommandGroup(
-      //             new ElevatorPIDCommand(ElevatorConstants.Positions.L1, elevator)))
-      //     .onFalse(
-      //         new ParallelCommandGroup(new ElevatorFFCommand(elevator)));
+        OPController
+          .b()
+          .onTrue(
+            new ParallelCommandGroup(new ElevatorPIDCommand(ElevatorConstants.Positions.L1, elevator)))
+          .onFalse(
+            new ParallelCommandGroup(new ElevatorFFCommand(elevator)));
   
-      //         OPController
-      //     .x()
-      //     .onTrue(
-      //         new ParallelCommandGroup(
-      //             new ElevatorPIDCommand(ElevatorConstants.Positions.POSTINTAKE, elevator)))
-      //     .onFalse(
-      //         new ParallelCommandGroup(
-      //             new ElevatorFFCommand(elevator)));
+        OPController
+          .x()
+          .onTrue(
+            new ParallelCommandGroup(new ElevatorPIDCommand(ElevatorConstants.Positions.POSTINTAKE, elevator)))
+          .onFalse(
+            new ParallelCommandGroup(new ElevatorFFCommand(elevator)));
 
       
 
       DriveController.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
 
-      DriveController.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
+      // DriveController.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
 
       DriveController.y().whileTrue(
       drivebase.driveToPose(new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0))));

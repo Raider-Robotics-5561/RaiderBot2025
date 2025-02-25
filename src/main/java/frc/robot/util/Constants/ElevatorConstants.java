@@ -13,11 +13,11 @@ public class ElevatorConstants {
   public static int kFollowerMotorID = 11;
   public static MotorType kMotorType = MotorType.kBrushless;
   public static IdleMode kIdleMode = IdleMode.kCoast;
-  public static int kCurrentLimit = 40;
-  public static double kMinHeight = 0;
-  public static double kMaxHeight = 0;
-  public static double kP = 1.5; // TODO: Configure me!
-  public static double kI = 0.0;
+  public static int kCurrentLimit = 40; // TODO: Configure me!
+  public static double kMinHeight = 0;  // TODO: Configure me!
+  public static double kMaxHeight = 0;  // TODO: Configure me!
+  public static double kP = 0.01; // TODO: Configure me!
+  public static double kI = 0.0;  // TODO: Configure me!
   public static double kD = 0.08; // TODO: Configure me!
   public static double kVelocityFF = 0.0; // TODO: Configure me!
 
@@ -45,15 +45,15 @@ public class ElevatorConstants {
   public static final SparkMaxConfig kElevatorFollowerConfig = new SparkMaxConfig();
 
   public enum Positions {
-    BOTTOM(0),
-    PREINTAKE(0),
-    POSTINTAKE(0),
-    L1(1),
-    L2(0),
-    L3(0),
-    L4(0),
-    SCORE(0),
-    BARGE(0);
+    BOTTOM(0), 
+    PREINTAKE(0), // TODO: Configure me!
+    POSTINTAKE(0),  // TODO: Configure me!
+    L1(0),  // TODO: Configure me!
+    L2(0),  // TODO: Configure me!
+    L3(0),  // TODO: Configure me!
+    L4(0),  // TODO: Configure me!
+    SCORE(0), // TODO: Configure me!
+    BARGE(0); // TODO: Configure me!
 
     public final double position;
 
