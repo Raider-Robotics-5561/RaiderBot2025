@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -18,6 +21,8 @@ import frc.robot.util.Constants.SwerveConstants;
  */
 public class Robot extends TimedRobot
 {
+  // AddressableLED led;
+  // AddressableLEDBuffer ledBuffer;
 
   private static Robot   instance;
   private        Command m_autonomousCommand;
@@ -28,7 +33,12 @@ public class Robot extends TimedRobot
 
   public Robot()
   {
-    
+    // led = new AddressableLED (0);
+    // ledBuffer = new AddressableLEDBuffer(500);
+    // led.setLength(500);
+    // led.setLength(ledBuffer.getLength());
+    // led.start();
+
     instance = this;
   }
 
