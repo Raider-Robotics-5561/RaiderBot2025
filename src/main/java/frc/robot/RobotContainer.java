@@ -74,7 +74,7 @@ public class RobotContainer
 
   //=======================================================
 
-  // private final Claw claw;
+  private final Claw sub_claw;
   private final Elevator elevator;
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
