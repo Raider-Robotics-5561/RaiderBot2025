@@ -47,8 +47,8 @@ public class ElevatorConstants {
     PREINTAKE(0), // TODO: Configure me!
     POSTINTAKE(0),  // TODO: Configure me!
     L1(0),  // TODO: Configure me!
-    L2(0),  // TODO: Configure me!
-    L3(0),  // TODO: Configure me!
+    L2(11.95),  // TODO: Configure me!
+    L3(47.2),  // TODO: Configure me!
     L4(0),  // TODO: Configure me!
     SCORE(0), // TODO: Configure me!
     BARGE(0); // TODO: Configure me!

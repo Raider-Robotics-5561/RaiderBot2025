@@ -183,7 +183,16 @@ public class RobotContainer
       //   sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Coral_updown.get());
       //  // sub_claw.setWrist(0.5);
       // }));
-      
+      OPController.a().onTrue(Commands.run(() -> {
+        System.out.println("A");
+        elevator.goToSetpoint(0);
+      }));
+
+      OPController.y().onTrue(Commands.run(() -> {
+        System.out.println("Y");
+        elevator.goToSetpoint(47.2);
+      }));
+
       OPController.x().onTrue(Commands.run(() -> {
         System.out.println("X");
         elevator.goToSetpoint(84);
