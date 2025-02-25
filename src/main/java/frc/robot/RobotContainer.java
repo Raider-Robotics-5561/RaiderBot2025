@@ -27,6 +27,7 @@ import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorFFCommand;
 import frc.robot.subsystems.Elevator.ElevatorPIDCommand;
 import frc.robot.subsystems.Swerve.SwerveSubsystem;
+import frc.robot.util.Constants.ClawConstants;
 import frc.robot.util.Constants.ElevatorConstants;
 import frc.robot.util.Constants.miscConstants;
 import frc.robot.util.Constants.ClawConstants.Wrist.ClawRollerVolt;
@@ -46,7 +47,7 @@ public class RobotContainer
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve"));
   public final ClimbSubsystem m_climber = new ClimbSubsystem();
-  public final Claw sub_claw = new Claw();
+  public final Claw sub_claw;
 
   // private final Claw claw;
   private final Elevator elevator;
@@ -115,7 +116,7 @@ public class RobotContainer
   public RobotContainer()
   {
     elevator = new Elevator();
-    // claw     = new Claw();
+     sub_claw     = new Claw();
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -166,22 +167,29 @@ public class RobotContainer
   
       
 
-      OPController.b().whileTrue(Commands.run(() -> {
-        sub_claw.setRollerPower(ClawRollerVolt.INTAKE_ALGAE);
-      }));
+      // OPController.b().whileTrue(Commands.run(() -> {
+      //   sub_claw.setRollerPower(ClawRollerVolt.INTAKE_ALGAE);
+      // }));
 
-      OPController.x().whileTrue(Commands.run(() -> {
-        sub_claw.setRollerPower(ClawRollerVolt.OUTTAKE_BARGE);
-      }));
+      // OPController.x().whileTrue(Commands.run(() -> {
+      //   sub_claw.setRollerPower(ClawRollerVolt.OUTTAKE_BARGE);
+      // }));
 
-      OPController.b().or(OPController.a()).whileFalse(Commands.run(() -> {
-        sub_claw.setRollerPower(ClawRollerVolt.STOPPED);
-      }));
+      // OPController.b().or(OPController.a()).whileFalse(Commands.run(() -> {
+      //   sub_claw.setRollerPower(ClawRollerVolt.STOPPED);
+      // }));
 
-      OPController.y().onTrue(Commands.run(()-> { 
-        sub_claw.goToSetpoint(WristPositions.Coral_updown.get());
-      }));
+      // OPController.y().onTrue(Commands.run(()-> { 
+      //   sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Coral_updown.get());
+      //  // sub_claw.setWrist(0.5);
+      // }));
       
+      OPController.x().onTrue(Commands.run(() -> {
+        System.out.println("X");
+        elevator.goToSetpoint(84);
+        //elevator.setMotorVoltage(1);
+      }));
+
       // OPController
       //     .y()
       //     .onTrue(
@@ -190,19 +198,19 @@ public class RobotContainer
       //     .onFalse(
       //         new ParallelCommandGroup(new ElevatorFFCommand(elevator)));
   
-        OPController
-          .b()
-          .onTrue(
-            new ParallelCommandGroup(new ElevatorPIDCommand(ElevatorConstants.Positions.L1, elevator)))
-          .onFalse(
-            new ParallelCommandGroup(new ElevatorFFCommand(elevator)));
+      //   OPController
+      //     .b()
+      //     .onTrue(
+      //       new ParallelCommandGroup(new ElevatorPIDCommand(ElevatorConstants.Positions.L1, elevator)))
+      //     .onFalse(
+      //       new ParallelCommandGroup(new ElevatorFFCommand(elevator)));
   
-        OPController
-          .x()
-          .onTrue(
-            new ParallelCommandGroup(new ElevatorPIDCommand(ElevatorConstants.Positions.POSTINTAKE, elevator)))
-          .onFalse(
-            new ParallelCommandGroup(new ElevatorFFCommand(elevator)));
+      //   OPController
+      //     .x()
+      //     .onTrue(
+      //       new ParallelCommandGroup(new ElevatorPIDCommand(ElevatorConstants.Positions.POSTINTAKE, elevator)))
+      //     .onFalse(
+      //       new ParallelCommandGroup(new ElevatorFFCommand(elevator)));
 
       
 

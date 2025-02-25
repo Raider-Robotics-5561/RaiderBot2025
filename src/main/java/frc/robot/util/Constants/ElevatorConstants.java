@@ -1,6 +1,5 @@
 package frc.robot.util.Constants;
 
-import org.xml.sax.SAXNotRecognizedException;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
@@ -16,7 +15,7 @@ public class ElevatorConstants {
   public static int kCurrentLimit = 40; // TODO: Configure me!
   public static double kMinHeight = 0;  // TODO: Configure me!
   public static double kMaxHeight = 0;  // TODO: Configure me!
-  public static double kP = 0.01; // TODO: Configure me!
+  public static double kP = 0.1; // TODO: Configure me!
   public static double kI = 0.0;  // TODO: Configure me!
   public static double kD = 0.08; // TODO: Configure me!
   public static double kVelocityFF = 0.0; // TODO: Configure me!
@@ -25,24 +24,23 @@ public class ElevatorConstants {
   public static double kMaxVelocity = 500;
   public static double kTolerance = 1;
 
-  public static double kForwardSoftLimit = 70;
+  public static double kForwardSoftLimit = 84;
   public static double kReverseSoftLimit = 0;
 
   // public static double kDrumDiameterM = Units.inchesToMeters(2.635); // Sprocket diameter
   // public static double kDrumCircumference = kDrumDiameterM * Math.PI;
 
-  // public static double kGearRatio = 25 / 1;
+  public static double kGearRatio = 1 / 12;
 
   public static double kS = 0.0;
   public static double kG = 0.9;
   public static double kV = 0.0;
   public static double kA = 0.0;
 
-  public static double kPositionConversionFactor = 1;
-  public static double kVelocityConversionFactor = kPositionConversionFactor / 60.0; // RPM -> MPS
+  public static double kPositionConversionFactor = kGearRatio  * 360 ;
+  public static double kVelocityConversionFactor = kPositionConversionFactor / 60; // RPM -> MPS
 
-  public static final SparkMaxConfig kElevatorConfig = new SparkMaxConfig();
-  public static final SparkMaxConfig kElevatorFollowerConfig = new SparkMaxConfig();
+
 
   public enum Positions {
     BOTTOM(0), 
@@ -66,18 +64,31 @@ public class ElevatorConstants {
     }
   };
 
+  public static class ElevatorConfigs {
+
+    public static final SparkMaxConfig kElevatorConfig = new SparkMaxConfig();
+    public static final SparkMaxConfig kElevatorFollowerConfig = new SparkMaxConfig();
+
   static {
     kElevatorFollowerConfig
     .follow(kMotorID, true)
     .idleMode(kIdleMode)
     .smartCurrentLimit(kCurrentLimit);
 
-    kElevatorConfig.idleMode(kIdleMode).smartCurrentLimit(kCurrentLimit);
-
     kElevatorConfig
-        .encoder
-        .positionConversionFactor(kPositionConversionFactor)
-        .velocityConversionFactor(kVelocityConversionFactor);
+      .idleMode(kIdleMode)
+      .smartCurrentLimit(kCurrentLimit);
+
+    System.out.println("KVCF "+kVelocityConversionFactor);
+    System.out.println("KPCF "+kPositionConversionFactor);
+
+
+    // kElevatorConfig
+    //     .absoluteEncoder
+    //     .positionConversionFactor(kPositionConversionFactor)
+    //     .velocityConversionFactor(kVelocityConversionFactor);
+
+      
 
     kElevatorConfig
         .closedLoop
@@ -85,11 +96,12 @@ public class ElevatorConstants {
         .pidf(kP, 0.0, kD, kVelocityFF)
         .outputRange(-1, 1);
 
-    kElevatorConfig
-        .closedLoop
-        .maxMotion
-        .maxVelocity(kMaxVelocity)
-        .maxAcceleration(kMaxAcceleration)
-        .allowedClosedLoopError(kTolerance);
+    // kElevatorConfig
+    //     .closedLoop
+    //     .maxMotion
+    //     .maxVelocity(kMaxVelocity)
+    //     .maxAcceleration(kMaxAcceleration)
+    //     .allowedClosedLoopError(kTolerance);
   }
+}
 }

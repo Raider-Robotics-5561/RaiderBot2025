@@ -74,7 +74,7 @@ public class ClawConstants {
     public static MotorType kMotorType = MotorType.kBrushless;
     public static IdleMode kIdleMode = IdleMode.kBrake;
     public static int kCurrentLimit = 20;
-    public static double kP = 0.001; // TODO: Configure me!
+    public static double kP = 0.1; // TODO: Configure me!
     public static double kD = 0.0; // TODO: Configure me!
     public static double kVelocityFF = 0.0; // TODO: Configure me!
 
@@ -83,7 +83,7 @@ public class ClawConstants {
     public static double kTolerance = 1;
 
     public static double kForwardSoftLimit = 2.8;
-    public static double kReverseSoftLimit = 7.15;
+    public static double kReverseSoftLimit = 7.2;
     public static double kGearRatio = 1 / 49.0;
 
     public static double kEncoderOffsetRev = 0.0623246; // In revolutions
@@ -156,7 +156,9 @@ public class ClawConstants {
     };
 
     static {
-      kWristConfig.idleMode(kIdleMode).smartCurrentLimit(kCurrentLimit);
+      kWristConfig
+      .idleMode(kIdleMode)
+      .smartCurrentLimit(kCurrentLimit);
 
       // kWristConfig
       //     .softLimit

@@ -37,7 +37,7 @@ public class Elevator extends SubsystemBase {
 
   public Elevator() {
     mElevatorSparkMax = new SparkMax(ElevatorConstants.kMotorID, MotorType.kBrushless);
-    mElevatorSparkMaxFollower = new SparkMax(11, MotorType.kBrushless);
+    mElevatorSparkMaxFollower = new SparkMax(ElevatorConstants.kFollowerMotorID, MotorType.kBrushless);
     // kAltEncType = com.rev
     elevatorRelEncoder = mElevatorSparkMax.getEncoder();
     mElevatorController = mElevatorSparkMax.getClosedLoopController();
@@ -45,17 +45,17 @@ public class Elevator extends SubsystemBase {
     //  m_alternateEncoder = mElevatorSparkMax.GetAlternateEncoder(kAltEncType, kCPR);
 
  
-    ElevatorConstants.kElevatorFollowerConfig
+    ElevatorConstants.ElevatorConfigs.kElevatorFollowerConfig
     .follow(ElevatorConstants.kMotorID, true);
     
     mElevatorSparkMaxFollower.configure(
-      ElevatorConstants.kElevatorFollowerConfig,
+      ElevatorConstants.ElevatorConfigs.kElevatorFollowerConfig,
       ResetMode.kResetSafeParameters,
       PersistMode.kNoPersistParameters);
 
 
     mElevatorSparkMax.configure(
-        ElevatorConstants.kElevatorConfig,
+        ElevatorConstants.ElevatorConfigs.kElevatorConfig,
         ResetMode.kResetSafeParameters,
         PersistMode.kNoPersistParameters);
 
@@ -90,12 +90,12 @@ public class Elevator extends SubsystemBase {
   }
 
   public double getEncoderMeasurement() {
-    return elevatorAbsEncoder.getPosition();
+    return elevatorRelEncoder.getPosition();
   }
 
   private double filterToLimits(double pInput) {
-    return (pInput > 0 && elevatorAbsEncoder.getPosition() >= ElevatorConstants.kForwardSoftLimit)
-            || (pInput < 0 && elevatorAbsEncoder.getPosition() <= ElevatorConstants.kReverseSoftLimit)
+    return (pInput > 0 && elevatorRelEncoder.getPosition() >= ElevatorConstants.kForwardSoftLimit)
+            || (pInput < 0 && elevatorRelEncoder.getPosition() <= ElevatorConstants.kReverseSoftLimit)
         ? 0.0
         : pInput;
   }
@@ -104,12 +104,14 @@ public class Elevator extends SubsystemBase {
     double motorOutput = getMotorOutput();
     if ((motorOutput > 0 && elevatorAbsEncoder.getPosition() >= ElevatorConstants.kForwardSoftLimit)
         || (motorOutput < 0 && elevatorAbsEncoder.getPosition() <= ElevatorConstants.kReverseSoftLimit)) {
+        System.out.println("Elevator Stop Limit");
       setMotorVoltage(0);
     }
   }
 
   public void goToSetpoint(double pSetpoint) {
-    mElevatorController.setReference(pSetpoint, ControlType.kMAXMotionPositionControl);
+    System.out.println("setpoint:"+pSetpoint);
+    mElevatorController.setReference(pSetpoint, ControlType.kPosition);
   }
 
   public boolean isAtSetpoint(double pSetpoint) {
