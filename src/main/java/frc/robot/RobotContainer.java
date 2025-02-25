@@ -23,7 +23,8 @@ import swervelib.SwerveInputStream;
 import swervelib.parser.json.modules.DriveConversionFactorsJson;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj.XboxController;
-
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.ClimberUpCommand;
 import frc.robot.commands.ClimberDownCommand;
 import frc.robot.subsystems.Claw.Claw;
@@ -52,6 +53,14 @@ public class RobotContainer
   public final ClimbSubsystem 
   m_climber = new ClimbSubsystem();
 
+  private final Command Red_Right_Start; 
+  private final Command Red_Middle_Start; 
+  private final Command Red_Left_Start; 
+
+  private final Command Blue_Left_Start; 
+  private final Command Blue_Right_Start; 
+  private final Command Blue_Middle_Start; 
+  SendableChooser<Command> m_chooser;
 
   // private final Claw claw;
   // private final Elevator elevator;
@@ -124,10 +133,31 @@ public class RobotContainer
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+    autoChooser.addOption("Blue Middle Start", getAutonomousCommand());
 
     configureBindings();
     DriverStation.silenceJoystickConnectionWarning(false);
-   
+    
+    Red_Right_Start = drivebase.getAutonomousCommand("Red Right Start");
+    Red_Middle_Start = drivebase.getAutonomousCommand("Red Middle Start");
+    Red_Left_Start = drivebase.getAutonomousCommand("Red Left Start");
+
+    Blue_Right_Start = drivebase.getAutonomousCommand("Blue Right Start");
+    Blue_Middle_Start = drivebase.getAutonomousCommand("Blue Middle Start");
+    Blue_Left_Start = drivebase.getAutonomousCommand("Blue Left Start");
+
+    m_chooser = new SendableChooser<>();
+
+    m_chooser.addOption("Red Middle Start", Red_Middle_Start);
+    m_chooser.addOption("Red Left Start", Red_Left_Start);
+    m_chooser.setDefaultOption("Red Right Start", Red_Right_Start);
+
+
+    m_chooser.addOption("Blue Middle Start", Blue_Middle_Start);
+    m_chooser.addOption("Blue Left Start", Blue_Left_Start);
+    m_chooser.addOption("Blue Left Start", Blue_Left_Start);
+
+    SmartDashboard.putData(m_chooser);
 
   }
   private void configureBindings()
@@ -235,7 +265,7 @@ public class RobotContainer
   public Command getAutonomousCommand()
   {
     // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("New Auto");
+    return m_chooser.getSelected();
   }
 
   public void setMotorBrake(boolean brake)
