@@ -1,9 +1,15 @@
 package frc.robot.subsystems.Elevator;
 
+
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
+
+import com.revrobotics.spark.SparkMaxAlternateEncoder;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
@@ -14,11 +20,16 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.TunableNumber;
 import frc.robot.util.Constants.ElevatorConstants;
 
+
 public class Elevator extends SubsystemBase {
   private final SparkMax mElevatorSparkMax;
   private final SparkMax mElevatorSparkMaxFollower;
   private final SparkClosedLoopController mElevatorController;
-  private final RelativeEncoder mEncoder;
+  private final SparkAbsoluteEncoder elevatorAbsEncoder;
+  private final RelativeEncoder elevatorRelEncoder;
+  // private final AbsoluteEncoder m_alternateEncoder;
+  // private final double kCPR = 8192;
+
   private double motorVoltage = 0;
 
   private TunableNumber elevatorFF, elevatorP, elevatorI, elevatorD;
@@ -26,25 +37,30 @@ public class Elevator extends SubsystemBase {
 
   public Elevator() {
     mElevatorSparkMax = new SparkMax(ElevatorConstants.kMotorID, MotorType.kBrushless);
-    mElevatorSparkMaxFollower = new SparkMax(10, MotorType.kBrushless);
-    mEncoder = mElevatorSparkMax.getEncoder();
+    mElevatorSparkMaxFollower = new SparkMax(ElevatorConstants.kFollowerMotorID, MotorType.kBrushless);
+    // kAltEncType = com.rev
+    elevatorRelEncoder = mElevatorSparkMax.getEncoder();
     mElevatorController = mElevatorSparkMax.getClosedLoopController();
+    elevatorAbsEncoder = mElevatorSparkMax.getAbsoluteEncoder();
+    //  m_alternateEncoder = mElevatorSparkMax.GetAlternateEncoder(kAltEncType, kCPR);
 
-    ElevatorConstants.kElevatorFollowerConfig
+ 
+    ElevatorConstants.ElevatorConfigs.kElevatorFollowerConfig
     .follow(ElevatorConstants.kMotorID, true);
     
-    mElevatorSparkMax.configure(ElevatorConstants.kElevatorFollowerConfig,
+    mElevatorSparkMaxFollower.configure(
+      ElevatorConstants.ElevatorConfigs.kElevatorFollowerConfig,
       ResetMode.kResetSafeParameters,
       PersistMode.kNoPersistParameters);
 
 
     mElevatorSparkMax.configure(
-        ElevatorConstants.kElevatorConfig.inverted(true),
+        ElevatorConstants.ElevatorConfigs.kElevatorConfig,
         ResetMode.kResetSafeParameters,
         PersistMode.kNoPersistParameters);
 
-    SmartDashboard.putNumber("Target Position", 0);
-    SmartDashboard.putNumber("Target Velocity", 0);
+    SmartDashboard.putNumber("Elevator Target Position", 0);
+    SmartDashboard.putNumber("Elevator Target Velocity", 0);
 
     elevatorFF = new TunableNumber("Elevator/Elevator FF");
     elevatorP = new TunableNumber("Elevator/Elevator P");
@@ -74,31 +90,33 @@ public class Elevator extends SubsystemBase {
   }
 
   public double getEncoderMeasurement() {
-    return mEncoder.getPosition();
+    return elevatorRelEncoder.getPosition();
   }
 
   private double filterToLimits(double pInput) {
-    return (pInput > 0 && mEncoder.getPosition() >= ElevatorConstants.kForwardSoftLimit)
-            || (pInput < 0 && mEncoder.getPosition() <= ElevatorConstants.kReverseSoftLimit)
+    return (pInput > 0 && elevatorRelEncoder.getPosition() >= ElevatorConstants.kForwardSoftLimit)
+            || (pInput < 0 && elevatorRelEncoder.getPosition() <= ElevatorConstants.kReverseSoftLimit)
         ? 0.0
         : pInput;
   }
 
   private void stopIfLimit() {
     double motorOutput = getMotorOutput();
-    if ((motorOutput > 0 && mEncoder.getPosition() >= ElevatorConstants.kForwardSoftLimit)
-        || (motorOutput < 0 && mEncoder.getPosition() <= ElevatorConstants.kReverseSoftLimit)) {
+    if ((motorOutput > 0 && elevatorAbsEncoder.getPosition() >= ElevatorConstants.kForwardSoftLimit)
+        || (motorOutput < 0 && elevatorAbsEncoder.getPosition() <= ElevatorConstants.kReverseSoftLimit)) {
+        System.out.println("Elevator Stop Limit");
       setMotorVoltage(0);
     }
   }
 
   public void goToSetpoint(double pSetpoint) {
-    mElevatorController.setReference(pSetpoint, ControlType.kMAXMotionPositionControl);
+    System.out.println("setpoint:"+pSetpoint);
+    mElevatorController.setReference(pSetpoint, ControlType.kPosition);
   }
 
   public boolean isAtSetpoint(double pSetpoint) {
-    return (mEncoder.getPosition() >= pSetpoint - ElevatorConstants.kTolerance)
-        && (mEncoder.getPosition() <= pSetpoint + ElevatorConstants.kTolerance);
+    return (elevatorAbsEncoder.getPosition() >= pSetpoint - ElevatorConstants.kTolerance)
+        && (elevatorAbsEncoder.getPosition() <= pSetpoint + ElevatorConstants.kTolerance);
   }
 
   public double getMotorOutput() {
@@ -109,8 +127,10 @@ public class Elevator extends SubsystemBase {
   public void periodic() {
     stopIfLimit();
 
-    SmartDashboard.putNumber("Elevator Position", mEncoder.getPosition());
-    SmartDashboard.putNumber("Elevator Velocity", mEncoder.getVelocity());
+    SmartDashboard.putNumber("Elevator ABS Position", elevatorAbsEncoder.getPosition());
+    SmartDashboard.putNumber("Elevator ABS Velocity", elevatorAbsEncoder.getVelocity());
+    SmartDashboard.putNumber("Elevator Rel Position", elevatorRelEncoder.getPosition());
+    SmartDashboard.putNumber("Elevator Rel Velocity", elevatorRelEncoder.getVelocity());
     SmartDashboard.putNumber("Elevator Output", getMotorOutput());
     SmartDashboard.putNumber("Elevator Voltage", mElevatorSparkMax.getBusVoltage());
     SmartDashboard.putNumber("Stepped Elevator Voltage", motorVoltage);
