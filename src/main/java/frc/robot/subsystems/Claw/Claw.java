@@ -19,6 +19,8 @@ import frc.robot.util.Constants.ClawConstants;
 import frc.robot.util.Constants.ClawConstants.Roller;
 import frc.robot.util.Constants.ClawConstants.Wrist.ClawRollerVolt;
 
+import com.revrobotics.spark.SparkLimitSwitch;
+
 public class Claw extends SubsystemBase {
   private final SparkMax mWristSparkMax;
   private final SparkMax kRollerID;
@@ -29,6 +31,12 @@ public class Claw extends SubsystemBase {
 
   private TunableNumber wristP, wristD, wristG, wristV, wristA;
   private TunableNumber tunablePosition;
+
+  private SparkLimitSwitch m_forwardLimit;
+  private SparkLimitSwitch m_reverseLimit;
+
+  public String kEnable;
+  public String kDisable;
 
   public Claw() {
     this.kRollerID =
@@ -45,6 +53,9 @@ public class Claw extends SubsystemBase {
         ResetMode.kResetSafeParameters,
         PersistMode.kNoPersistParameters);
 
+    // m_forwardLimit = kRollerID.getForwardLimitSwitch(SparkLimitSwitch.class.);
+    m_forwardLimit = kRollerID.getForwardLimitSwitch();
+    m_reverseLimit = kRollerID.getReverseLimitSwitch();
 
     wristP = new TunableNumber("Wrist/kP", ClawConstants.Wrist.kP);
     wristD = new TunableNumber("Wrist/kD", ClawConstants.Wrist.kD);
@@ -55,6 +66,14 @@ public class Claw extends SubsystemBase {
     // wristD.setDefault(0.0);
     // wristV.setDefault(0.0);
     // wristA.setDefault(0.0);
+  }
+
+  public boolean getForwardLimitSwitch1() {
+    return m_forwardLimit.isPressed(); 
+  }
+
+  public boolean getReverseLimitSwitch1() {
+    return m_reverseLimit.isPressed(); 
   }
 
   public void setRollerPower(ClawRollerVolt pVoltage) {

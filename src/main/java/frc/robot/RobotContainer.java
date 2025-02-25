@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.io.File;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
@@ -38,6 +39,7 @@ import frc.robot.util.Constants.miscConstants;
 import frc.robot.util.Constants.ClawConstants.Wrist.ClawRollerVolt;
 import frc.robot.util.Constants.ClawConstants.Wrist.WristPositions;
 import frc.robot.commands.swervedrive.drivebase.*;
+
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
  * little robot logic should actually be handled in the {@link Robot} periodic methods (other than the scheduler calls).
@@ -193,6 +195,10 @@ public class RobotContainer
       OPController.y().onTrue(Commands.run(()-> { 
         sub_claw.goToSetpoint(WristPositions.Coral_updown.get());
       }));
+      
+      SmartDashboard.putBoolean("Forward Limit Switch", sub_claw.getForwardLimitSwitch1());
+      SmartDashboard.putBoolean("Reverse Limit Switch", sub_claw.getReverseLimitSwitch1());
+      
       
       // OPController
       //     .y()
