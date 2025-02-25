@@ -52,7 +52,7 @@ public class RobotContainer
   public final ClimbSubsystem 
   m_climber = new ClimbSubsystem();
 
-//=======================================================
+//======================Auton_Stuff=========================
 
   private final Command Red_Right_Start; 
   private final Command Red_Middle_Start; 
@@ -141,7 +141,7 @@ public class RobotContainer
   public RobotContainer()
   {
     elevator = new Elevator();
-     sub_claw    = new Claw();
+    sub_claw = new Claw();
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -232,7 +232,7 @@ public class RobotContainer
       
 
       // OPController.b().whileTrue(Commands.run(() -> {
-      //   sub_claw.setRollerPower(ClawRollerVolt.INTAKE_ALGAE);
+      // sub_claw.setRollerPower(ClawRollerVolt.INTAKE_ALGAE);
       // }));
 
       // OPController.x().whileTrue(Commands.run(() -> {
