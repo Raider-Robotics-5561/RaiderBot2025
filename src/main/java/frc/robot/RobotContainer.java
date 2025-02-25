@@ -186,6 +186,7 @@ public class RobotContainer
       OPController.a().onTrue(Commands.run(() -> {
         System.out.println("A");
         elevator.goToSetpoint(0);
+        elevator.setMotorVoltage(0.1);
       }));
 
       OPController.y().onTrue(Commands.run(() -> {
@@ -196,7 +197,7 @@ public class RobotContainer
       OPController.x().onTrue(Commands.run(() -> {
         System.out.println("X");
         elevator.goToSetpoint(84);
-        //elevator.setMotorVoltage(1);
+        // elevator.setMotorVoltage(1);
       }));
 
       // OPController
