@@ -37,6 +37,9 @@ public class Claw extends SubsystemBase {
   public String kEnable;
   public String kDisable;
 
+  private double lastVoltage = 0;
+  private boolean RollerHoldLatch = false; 
+
   public Claw() {
     this.kRollerID =
         new SparkMax(ClawConstants.Roller.kRollerID, ClawConstants.Roller.kMotorType);
@@ -83,7 +86,25 @@ public class Claw extends SubsystemBase {
   }
 
   public void setRollerPower(double pVoltage) {
-    kRollerID.setVoltage(filterVoltage(pVoltage));
+    if(RollerHoldLatch && (pVoltage == 0)|| ((lastVoltage > 0) && (pVoltage == 0) && kRollerID.getForwardLimitSwitch().isPressed())) {
+      if(kRollerID.getForwardLimitSwitch().isPressed()) {
+        RollerHoldLatch = true;
+      } else {
+        RollerHoldLatch = false; 
+      }
+      kRollerID.setVoltage((0.25 * 12));
+    } else {
+      kRollerID.setVoltage(0);
+      RollerHoldLatch = false;
+    }
+
+    if(pVoltage != 0) {
+      kRollerID.setVoltage(filterVoltage(pVoltage));
+    }
+
+    SmartDashboard.putNumber("Roller/lastVoltage set", pVoltage);
+    lastVoltage = pVoltage;
+   
   }
 
   public void setWrist(double pVoltage) {

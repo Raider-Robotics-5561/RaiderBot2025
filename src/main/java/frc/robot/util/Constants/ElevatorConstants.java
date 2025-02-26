@@ -42,32 +42,33 @@ public class ElevatorConstants {
 
 
 
-  public enum Positions {
-    BOTTOM(0), 
-    PREINTAKE(0), // TODO: Configure me!
-    POSTINTAKE(0),  // TODO: Configure me!
-    L1(0),  // TODO: Configure me!
-    L2(11.95),  // TODO: Configure me!
-    L3(47.2),  // TODO: Configure me!
-    L4(0),  // TODO: Configure me!
-    SCORE(0), // TODO: Configure me!
-    BARGE(0); // TODO: Configure me!
-
-    public final double position;
-
-    private Positions(double position) {
-      this.position = position;
-    }
-
-    public double getPos() {
-      return this.position;
-    }
-  };
 
   public static class ElevatorConfigs {
 
     public static final SparkMaxConfig kElevatorConfig = new SparkMaxConfig();
     public static final SparkMaxConfig kElevatorFollowerConfig = new SparkMaxConfig();
+    
+    public enum Positions {
+      BOTTOM(0), 
+      PREINTAKE(0), // TODO: Configure me!
+      POSTINTAKE(6.7),  // TODO: Configure me!
+      L1(6.7),  // TODO: Configure me!
+      L2(12.57),  // TODO: Configure me!
+      L3(44.59),  // TODO: Configure me!
+      L4(84),  // TODO: Configure me!
+      SCORE(0), // TODO: Configure me!
+      BARGE(0); // TODO: Configure me!
+
+      public final double position;
+
+      private Positions(double position) {
+        this.position = position;
+      }
+
+      public double getPos() {
+        return this.position;
+      }
+    };
 
   static {
     kElevatorFollowerConfig
@@ -94,7 +95,7 @@ public class ElevatorConstants {
         .closedLoop
         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
         .pidf(kP, 0.0, kD, kVelocityFF)
-        .outputRange(-1, 1);
+        .outputRange(-0.25, 0.25);
 
     // kElevatorConfig
     //     .closedLoop

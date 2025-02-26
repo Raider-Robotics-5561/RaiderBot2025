@@ -41,12 +41,19 @@ public class ClawConstants {
     public static final SparkMaxConfig kAngleConfig = new SparkMaxConfig();
 
     static {
-        kRollerConfig.idleMode(kIdleMode).smartCurrentLimit(kCurrentLimit);
+        kRollerConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(kCurrentLimit);
 
-      // kWristConfig
-      //     .softLimit
-      //     .forwardSoftLimit(kForwardSoftLimit)
-      //     .reverseSoftLimit(kReverseSoftLimit);
+        kRollerConfig
+          .softLimit
+          .forwardSoftLimit(kForwardSoftLimit)
+          .forwardSoftLimitEnabled(false)
+          .reverseSoftLimit(kReverseSoftLimit)
+          .reverseSoftLimitEnabled(false);
+
+      kRollerConfig
+        .limitSwitch
+        .forwardLimitSwitchEnabled(false)
+        .reverseLimitSwitchEnabled(false);
 
       kRollerConfig
           .absoluteEncoder
@@ -98,6 +105,8 @@ public class ClawConstants {
 
     public static final SparkMaxConfig kWristConfig = new SparkMaxConfig();
 
+    public static final double WristElevatorSafeyThresh = 4.48;
+
     public enum ClawRollerVolt {
       STOPPED(0),
       INTAKE_CORAL(0.5),
@@ -117,36 +126,18 @@ public class ClawConstants {
     };
 
     public enum WristPositions {
-      ZERO(3),
-      Home(3),
+      ZERO(6.79),
+      Home(6.83),
+      L1_L2_Coral(6.21),
       Coral_updown(5.18),
-      Max(3);
+      Algae_Drive(3.06),
+      Max(5.8),
+      Elevator_Threh(WristElevatorSafeyThresh);
 
 
       public final double position;
 
       private WristPositions(double position) {
-        this.position = position;
-      }
-
-      public double get() {
-        return this.position;
-      }
-    };
-
-    public enum ElevatorPositions {
-      BOTTOM(0),
-      INTAKE(-50),
-      L1(0),
-      L2(50),
-      L3(50),
-      L4(65),
-      SCORE(25),
-      BARGE(0);
-
-      public final double position;
-
-      private ElevatorPositions(double position) {
         this.position = position;
       }
 
@@ -175,7 +166,7 @@ public class ClawConstants {
           .closedLoop
           .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
           .pidf(kP, 0.0, kD, kVelocityFF)
-          .outputRange(-1, 1);
+          .outputRange(-0.25, 0.25);
 
       // kWristConfig
       //     .closedLoop

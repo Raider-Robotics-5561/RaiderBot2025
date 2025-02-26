@@ -54,6 +54,8 @@ public class RobotContainer
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
 
+  private boolean RollerGoingIn = false;
+
   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
                                                              () -> DriveController.getLeftY() * -1,
                                                              () -> DriveController.getLeftX() * -1)
@@ -162,10 +164,54 @@ public class RobotContainer
       DriveController.rightBumper().onTrue(Commands.none());
     } else
     {
-      OPController.povUp().whileTrue(new ClimberUpCommand(m_climber));
-      OPController.povDown().whileTrue(new ClimberDownCommand(m_climber));
+
   
       
+      //~~~~~~~~~~~~~~~~~~OPControler~~~~~~~~~~~~~~~~~~~~~~~~
+      //Elevator Pos Control 
+      OPController.leftBumper().whileTrue(new ClimberUpCommand(m_climber));
+      OPController.rightBumper().whileTrue(new ClimberDownCommand(m_climber));
+
+      OPController.axisGreaterThan(2, 0.01).whileTrue(Commands.run(() -> {
+        sub_claw.setRollerPower(((OPController.getRawAxis(2) * 0.25) * 12) * -1);
+      }));
+      OPController.axisGreaterThan(3, 0.01).whileTrue(Commands.run(() -> {
+        sub_claw.setRollerPower((OPController.getRawAxis(3) * 0.25) * 12);
+      }));
+
+      OPController.axisLessThan(3, 0.01).and(OPController.axisLessThan(2,0.01)).whileTrue(Commands.run(() -> {
+       sub_claw.setRollerPower(0);
+      }).repeatedly());
+
+
+ 
+
+      OPController.povUp().whileTrue(Commands.run(() -> {
+        elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.L1.getPos());
+      }));
+      OPController.povRight().whileTrue(Commands.run(() -> {
+        elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.L2.getPos());
+      }));
+      OPController.povDown().whileTrue(Commands.run(() -> {
+        elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.L3.getPos());
+      }));
+      OPController.povLeft().whileTrue(Commands.run(() -> {
+        elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.L4.getPos());
+      }));
+
+      //Wrist Pos Control 
+      OPController.y().whileTrue(Commands.run(() -> {
+        sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.L1_L2_Coral.getPos());
+      }));
+      OPController.x().whileTrue(Commands.run(() -> {
+        sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Home.getPos());
+      }));
+      OPController.b().whileTrue(Commands.run(() -> {
+        sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Coral_updown.getPos());
+      }));
+      OPController.a().whileTrue(Commands.run(() -> {
+        sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Elevator_Threh.getPos());
+      }));
 
       // OPController.b().whileTrue(Commands.run(() -> {
       //   sub_claw.setRollerPower(ClawRollerVolt.INTAKE_ALGAE);
@@ -183,23 +229,29 @@ public class RobotContainer
       //   sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Coral_updown.get());
       //  // sub_claw.setWrist(0.5);
       // }));
-      OPController.a().onTrue(Commands.run(() -> {
-        System.out.println("A");
-        elevator.goToSetpoint(0);
-        elevator.setMotorVoltage(0.1);
-      }));
+      // OPController.a().onTrue(Commands.run(() -> {
+      //   System.out.println("A");
+      //   elevator.goToSetpoint(0);
+      //   elevator.setMotorVoltage(0.1);
+      // }));
 
-      OPController.y().onTrue(Commands.run(() -> {
-        System.out.println("Y");
-        elevator.goToSetpoint(47.2);
-      }));
+      // OPController.y().onTrue(Commands.run(() -> {
+      //   System.out.println("Y");
+      //   elevator.goToSetpoint(47.2);
+      // }));
 
-      OPController.x().onTrue(Commands.run(() -> {
-        System.out.println("X");
-        elevator.goToSetpoint(84);
-        // elevator.setMotorVoltage(1);
-      }));
+      // OPController.x().onTrue(Commands.run(() -> {
+      //   System.out.println("X");
+      //   elevator.goToSetpoint(84);
+      //   // elevator.setMotorVoltage(1);
+      // }));
 
+      // OPController.povLeft().onTrue(Commands.run(() -> {
+      //   sub_claw.goToSetpoint(0);
+      // }));
+
+
+      
       // OPController
       //     .y()
       //     .onTrue(
@@ -223,16 +275,21 @@ public class RobotContainer
       //       new ParallelCommandGroup(new ElevatorFFCommand(elevator)));
 
       
-
+      //~~~~~~~~~~~~~~~~~~Drive Control~~~~~~~~~~~~~~~~~~~~~~~~
       DriveController.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
 
       // DriveController.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
 
-      DriveController.y().whileTrue(
-      drivebase.driveToPose(new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0))));
+      //Go to pos ?
+      // DriveController.y().whileTrue(
+      // drivebase.driveToPose(new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0))));
 
+
+      //Lock the drive
       DriveController.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
 
+
+      //This is our boost control Right Trigger
       DriveController.axisGreaterThan(3, 0.01).onChange(Commands.runOnce(() -> {
         driveAngularVelocity.scaleTranslation(DriveController.getRightTriggerAxis() + 0.25);
         driveAngularVelocity.scaleRotation((DriveController.getRightTriggerAxis() * miscConstants.RotationSpeedScale) + 0.25);
