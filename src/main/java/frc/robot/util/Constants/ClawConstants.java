@@ -128,10 +128,12 @@ public class ClawConstants {
     public enum WristPositions {
       ZERO(6.79),
       Home(6.83),
+      Intake(6.7),
       L1_L2_Coral(6.21),
       Coral_updown(5.18),
       Algae_Drive(3.06),
       Max(5.8),
+      
       Elevator_Threh(WristElevatorSafeyThresh);
 
 

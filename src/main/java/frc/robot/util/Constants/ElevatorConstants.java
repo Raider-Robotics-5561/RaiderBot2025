@@ -50,7 +50,7 @@ public class ElevatorConstants {
     
     public enum Positions {
       BOTTOM(0), 
-      PREINTAKE(0), // TODO: Configure me!
+      INTAKE(1), // TODO: Configure me!
       POSTINTAKE(6.7),  // TODO: Configure me!
       L1(6.7),  // TODO: Configure me!
       L2(12.57),  // TODO: Configure me!
