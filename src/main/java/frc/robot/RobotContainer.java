@@ -17,8 +17,11 @@ import java.io.File;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import swervelib.SwerveInputStream;
-
-
+import swervelib.parser.json.modules.DriveConversionFactorsJson;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.ClimberUpCommand;
 import frc.robot.commands.ClimberDownCommand;
 import frc.robot.subsystems.Claw.Claw;
@@ -46,10 +49,32 @@ public class RobotContainer
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve"));
-  public final ClimbSubsystem m_climber = new ClimbSubsystem();
-  public final Claw sub_claw;
+  public final ClimbSubsystem 
+  m_climber = new ClimbSubsystem();
 
-  // private final Claw claw;
+//======================Auton_Stuff=========================
+
+  private final Command Red_Right_Start; 
+  private final Command Red_Middle_Start; 
+  private final Command Red_Left_Start; 
+
+  private final Command Blue_Left_Start; 
+  private final Command Blue_Right_Start; 
+  private final Command Blue_Middle_Start; 
+
+  private final Command Blue_Right_Coral;
+  private final Command Blue_Middle_Coral;
+  private final Command Blue_Left_Coral;
+
+  private final Command Red_Right_Coral;
+  private final Command Red_Middle_Coral;
+  private final Command Red_Left_Coral;
+
+  SendableChooser<Command> m_chooser;
+
+  //=======================================================
+
+  private final Claw sub_claw;
   private final Elevator elevator;
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -118,15 +143,54 @@ public class RobotContainer
   public RobotContainer()
   {
     elevator = new Elevator();
-     sub_claw     = new Claw();
+    sub_claw = new Claw();
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+    autoChooser.addOption("Blue Middle Start", getAutonomousCommand());
 
     configureBindings();
-    DriverStation.silenceJoystickConnectionWarning(true);
+    DriverStation.silenceJoystickConnectionWarning(false);
     
-   
+//========================Auton_Stuff===================================================
+
+    Red_Right_Start = drivebase.getAutonomousCommand("Red Right Start");
+    Red_Middle_Start = drivebase.getAutonomousCommand("Red Middle Start");
+    Red_Left_Start = drivebase.getAutonomousCommand("Red Left Start");
+
+    Blue_Right_Start = drivebase.getAutonomousCommand("Blue Right Start");
+    Blue_Middle_Start = drivebase.getAutonomousCommand("Blue Middle Start");
+    Blue_Left_Start = drivebase.getAutonomousCommand("Blue Left Start");
+
+    Red_Right_Coral = drivebase.getAutonomousCommand("Red Right Coral");
+    Red_Middle_Coral = drivebase.getAutonomousCommand("Red Middle Coral");
+    Red_Left_Coral = drivebase.getAutonomousCommand("Red Left Coral");
+
+    Blue_Right_Coral = drivebase.getAutonomousCommand("Blue Right Coral");
+    Blue_Middle_Coral = drivebase.getAutonomousCommand("Blue Middle Coral");
+    Blue_Left_Coral = drivebase.getAutonomousCommand("Blue Left Coral");
+
+    m_chooser = new SendableChooser<>();
+
+    m_chooser.addOption("Red Middle Start", Red_Middle_Start);
+    m_chooser.addOption("Red Left Start", Red_Left_Start);
+    m_chooser.setDefaultOption("Red Right Start", Red_Right_Start);
+
+    m_chooser.addOption("Blue Middle Start", Blue_Middle_Start);
+    m_chooser.addOption("Blue Left Start", Blue_Left_Start);
+    m_chooser.addOption("Blue Right Start", Blue_Right_Start);
+
+    m_chooser.addOption("Blue Middle Start", Blue_Middle_Coral);
+    m_chooser.addOption("Blue Left Start", Blue_Left_Coral);
+    m_chooser.addOption("Blue Right Start", Blue_Right_Coral);
+
+    m_chooser.addOption("Red Middle Start", Red_Middle_Coral);
+    m_chooser.addOption("Red Left Start", Red_Left_Coral);
+    m_chooser.addOption("Red Right Start", Red_Right_Coral);
+
+//======================================================================================
+
+    SmartDashboard.putData(m_chooser);
 
   }
   private void configureBindings()
@@ -214,7 +278,7 @@ public class RobotContainer
       }));
 
       // OPController.b().whileTrue(Commands.run(() -> {
-      //   sub_claw.setRollerPower(ClawRollerVolt.INTAKE_ALGAE);
+      // sub_claw.setRollerPower(ClawRollerVolt.INTAKE_ALGAE);
       // }));
 
       // OPController.x().whileTrue(Commands.run(() -> {
@@ -318,7 +382,7 @@ public class RobotContainer
   public Command getAutonomousCommand()
   {
     // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("New Auto");
+    return m_chooser.getSelected();
   }
 
   public void setMotorBrake(boolean brake)
