@@ -256,7 +256,7 @@ public class RobotContainer
       //Wrist Pos Control 
       OPController.y().whileTrue(Commands.run(() -> {
         // sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Elevator_Threh.getPos());
-        
+        elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.INTAKE.getPos());
         sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Intake.getPos());
       }));
       OPController.x().whileTrue(Commands.run(() -> {
