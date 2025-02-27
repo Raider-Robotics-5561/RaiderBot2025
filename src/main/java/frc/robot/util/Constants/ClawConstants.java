@@ -128,7 +128,7 @@ public class ClawConstants {
     public enum WristPositions {
       ZERO(6.79),
       Home(6.83),
-      Intake(6.7),
+      Intake(6.8),
       L1_L2_Coral(6.21),
       Coral_updown(5.18),
       Algae_Drive(3.06),
@@ -168,7 +168,7 @@ public class ClawConstants {
           .closedLoop
           .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
           .pidf(kP, 0.0, kD, kVelocityFF)
-          .outputRange(-0.25, 0.25);
+          .outputRange(-0.35, 0.35);
 
       // kWristConfig
       //     .closedLoop

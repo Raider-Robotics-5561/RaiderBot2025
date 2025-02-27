@@ -216,25 +216,14 @@ public class RobotContainer
       DriveController.button(1).whileTrue(drivebase.sysIdDriveMotorCommand());
 
     }
-    if (DriverStation.isTest())
-    {
-      drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity); // Overrides drive command above!
 
-      DriveController.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-      DriveController.y().whileTrue(drivebase.driveToDistanceCommand(1.0, 0.2));
-      DriveController.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-      DriveController.back().whileTrue(drivebase.centerModulesCommand());
-      DriveController.leftBumper().onTrue(Commands.none());
-      DriveController.rightBumper().onTrue(Commands.none());
-    } else
-    {
 
   
       
       //~~~~~~~~~~~~~~~~~~OPControler~~~~~~~~~~~~~~~~~~~~~~~~
       //Elevator Pos Control 
-      OPController.leftBumper().whileTrue(new ClimberUpCommand(m_climber));
-      OPController.rightBumper().whileTrue(new ClimberDownCommand(m_climber));
+      OPController.start().whileTrue(new ClimberUpCommand(m_climber));
+      OPController.back().whileTrue(new ClimberDownCommand(m_climber));
 
       OPController.axisGreaterThan(2, 0.01).whileTrue(Commands.run(() -> {
         sub_claw.setRollerPower(((OPController.getRawAxis(2) * 0.25) * 12) * -1);
@@ -281,68 +270,7 @@ public class RobotContainer
         sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Elevator_Threh.getPos());
       }));
 
-      // OPController.b().whileTrue(Commands.run(() -> {
-      // sub_claw.setRollerPower(ClawRollerVolt.INTAKE_ALGAE);
-      // }));
 
-      // OPController.x().whileTrue(Commands.run(() -> {
-      //   sub_claw.setRollerPower(ClawRollerVolt.OUTTAKE_BARGE);
-      // }));
-
-      // OPController.b().or(OPController.a()).whileFalse(Commands.run(() -> {
-      //   sub_claw.setRollerPower(ClawRollerVolt.STOPPED);
-      // }));
-
-      // OPController.y().onTrue(Commands.run(()-> { 
-      //   sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Coral_updown.get());
-      //  // sub_claw.setWrist(0.5);
-      // }));
-      // OPController.a().onTrue(Commands.run(() -> {
-      //   System.out.println("A");
-      //   elevator.goToSetpoint(0);
-      //   elevator.setMotorVoltage(0.1);
-      // }));
-
-      // OPController.y().onTrue(Commands.run(() -> {
-      //   System.out.println("Y");
-      //   elevator.goToSetpoint(47.2);
-      // }));
-
-      // OPController.x().onTrue(Commands.run(() -> {
-      //   System.out.println("X");
-      //   elevator.goToSetpoint(84);
-      //   // elevator.setMotorVoltage(1);
-      // }));
-
-      // OPController.povLeft().onTrue(Commands.run(() -> {
-      //   sub_claw.goToSetpoint(0);
-      // }));
-
-
-      
-      // OPController
-      //     .y()
-      //     .onTrue(
-      //         new ParallelCommandGroup(
-      //             new ElevatorPIDCommand(ElevatorConstants.Positions.L4, elevator)))
-      //     .onFalse(
-      //         new ParallelCommandGroup(new ElevatorFFCommand(elevator)));
-  
-      //   OPController
-      //     .b()
-      //     .onTrue(
-      //       new ParallelCommandGroup(new ElevatorPIDCommand(ElevatorConstants.Positions.L1, elevator)))
-      //     .onFalse(
-      //       new ParallelCommandGroup(new ElevatorFFCommand(elevator)));
-  
-      //   OPController
-      //     .x()
-      //     .onTrue(
-      //       new ParallelCommandGroup(new ElevatorPIDCommand(ElevatorConstants.Positions.POSTINTAKE, elevator)))
-      //     .onFalse(
-      //       new ParallelCommandGroup(new ElevatorFFCommand(elevator)));
-
-      
       //~~~~~~~~~~~~~~~~~~Drive Control~~~~~~~~~~~~~~~~~~~~~~~~
       DriveController.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
 
@@ -376,7 +304,7 @@ public class RobotContainer
        }
 
     
-  }
+  
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
