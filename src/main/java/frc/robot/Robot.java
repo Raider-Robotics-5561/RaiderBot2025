@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -26,6 +27,7 @@ import frc.robot.util.Constants.SwerveConstants;
  */
 public class Robot extends TimedRobot
 {
+  private boolean drivestationcolor;
   AddressableLED led;
   AddressableLEDBuffer ledBuffer;
 
@@ -96,13 +98,10 @@ public class Robot extends TimedRobot
   @Override
   public void robotPeriodic()
   {
-   
-if (DriverStation.waitForDsConnection( 0.025) == false) {
-
-// Create an LED pattern that displays a red-to-blue gradient, blinking at various rates.
-LEDPattern base = LEDPattern.solid(new Color(7,255,0));
+  SmartDashboard.putBoolean("Color", drivestationcolor);
+if (DriverStation.waitForDsConnection( 0.025) == false){
 // GRB
-// 1 seconds on, 1 seconds off, for a total period of 2 seconds
+LEDPattern base = LEDPattern.solid(new Color(7,255,0));
 LEDPattern pattern = base.breathe(Units.Seconds.of(2.0));
 
 // Apply the LED pattern to the data buffer
@@ -119,8 +118,21 @@ else{
     led.setData(ledBuffer);
 }
 }
-
-// if (DriverStation.getAlliance()) {
+DriverStation.getAlliance().equals(drivestationcolor);
+if (drivestationcolor == false) {
+  for (var i = 0; i < ledBuffer.getLength(); i++) {
+    // Sets the specified LED to the GRB values for red
+    ledBuffer.setRGB(i, 0, 255, 0);
+    led.setData(ledBuffer);
+}
+}else{
+  for (var i = 0; i < ledBuffer.getLength(); i++) {
+    // Sets the specified LED to the GRB values for red
+    ledBuffer.setRGB(i, 0, 0 ,255);
+    led.setData(ledBuffer);
+}
+}
+// if (DriverStation.getRawAllianceStation()) {
 
 //   // Create an LED pattern that displays a red-to-blue gradient, blinking at various rates.
 //   LEDPattern base = LEDPattern.solid(new Color(7,255,0));
@@ -133,7 +145,7 @@ else{
   
 
     
-  // }
+//   }
 
 
     CommandScheduler.getInstance().run();
