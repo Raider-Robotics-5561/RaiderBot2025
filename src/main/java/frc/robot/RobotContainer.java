@@ -142,8 +142,9 @@ public class RobotContainer
    */
   public RobotContainer()
   {
-    elevator = new Elevator();
+
     sub_claw = new Claw();
+    elevator = new Elevator(sub_claw);
 
     // Set up auto routines
     // autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -255,13 +256,13 @@ public class RobotContainer
       //Wrist Pos Control 
       OPController.y().whileTrue(Commands.run(() -> {
         // sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Elevator_Threh.getPos());
-
+        
         sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Intake.getPos());
-        elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.INTAKE.getPos());
       }));
       OPController.x().whileTrue(Commands.run(() -> {
+
         sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.L1_L2_Coral.getPos());
-      //  sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Home.getPos());
+        
       }));
       OPController.b().whileTrue(Commands.run(() -> {
         sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Coral_updown.getPos());
@@ -270,6 +271,9 @@ public class RobotContainer
         sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Elevator_Threh.getPos());
       }));
 
+      OPController.leftBumper().whileTrue(Commands.run(() -> {
+        sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Algae_Drive.getPos());
+      }));
 
       //~~~~~~~~~~~~~~~~~~Drive Control~~~~~~~~~~~~~~~~~~~~~~~~
       DriveController.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
@@ -316,7 +320,6 @@ public class RobotContainer
   //   // An example command will be run in autonomous
   //   return m_chooser.getSelected();
   // }
-
   public void setMotorBrake(boolean brake)
   {
     drivebase.setMotorBrake(brake);

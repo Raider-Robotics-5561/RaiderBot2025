@@ -17,8 +17,11 @@ import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.Claw.Claw;
 import frc.robot.util.TunableNumber;
+import frc.robot.util.Constants.ClawConstants;
 import frc.robot.util.Constants.ElevatorConstants;
+import frc.robot.util.Constants.ClawConstants.Wrist;
 
 
 public class Elevator extends SubsystemBase {
@@ -29,13 +32,18 @@ public class Elevator extends SubsystemBase {
   private final RelativeEncoder elevatorRelEncoder;
   // private final AbsoluteEncoder m_alternateEncoder;
   // private final double kCPR = 8192;
+  private Claw subClaw;
 
   private double motorVoltage = 0;
 
   private TunableNumber elevatorFF, elevatorP, elevatorI, elevatorD;
   private TunableNumber elevatorTunableSetpoint;
 
-  public Elevator() {
+  private boolean TopWristPosCheck = false;
+  private boolean BottomWristPosCheck = false;
+
+  public Elevator(Claw subclaw) {
+    subClaw = subclaw;
     mElevatorSparkMax = new SparkMax(ElevatorConstants.kMotorID, MotorType.kBrushless);
     mElevatorSparkMaxFollower = new SparkMax(ElevatorConstants.kFollowerMotorID, MotorType.kBrushless);
     // kAltEncType = com.rev
@@ -111,7 +119,22 @@ public class Elevator extends SubsystemBase {
 
   public void goToSetpoint(double pSetpoint) {
     System.out.println("setpoint:"+pSetpoint);
-    mElevatorController.setReference(pSetpoint, ControlType.kPosition);
+    WristSaftyCheck();
+    //Are we commanding higher than our top clear threshold? 
+    if((pSetpoint >= ClawConstants.Wrist.WristElevatorPosClearHightTop) && 
+        (pSetpoint <= ClawConstants.Wrist.WristElevatorPosClearHightBottom) && 
+        TopWristPosCheck) {
+      mElevatorController.setReference(pSetpoint, ControlType.kPosition);
+    
+    //Are we commanding higher than our Bottom clear threshold? 
+    } else if(pSetpoint >= ClawConstants.Wrist.WristElevatorPosClearHightBottom && BottomWristPosCheck) {
+      mElevatorController.setReference(pSetpoint, ControlType.kPosition);
+
+     //Are we commanding to a safe zone? 
+    } else if (pSetpoint <= ClawConstants.Wrist.WristElevatorPosClearHightTop) {
+      mElevatorController.setReference(pSetpoint, ControlType.kPosition);
+
+    }
   }
 
   public boolean isAtSetpoint(double pSetpoint) {
@@ -123,10 +146,28 @@ public class Elevator extends SubsystemBase {
     return mElevatorSparkMax.getAppliedOutput();
   }
 
+  public void WristSaftyCheck(){
+    double WristABSPos = subClaw.getEncoderMeasurement();
+    //Top Hight Check
+    if ((WristABSPos <= ClawConstants.Wrist.WristPosElevatorSafeyThreshTop + 0.1)){
+      //Bottom Hight Check 
+      TopWristPosCheck = true; // The top of the wrist has cleared the elevator bar
+      if((WristABSPos <= ClawConstants.Wrist.WristPosElevatorSafeyThreshBottom + 0.1)){
+        BottomWristPosCheck = true; //The bottom of the wrist has cleared the elevator bar
+      } else {
+        BottomWristPosCheck = false;
+      }
+    } else {
+      TopWristPosCheck = false;
+      BottomWristPosCheck = false;
+    }
+  }
+
+
   @Override
   public void periodic() {
     stopIfLimit();
-
+    subClaw.setElevatorHight(getEncoderMeasurement());
     SmartDashboard.putNumber("Elevator ABS Position", elevatorAbsEncoder.getPosition());
     SmartDashboard.putNumber("Elevator ABS Velocity", elevatorAbsEncoder.getVelocity());
     SmartDashboard.putNumber("Elevator Rel Position", elevatorRelEncoder.getPosition());

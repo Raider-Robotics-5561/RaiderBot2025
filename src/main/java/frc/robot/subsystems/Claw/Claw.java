@@ -13,10 +13,12 @@ import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.util.TunableNumber;
 import frc.robot.util.Constants.ClawConstants;
 import frc.robot.util.Constants.ClawConstants.Roller;
 import frc.robot.util.Constants.ClawConstants.Wrist.ClawRollerVolt;
+import frc.robot.util.Constants.ElevatorConstants;
 
 import com.revrobotics.spark.SparkLimitSwitch;
 
@@ -39,6 +41,8 @@ public class Claw extends SubsystemBase {
 
   private double lastVoltage = 0;
   private boolean RollerHoldLatch = false; 
+
+  private double Elevatorhight;
 
   public Claw() {
     this.kRollerID =
@@ -84,6 +88,7 @@ public class Claw extends SubsystemBase {
   public void setRollerPower(ClawRollerVolt pVoltage) {
     setRollerPower(pVoltage.get());
   }
+  
 
   public void setRollerPower(double pVoltage) {
     if(RollerHoldLatch && (pVoltage == 0)|| ((lastVoltage > 0) && (pVoltage == 0) && kRollerID.getForwardLimitSwitch().isPressed())) {
@@ -116,11 +121,7 @@ public class Claw extends SubsystemBase {
   }
 
   public double getEncoderMeasurement() {
-    double encoderMeasurement = mWristEncoder.getPosition();
-    // if (encoderMeasurement > ClawConstants.Wrist.kPositionConversionFactor / 2.0)
-    //   encoderMeasurement -= ClawConstants.Wrist.kPositionConversionFactor;
-    // Why would we want to do this? 
-    return encoderMeasurement;
+    return mWristEncoder.getPosition();
   }
 
   // private double filterToLimits(double pInput) {
@@ -149,14 +150,37 @@ public class Claw extends SubsystemBase {
   public double getMotorOutput() {
     return mWristSparkMax.getAppliedOutput();
   }
-
+  
+  public boolean WristSaftyCheck(){
+    
+    //Is the elevator deployed to the top of the bar?
+    if ((Elevatorhight >= ClawConstants.Wrist.WristAngleLimitHight - 0.1)){
+      return true; //Yes we are above our safty limit
+    } else {
+      return false; //No we are below our safty limit
+    }
+  }
   public void goToSetpoint(double pSetpoint) {
-    mWristController.setReference(pSetpoint, ControlType.kPosition);
+    //Does our safty check pass & are we want
+    if(WristSaftyCheck()) {
+      if(ClawConstants.Wrist.WristAngleLimit >= pSetpoint) {
+        mWristController.setReference(pSetpoint, ControlType.kPosition);
+      }
+    } else {
+      mWristController.setReference(pSetpoint, ControlType.kPosition);
+    }
+   
+  }
+
+
+  public void setElevatorHight(double h) {
+    Elevatorhight = h; 
   }
 
   @Override
   public void periodic() {
     stopIfLimit();
+    
     SmartDashboard.putNumber("Wrist/Position", getEncoderMeasurement());
     SmartDashboard.putNumber("Wrist/Position/Abs",  mWristEncoder.getPosition());
     SmartDashboard.putNumber("Wrist/Voltage", mWristSparkMax.getBusVoltage());

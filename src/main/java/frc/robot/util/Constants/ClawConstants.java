@@ -105,7 +105,14 @@ public class ClawConstants {
 
     public static final SparkMaxConfig kWristConfig = new SparkMaxConfig();
 
-    public static final double WristElevatorSafeyThresh = 4.48;
+    public static final double WristPosElevatorSafeyThreshTop = 6.19;
+    public static final double WristPosElevatorSafeyThreshBottom = 4.83;
+
+    public static final double WristElevatorPosClearHightTop = 16;
+    public static final double WristElevatorPosClearHightBottom = 27;
+
+    public static final double WristAngleLimit = 4.9;
+    public static final double WristAngleLimitHight = 36.9; 
 
     public enum ClawRollerVolt {
       STOPPED(0),
@@ -128,13 +135,13 @@ public class ClawConstants {
     public enum WristPositions {
       ZERO(6.79),
       Home(6.83),
-      Intake(6.8),
+      Intake(6.78),
       L1_L2_Coral(6.21),
       Coral_updown(5.18),
       Algae_Drive(3.06),
       Max(5.8),
       
-      Elevator_Threh(WristElevatorSafeyThresh);
+      Elevator_Threh(WristPosElevatorSafeyThreshBottom);
 
 
       public final double position;
@@ -168,7 +175,7 @@ public class ClawConstants {
           .closedLoop
           .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
           .pidf(kP, 0.0, kD, kVelocityFF)
-          .outputRange(-0.35, 0.35);
+          .outputRange(-0.75, 0.75);
 
       // kWristConfig
       //     .closedLoop

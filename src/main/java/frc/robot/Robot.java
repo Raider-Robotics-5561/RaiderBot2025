@@ -9,8 +9,12 @@ import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.LEDPattern;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.util.Constants.SwerveConstants;
@@ -32,15 +36,24 @@ public class Robot extends TimedRobot
 
   private Timer disabledTimer;
 
+        // all hues at maximum saturation and half brightness
+        private final LEDPattern m_rainbow = LEDPattern.rainbow(255, 128);
+
+        // Our LED strip has a density of 120 LEDs per meter
+        private static final Distance kLedSpacing = Units.Meters.of(1 / 120.0);
+      
+        // Create a new pattern that scrolls the rainbow pattern across the LED strip, moving at a speed
+        // of 1 meter per second.
+        private final LEDPattern m_scrollingRainbow =
+            m_rainbow.scrollAtAbsoluteSpeed(Units.MetersPerSecond.of(1), kLedSpacing);
+
+
   public Robot()
   {
-    led = new AddressableLED (0);
-    ledBuffer = new AddressableLEDBuffer(500);
-    led.setLength(500);
-    led.setLength(ledBuffer.getLength());
-    led.start();
+
 
     instance = this;
+  
   }
 
   public static Robot getInstance()
@@ -54,6 +67,11 @@ public class Robot extends TimedRobot
   @Override
   public void robotInit()
   {
+    led = new AddressableLED (0);
+    ledBuffer = new AddressableLEDBuffer(1500);
+    led.setLength(1500);
+    led.setLength(ledBuffer.getLength());
+    led.start();
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
@@ -78,16 +96,49 @@ public class Robot extends TimedRobot
   @Override
   public void robotPeriodic()
   {
+   
+if (DriverStation.waitForDsConnection( 0.025) == false) {
 
-    // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
-    // commands, running already-scheduled commands, removing finished or interrupted commands,
-    // and running subsystem periodic() methods.  This must be called from the robot's periodic
-    // block in order for anything in the Command-based framework to work.
+// Create an LED pattern that displays a red-to-blue gradient, blinking at various rates.
+LEDPattern base = LEDPattern.solid(new Color(7,255,0));
+// GRB
+// 1 seconds on, 1 seconds off, for a total period of 2 seconds
+LEDPattern pattern = base.breathe(Units.Seconds.of(2.0));
+
+// Apply the LED pattern to the data buffer
+pattern.applyTo(ledBuffer);
+
+// Write the data to the LED strip
+led.setData(ledBuffer);
+  
+}
+else{
+  for (var i = 0; i < ledBuffer.getLength(); i++) {
+    // Sets the specified LED to the GRB values for red
+    ledBuffer.setRGB(i, 255, 7, 0);
+    led.setData(ledBuffer);
+}
+}
+
+// if (DriverStation.getAlliance()) {
+
+//   // Create an LED pattern that displays a red-to-blue gradient, blinking at various rates.
+//   LEDPattern base = LEDPattern.solid(new Color(7,255,0));
+//   // GRB
+//   // 1 seconds on, 1 seconds off, for a total period of 2 seconds
+//   LEDPattern pattern = base.breathe(Units.Seconds.of(2.0));
+  
+//   // Apply the LED pattern to the data buffer
+//   pattern.applyTo(ledBuffer);
+  
+
+    
+  // }
 
 
     CommandScheduler.getInstance().run();
+  
   }
-
   /**
    * This function is called once each time the robot enters Disabled mode.
    */
@@ -159,9 +210,8 @@ public class Robot extends TimedRobot
   @Override
   public void teleopPeriodic()
   {
-    if (DriverStation.waitForDsConnection(kDefaultPeriod)) {
-      
-    }
+
+  
   }
 
   @Override
