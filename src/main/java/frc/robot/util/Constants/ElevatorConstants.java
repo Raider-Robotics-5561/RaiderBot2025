@@ -95,7 +95,7 @@ public class ElevatorConstants {
         .closedLoop
         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
         .pidf(kP, 0.0, kD, kVelocityFF)
-        .outputRange(-0.6, 0.6);
+        .outputRange(-0.45, 0.45);
 
     // kElevatorConfig
     //     .closedLoop

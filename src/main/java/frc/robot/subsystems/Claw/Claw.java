@@ -145,6 +145,11 @@ public class Claw extends SubsystemBase {
       System.out.println("Claw Stop Limit Reached");
       setWrist(0);
     }
+
+    // else if (kRollerID.getForwardLimitSwitch().isPressed()) {
+    //   kRollerID.setVoltage(6);
+    // }
+    
   }
 
   public double getMotorOutput() {

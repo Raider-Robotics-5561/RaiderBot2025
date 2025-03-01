@@ -204,6 +204,7 @@ public class RobotContainer
         
 
  Command driveFieldOrientedAnglularVelocity = drivebase.driveFieldOriented(driveAngularVelocity);
+ Command c_driveRobotOriented = drivebase.drive(driveRobotOriented);
 
  Command driveFieldOrientedDirectAngleKeyboard  = drivebase.driveFieldOriented(driveDirectAngleKeyboard);
 
@@ -285,6 +286,10 @@ public class RobotContainer
 
       //~~~~~~~~~~~~~~~~~~Drive Control~~~~~~~~~~~~~~~~~~~~~~~~
       DriveController.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
+      // DriveController.leftBumper().whileTrue(drivebase.(c_driveRobotOriented))
+      // .whileFalse(Commands.runOnce(() -> {
+      //   drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
+      // }));
 
       // DriveController.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
 
@@ -294,7 +299,7 @@ public class RobotContainer
 
 
       //Lock the drive
-      DriveController.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+      // DriveController.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
 
 
       //This is our boost control Right Trigger

@@ -100,7 +100,6 @@ public class Robot extends TimedRobot
   @Override
   public void robotPeriodic()
   {
-  SmartDashboard.putBoolean("Color", drivestationcolor);
   
 if (DriverStation.waitForDsConnection( 0.025) == false){
 // GRB
@@ -123,10 +122,30 @@ if
     led.setData(ledBuffer);
 }
 }
-if(DriverStation.getAlliance().get() == DriverStation.Alliance.Blue){
+else if (DriverStation.waitForDsConnection( 0.025) == false){
+  // GRB
+  LEDPattern base = LEDPattern.solid(new Color(7,255,0));
+  LEDPattern pattern = base.breathe(Units.Seconds.of(2.0));
+  
+  // Apply the LED pattern to the data buffer
+  pattern.applyTo(ledBuffer);
+  
+  // Write the data to the LED strip
+  led.setData(ledBuffer);
+  
+  }
+  
+else if(DriverStation.getAlliance().get() == DriverStation.Alliance.Blue){
   for (var i = 0; i < ledBuffer.getLength(); i++) {
     // Sets the specified LED to the GRB values for red
     ledBuffer.setRGB(i, 0, 15 ,255);
+    led.setData(ledBuffer);
+}
+}
+else{
+  for (var i = 0; i < ledBuffer.getLength(); i++) {
+    // Sets the specified LED to the GRB values for red
+    ledBuffer.setRGB(i, 7, 255 ,255);
     led.setData(ledBuffer);
 }
 }

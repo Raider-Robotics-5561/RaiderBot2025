@@ -41,7 +41,11 @@ public class ClawConstants {
     public static final SparkMaxConfig kAngleConfig = new SparkMaxConfig();
 
     static {
-        kRollerConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(kCurrentLimit);
+        kRollerConfig
+        .idleMode(IdleMode.kBrake)
+        .smartCurrentLimit(kCurrentLimit);
+        // .voltageCompensation(10)
+        // .openLoopRampRate(0.5);
 
         kRollerConfig
           .softLimit
