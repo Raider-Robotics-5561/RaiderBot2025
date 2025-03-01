@@ -169,11 +169,13 @@ public class SwerveSubsystem extends SubsystemBase
       final boolean enableFeedforward = true;
       // Configure AutoBuilder last
       AutoBuilder.configure(
+          
           this::getPose,
           // Robot pose supplier
           this::resetOdometry,
           // Method to reset odometry (will be called if your auto has a starting pose)
           this::getRobotVelocity,
+          
           // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
           (speedsRobotRelative, moduleFeedForwards) -> {
             if (enableFeedforward)
@@ -207,8 +209,11 @@ public class SwerveSubsystem extends SubsystemBase
             if (alliance.isPresent())
             {
               return alliance.get() == DriverStation.Alliance.Red;
+              
             }
-            return false;
+            return true;
+            // return false;
+
           },
           this
           // Reference to this subsystem to set requirements
@@ -604,7 +609,7 @@ public class SwerveSubsystem extends SubsystemBase
    */
   public void setMotorBrake(boolean brake)
   {
-    brake = true;
+    brake = false;
     swerveDrive.setMotorIdleMode(brake);
   }
 

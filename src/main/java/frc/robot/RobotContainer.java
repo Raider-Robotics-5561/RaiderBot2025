@@ -2,6 +2,9 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+
+import com.pathplanner.lib.auto.CommandUtil;
+// import com.pathplanner.lib.commands.;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -54,23 +57,24 @@ public class RobotContainer
 
 //======================Auton_Stuff=========================
 
-  // private final Command Red_Right_Start; 
-  // private final Command Red_Middle_Start; 
-  // private final Command Red_Left_Start; 
 
-  // private final Command Blue_Left_Start; 
-  // private final Command Blue_Right_Start; 
-  // private final Command Blue_Middle_Start; 
+  private final Command Red_Right_Start; 
+  private final Command Red_Middle_Start; 
+  private final Command Red_Left_Start; 
 
-  // private final Command Blue_Right_Coral;
-  // private final Command Blue_Middle_Coral;
-  // private final Command Blue_Left_Coral;
+  private final Command Blue_Left_Start; 
+  private final Command Blue_Right_Start; 
+  private final Command Blue_Middle_Start; 
 
-  // private final Command Red_Right_Coral;
-  // private final Command Red_Middle_Coral;
-  // private final Command Red_Left_Coral;
+  private final Command Blue_Right_Coral;
+  private final Command Blue_Middle_Coral;
+  private final Command Blue_Left_Coral;
 
-  // SendableChooser<Command> m_chooser;
+  private final Command Red_Right_Coral;
+  private final Command Red_Middle_Coral;
+  private final Command Red_Left_Coral;
+
+  SendableChooser<Command> m_chooser;
 
   //=======================================================
 
@@ -142,12 +146,11 @@ public class RobotContainer
    */
   public RobotContainer()
   {
-
     sub_claw = new Claw();
     elevator = new Elevator(sub_claw);
 
     // Set up auto routines
-    // autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+     //autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
     // autoChooser.addOption("Blue Middle Start", getAutonomousCommand());
 
     configureBindings();
@@ -155,39 +158,41 @@ public class RobotContainer
     
 //========================Auton_Stuff===================================================
 
-    // Red_Right_Start = drivebase.getAutonomousCommand("Red Right Start");
-    // Red_Middle_Start = drivebase.getAutonomousCommand("Red Middle Start");
-    // Red_Left_Start = drivebase.getAutonomousCommand("Red Left Start");
+    Red_Right_Start = drivebase.getAutonomousCommand("Red Right Start");
+    Red_Middle_Start = drivebase.getAutonomousCommand("Red Middle Start");
+    Red_Left_Start = drivebase.getAutonomousCommand("Red Left Start");
 
-    // Blue_Right_Start = drivebase.getAutonomousCommand("Blue Right Start");
-    // Blue_Middle_Start = drivebase.getAutonomousCommand("Blue Middle Start");
-    // Blue_Left_Start = drivebase.getAutonomousCommand("Blue Left Start");
+    Blue_Right_Start = drivebase.getAutonomousCommand("Blue Right Start");
+    Blue_Middle_Start = drivebase.getAutonomousCommand("Blue Middle Start");
+    Blue_Left_Start = drivebase.getAutonomousCommand("Blue Left Start");
 
-    // Red_Right_Coral = drivebase.getAutonomousCommand("Red Right Coral");
-    // Red_Middle_Coral = drivebase.getAutonomousCommand("Red Middle Coral");
-    // Red_Left_Coral = drivebase.getAutonomousCommand("Red Left Coral");
+    Red_Right_Coral = drivebase.getAutonomousCommand("Red Right Coral");
+    Red_Middle_Coral = drivebase.getAutonomousCommand("Red Middle Coral");
+    Red_Left_Coral = drivebase.getAutonomousCommand("Red Left Coral");
 
-    // Blue_Right_Coral = drivebase.getAutonomousCommand("Blue Right Coral");
-    // Blue_Middle_Coral = drivebase.getAutonomousCommand("Blue Middle Coral");
-    // Blue_Left_Coral = drivebase.getAutonomousCommand("Blue Left Coral");
+    Blue_Right_Coral = drivebase.getAutonomousCommand("Blue Right Coral");
+    Blue_Middle_Coral = drivebase.getAutonomousCommand("Blue Middle Coral");
+    Blue_Left_Coral = drivebase.getAutonomousCommand("Blue Left Coral");
 
+    m_chooser = new SendableChooser<Command>();
 
+    m_chooser.addOption("Red Middle Start", Red_Middle_Start);
+    m_chooser.addOption("Red Left Start", Red_Left_Start);
+    m_chooser.addOption("Red Right Start", Red_Right_Start);
 
-    // autoChooser.addOption("Red Middle Start", Red_Middle_Start);
-    // autoChooser.addOption("Red Left Start", Red_Left_Start);
-    // autoChooser.addOption("Red Right Start", Red_Right_Start);
+    m_chooser.addOption("Blue Middle Start", Blue_Middle_Start);
+    m_chooser.addOption("Blue Left Start", Blue_Left_Start);
+    m_chooser.addOption("Blue Right Start", Blue_Right_Start);
 
-    // autoChooser.addOption("Blue Middle Start", Blue_Middle_Start);
-    // autoChooser.addOption("Blue Left Start", Blue_Left_Start);
-    // autoChooser.addOption("Blue Right Start", Blue_Right_Start);
+    m_chooser.addOption("Blue Middle Start", Blue_Middle_Coral);
+    m_chooser.addOption("Blue Left Start", Blue_Left_Coral);
+    m_chooser.addOption("Blue Right Start", Blue_Right_Coral);
 
-    // autoChooser.addOption("Blue Middle Start", Blue_Middle_Coral);
-    // autoChooser.addOption("Blue Left Start", Blue_Left_Coral);
-    // autoChooser.addOption("Blue Right Start", Blue_Right_Coral);
+    m_chooser.addOption("Red Middle Start", Red_Middle_Coral);
+    m_chooser.addOption("Red Left Start", Red_Left_Coral);
+    m_chooser.addOption("Red Right Start", Red_Right_Coral);
 
-    // autoChooser.addOption("Red Middle Start", Red_Middle_Coral);
-    // autoChooser.addOption("Red Left Start", Red_Left_Coral);
-    // autoChooser.addOption("Red Right Start", Red_Right_Coral);
+    SmartDashboard.putData(m_chooser);
 
 //======================================================================================
 
@@ -227,13 +232,13 @@ public class RobotContainer
       OPController.back().whileTrue(new ClimberDownCommand(m_climber));
 
       OPController.axisGreaterThan(2, 0.01).whileTrue(Commands.run(() -> {
-        sub_claw.setRollerPower(((OPController.getRawAxis(2) * 0.25) * 12) * -1);
+        sub_claw.setRollerPower(((OPController.getRawAxis(2) * 0.65) * 12) * -1);
       }));
       OPController.axisGreaterThan(3, 0.01).whileTrue(Commands.run(() -> {
-        sub_claw.setRollerPower((OPController.getRawAxis(3) * 0.25) * 12);
+        sub_claw.setRollerPower((OPController.getRawAxis(3) * 0.65) * 12);
       }));
 
-      OPController.axisLessThan(3, 0.01).and(OPController.axisLessThan(2,0.01)).whileTrue(Commands.run(() -> {
+      OPController.axisLessThan(2, 0.01).and(OPController.axisLessThan(2,0.01)).whileTrue(Commands.run(() -> {
        sub_claw.setRollerPower(0);
       }).repeatedly());
 
@@ -241,10 +246,10 @@ public class RobotContainer
  
 
       OPController.povUp().whileTrue(Commands.run(() -> {
-        elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.L1.getPos());
+        elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.SCORE.getPos());
       }));
       OPController.povRight().whileTrue(Commands.run(() -> {
-        elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.L2.getPos());
+        elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.BARGE.getPos());
       }));
       OPController.povDown().whileTrue(Commands.run(() -> {
         elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.L3.getPos());
@@ -255,9 +260,8 @@ public class RobotContainer
 
       //Wrist Pos Control 
       OPController.y().whileTrue(Commands.run(() -> {
-        // sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Elevator_Threh.getPos());
+        sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Home.getPos());
         elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.INTAKE.getPos());
-        sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Intake.getPos());
       }));
       OPController.x().whileTrue(Commands.run(() -> {
 
@@ -265,7 +269,8 @@ public class RobotContainer
         
       }));
       OPController.b().whileTrue(Commands.run(() -> {
-        sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Coral_updown.getPos());
+        sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Floor.getPos());
+        elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.FloorIntake.getPos());
       }));
       OPController.a().whileTrue(Commands.run(() -> {
         sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Elevator_Threh.getPos());
@@ -274,6 +279,9 @@ public class RobotContainer
       OPController.leftBumper().whileTrue(Commands.run(() -> {
         sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Algae_Drive.getPos());
       }));
+
+      OPController.rightBumper().whileTrue(Commands.run(() -> {
+        sub_claw.setRollerPower(-9);      }));
 
       //~~~~~~~~~~~~~~~~~~Drive Control~~~~~~~~~~~~~~~~~~~~~~~~
       DriveController.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
@@ -315,11 +323,11 @@ public class RobotContainer
    *
    * @return the command to run in autonomous
    */
-  // public Command getAutonomousCommand()
-  // {
-  //   // An example command will be run in autonomous
-  //   return m_chooser.getSelected();
-  // }
+  public Command getAutonomousCommand()
+  {
+    // An example command will be run in autonomous
+    return m_chooser.getSelected();
+  }
   public void setMotorBrake(boolean brake)
   {
     drivebase.setMotorBrake(brake);

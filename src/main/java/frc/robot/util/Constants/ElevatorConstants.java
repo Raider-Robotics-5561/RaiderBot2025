@@ -50,15 +50,15 @@ public class ElevatorConstants {
     
     public enum Positions {
       BOTTOM(0), 
-      INTAKE(1), // TODO: Configure me!
+      INTAKE(3.65), // TODO: Configure me!
       POSTINTAKE(6.7),  // TODO: Configure me!
       L1(6.7),  // TODO: Configure me!
       L2(12.57),  // TODO: Configure me!
       L3(44.59),  // TODO: Configure me!
       L4(84),  // TODO: Configure me!
-      SCORE(0), // TODO: Configure me!
-      BARGE(0); // TODO: Configure me!
-
+      SCORE(28.4), // TODO: Configure me!
+      BARGE(58.1), // TODO: Configure me!
+      FloorIntake(1);
       public final double position;
 
       private Positions(double position) {
@@ -95,7 +95,7 @@ public class ElevatorConstants {
         .closedLoop
         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
         .pidf(kP, 0.0, kD, kVelocityFF)
-        .outputRange(-0.25, 0.25);
+        .outputRange(-0.6, 0.6);
 
     // kElevatorConfig
     //     .closedLoop

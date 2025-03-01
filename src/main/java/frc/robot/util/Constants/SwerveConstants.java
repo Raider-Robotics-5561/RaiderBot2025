@@ -18,6 +18,6 @@ public class SwerveConstants {
 
   public static final class DrivebaseConstants{
       // Hold time on motor brakes when disabled
-      public static final double WHEEL_LOCK_TIME = 1; // seconds
+      public static final double WHEEL_LOCK_TIME = 35; // seconds
   }
 }

@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.AddressableLED;
@@ -19,6 +20,7 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.util.Constants.SwerveConstants;
+import swervelib.SwerveDrive;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to each mode, as
@@ -99,6 +101,7 @@ public class Robot extends TimedRobot
   public void robotPeriodic()
   {
   SmartDashboard.putBoolean("Color", drivestationcolor);
+  
 if (DriverStation.waitForDsConnection( 0.025) == false){
 // GRB
 LEDPattern base = LEDPattern.solid(new Color(7,255,0));
@@ -109,48 +112,30 @@ pattern.applyTo(ledBuffer);
 
 // Write the data to the LED strip
 led.setData(ledBuffer);
-  
+
 }
-else{
-  for (var i = 0; i < ledBuffer.getLength(); i++) {
-    // Sets the specified LED to the GRB values for red
-    ledBuffer.setRGB(i, 255, 7, 0);
-    led.setData(ledBuffer);
-}
-}
-DriverStation.getAlliance().equals(drivestationcolor);
-if (drivestationcolor == false) {
+
+if
+(DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
   for (var i = 0; i < ledBuffer.getLength(); i++) {
     // Sets the specified LED to the GRB values for red
     ledBuffer.setRGB(i, 0, 255, 0);
     led.setData(ledBuffer);
 }
-}else{
+}
+if(DriverStation.getAlliance().get() == DriverStation.Alliance.Blue){
   for (var i = 0; i < ledBuffer.getLength(); i++) {
     // Sets the specified LED to the GRB values for red
-    ledBuffer.setRGB(i, 0, 0 ,255);
+    ledBuffer.setRGB(i, 0, 15 ,255);
     led.setData(ledBuffer);
 }
 }
-// if (DriverStation.getRawAllianceStation()) {
 
-//   // Create an LED pattern that displays a red-to-blue gradient, blinking at various rates.
-//   LEDPattern base = LEDPattern.solid(new Color(7,255,0));
-//   // GRB
-//   // 1 seconds on, 1 seconds off, for a total period of 2 seconds
-//   LEDPattern pattern = base.breathe(Units.Seconds.of(2.0));
-  
-//   // Apply the LED pattern to the data buffer
-//   pattern.applyTo(ledBuffer);
-  
-
-    
-//   }
 
 
     CommandScheduler.getInstance().run();
+}
   
-  }
   /**
    * This function is called once each time the robot enters Disabled mode.
    */
@@ -180,7 +165,7 @@ if (drivestationcolor == false) {
   public void autonomousInit()
   {
     m_robotContainer.setMotorBrake(true);
-    // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
 
@@ -196,6 +181,7 @@ if (drivestationcolor == false) {
   @Override
   public void autonomousPeriodic()
   {
+    
   }
 
   @Override
