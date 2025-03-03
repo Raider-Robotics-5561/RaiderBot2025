@@ -49,15 +49,15 @@ public class ElevatorConstants {
     public static final SparkMaxConfig kElevatorFollowerConfig = new SparkMaxConfig();
     
     public enum Positions {
-      BOTTOM(0), 
+      BOTTOM(1), 
       INTAKE(3.65), // TODO: Configure me!
       POSTINTAKE(6.7),  // TODO: Configure me!
       L1(6.7),  // TODO: Configure me!
       L2(12.57),  // TODO: Configure me!
       L3(44.59),  // TODO: Configure me!
       L4(84),  // TODO: Configure me!
-      SCORE(28.4), // TODO: Configure me!
-      BARGE(58.1), // TODO: Configure me!
+      Algae_1(28.4), // TODO: Configure me!
+      Algae_2(58.1), // TODO: Configure me!
       FloorIntake(1);
       public final double position;
 

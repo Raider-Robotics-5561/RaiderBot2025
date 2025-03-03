@@ -57,22 +57,8 @@ public class RobotContainer
 
 //======================Auton_Stuff=========================
 
-
-  private final Command Red_Right_Start; 
-  private final Command Red_Middle_Start; 
-  private final Command Red_Left_Start; 
-
-  private final Command Blue_Left_Start; 
-  private final Command Blue_Right_Start; 
-  private final Command Blue_Middle_Start; 
-
-  private final Command Blue_Right_Coral;
-  private final Command Blue_Middle_Coral;
-  private final Command Blue_Left_Coral;
-
-  private final Command Red_Right_Coral;
-  private final Command Red_Middle_Coral;
-  private final Command Red_Left_Coral;
+  private final Command Leave;
+  private final Command algae_Left;
 
   SendableChooser<Command> m_chooser;
 
@@ -149,48 +135,44 @@ public class RobotContainer
     sub_claw = new Claw();
     elevator = new Elevator(sub_claw);
 
-    // Set up auto routines
-     //autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
-    // autoChooser.addOption("Blue Middle Start", getAutonomousCommand());
+
 
     configureBindings();
     DriverStation.silenceJoystickConnectionWarning(false);
     
 //========================Auton_Stuff===================================================
 
-    Red_Right_Start = drivebase.getAutonomousCommand("Red Right Start");
-    Red_Middle_Start = drivebase.getAutonomousCommand("Red Middle Start");
-    Red_Left_Start = drivebase.getAutonomousCommand("Red Left Start");
+NamedCommands.registerCommand("Saftey", Commands.run(() -> {
+  sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Elevator_Threh.getPos()); 
+}));
+NamedCommands.registerCommand("Elevator_Return", Commands.run(() -> {
+  elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.BOTTOM.getPos());
+}));
+NamedCommands.registerCommand("Algae_Level_1", Commands.run(() -> {
+  elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.Algae_1.getPos());
+}));  
+NamedCommands.registerCommand("Algae_Level_2", Commands.run(() -> {
+  elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.Algae_2.getPos());
+}));  
+NamedCommands.registerCommand("Algae_Intake", Commands.run(() -> {
+  sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Algae_Drive.getPos());
+}));
+NamedCommands.registerCommand("Algae_Intake_Rollers", Commands.run(() -> {
+  sub_claw.setRollerPower(9); 
+}));
+NamedCommands.registerCommand("Algae_Hold", Commands.run(() -> {
+  sub_claw.setRollerPower(4); 
+}));
+     
 
-    Blue_Right_Start = drivebase.getAutonomousCommand("Blue Right Start");
-    Blue_Middle_Start = drivebase.getAutonomousCommand("Blue Middle Start");
-    Blue_Left_Start = drivebase.getAutonomousCommand("Blue Left Start");
-
-    Red_Right_Coral = drivebase.getAutonomousCommand("Red Right Coral");
-    Red_Middle_Coral = drivebase.getAutonomousCommand("Red Middle Coral");
-    Red_Left_Coral = drivebase.getAutonomousCommand("Red Left Coral");
-
-    Blue_Right_Coral = drivebase.getAutonomousCommand("Blue Right Coral");
-    Blue_Middle_Coral = drivebase.getAutonomousCommand("Blue Middle Coral");
-    Blue_Left_Coral = drivebase.getAutonomousCommand("Blue Left Coral");
+    Leave = drivebase.getAutonomousCommand("Leave");
+    algae_Left = drivebase.getAutonomousCommand("algae_Left");
+    
 
     m_chooser = new SendableChooser<Command>();
 
-    m_chooser.addOption("Red Middle Start", Red_Middle_Start);
-    m_chooser.addOption("Red Left Start", Red_Left_Start);
-    m_chooser.addOption("Red Right Start", Red_Right_Start);
-
-    m_chooser.addOption("Blue Middle Start", Blue_Middle_Start);
-    m_chooser.addOption("Blue Left Start", Blue_Left_Start);
-    m_chooser.addOption("Blue Right Start", Blue_Right_Start);
-
-    m_chooser.addOption("Blue Middle Start", Blue_Middle_Coral);
-    m_chooser.addOption("Blue Left Start", Blue_Left_Coral);
-    m_chooser.addOption("Blue Right Start", Blue_Right_Coral);
-
-    m_chooser.addOption("Red Middle Start", Red_Middle_Coral);
-    m_chooser.addOption("Red Left Start", Red_Left_Coral);
-    m_chooser.addOption("Red Right Start", Red_Right_Coral);
+    m_chooser.addOption("Leave", Leave);
+    m_chooser.addOption("algae_Left", algae_Left);
 
     SmartDashboard.putData(m_chooser);
 
@@ -247,17 +229,17 @@ public class RobotContainer
  
 
       OPController.povUp().whileTrue(Commands.run(() -> {
-        elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.SCORE.getPos());
+        elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.Algae_1.getPos());
       }));
       OPController.povRight().whileTrue(Commands.run(() -> {
-        elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.BARGE.getPos());
+        elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.Algae_2.getPos());
       }));
-      OPController.povDown().whileTrue(Commands.run(() -> {
-        elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.L3.getPos());
-      }));
-      OPController.povLeft().whileTrue(Commands.run(() -> {
-        elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.L4.getPos());
-      }));
+      // OPController.povDown().whileTrue(Commands.run(() -> {
+      //   elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.L3.getPos());
+      // }));
+      // OPController.povLeft().whileTrue(Commands.run(() -> {
+      //   elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.L4.getPos());
+      // }));
 
       //Wrist Pos Control 
       OPController.y().whileTrue(Commands.run(() -> {
@@ -282,7 +264,8 @@ public class RobotContainer
       }));
 
       OPController.rightBumper().whileTrue(Commands.run(() -> {
-        sub_claw.setRollerPower(-9);      }));
+        sub_claw.setRollerPower(-9);      
+      }));
 
       //~~~~~~~~~~~~~~~~~~Drive Control~~~~~~~~~~~~~~~~~~~~~~~~
       DriveController.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));

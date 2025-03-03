@@ -1,0 +1,103 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Algae_Intake"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Go To Half"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Aproach"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Algae_Level_1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Algae_Intake_Rollers"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Grab Algae"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Saftey"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Algae_Hold"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Back Away"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Elevator_Return"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Algae Left",
+  "choreoAuto": false
+}
