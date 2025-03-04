@@ -215,10 +215,10 @@ NamedCommands.registerCommand("Algae_Hold", Commands.run(() -> {
       OPController.back().whileTrue(new ClimberDownCommand(m_climber));
 
       OPController.axisGreaterThan(2, 0.01).whileTrue(Commands.run(() -> {
-        sub_claw.setRollerPower(((OPController.getRawAxis(2) * 0.65) * 12) * -1);
+        sub_claw.setRollerPower(((OPController.getRawAxis(2) * 0.75) * 12) * -1);
       }));
       OPController.axisGreaterThan(3, 0.01).whileTrue(Commands.run(() -> {
-        sub_claw.setRollerPower((OPController.getRawAxis(3) * 0.65) * 12);
+        sub_claw.setRollerPower((OPController.getRawAxis(3) * 0.75) * 12);
       }));
 
       OPController.axisLessThan(2, 0.01).and(OPController.axisLessThan(2,0.01)).whileTrue(Commands.run(() -> {
@@ -228,15 +228,19 @@ NamedCommands.registerCommand("Algae_Hold", Commands.run(() -> {
 
  
 
-      OPController.povUp().whileTrue(Commands.run(() -> {
+      // OPController.povUp().whileTrue(Commands.run(() -> {
+      //   elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.Algae_1.getPos());
+      // }));
+      OPController.povRight().whileTrue(Commands.run(() -> {
         elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.Algae_1.getPos());
       }));
-      OPController.povRight().whileTrue(Commands.run(() -> {
-        elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.Algae_2.getPos());
+      OPController.povUp().whileTrue(Commands.run(() -> {
+        elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.Algae_1_Test.getPos());
       }));
-      // OPController.povDown().whileTrue(Commands.run(() -> {
-      //   elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.L3.getPos());
-      // }));
+      OPController.povDown().whileTrue(Commands.run(() -> {
+        sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.WRIST_Test2.getPos());
+      }));
+
       // OPController.povLeft().whileTrue(Commands.run(() -> {
       //   elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.L4.getPos());
       // }));
@@ -269,6 +273,7 @@ NamedCommands.registerCommand("Algae_Hold", Commands.run(() -> {
 
       //~~~~~~~~~~~~~~~~~~Drive Control~~~~~~~~~~~~~~~~~~~~~~~~
       DriveController.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
+
       // DriveController.leftBumper().whileTrue(drivebase.(c_driveRobotOriented))
       // .whileFalse(Commands.runOnce(() -> {
       //   drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
@@ -286,7 +291,7 @@ NamedCommands.registerCommand("Algae_Hold", Commands.run(() -> {
 
 
       //This is our boost control Right Trigger
-      DriveController.axisGreaterThan(3, 0.01).onChange(Commands.runOnce(() -> {
+      DriveController.axisGreaterThan(3, 0.1).onChange(Commands.runOnce(() -> {
         driveAngularVelocity.scaleTranslation(DriveController.getRightTriggerAxis() + 0.25);
         driveAngularVelocity.scaleRotation((DriveController.getRightTriggerAxis() * miscConstants.RotationSpeedScale) + 0.25);
       }).repeatedly()).whileFalse(Commands.runOnce(() -> { 
