@@ -73,7 +73,6 @@ public class SwerveSubsystem extends SubsystemBase
    * Enable vision odometry updates while driving.
    */
   private final boolean             visionDriveTest     = true;
-  boolean fieldRel;
 
   /**
    * PhotonVision class to keep an accurate odometry.
@@ -101,6 +100,8 @@ public class SwerveSubsystem extends SubsystemBase
     {
       throw new RuntimeException(e);
     }
+    // fieldRel = true;
+
     swerveDrive.setHeadingCorrection(false); // Heading correction should only be used while controlling the robot via angle.
     swerveDrive.setCosineCompensator(false);//!SwerveDriveTelemetry.isSimulation); // Disables cosine compensation for simulations since it causes discrepancies not seen in real life.
     swerveDrive.setAngularVelocityCompensation(true,
@@ -115,9 +116,14 @@ public class SwerveSubsystem extends SubsystemBase
     //   // Stop the odometry thread if we are using vision that way we can synchronize updates better.
     //   swerveDrive.stopOdometryThread();
     // }
+    
     setupPathPlanner();
   }
 
+  // public Command switchFieldRel(){
+  //   return runOnce(() ->{ fieldRel = !fieldRel;
+  //    if(fieldRel)swerveDrive.zeroGyro(); SmartDashboard.putBoolean("IsFieldRelative", fieldRel);});
+  //  }
   /**
    * Construct the swerve drive.
    *
@@ -198,7 +204,7 @@ public class SwerveSubsystem extends SubsystemBase
               // PPHolonomicController is the built in path following controller for holonomic drive trains
               new PIDConstants(0.25, 0.0, 0.0),
               // Translation PID constants
-              new PIDConstants(0.25, 0.0, 0.0)
+              new PIDConstants(5.0, 0.0, 0.0)
               // Rotation PID constants
           ),
           config,
@@ -682,10 +688,7 @@ public class SwerveSubsystem extends SubsystemBase
     return swerveDrive.getFieldVelocity();
   }
 
-     public Command switchFieldRel(){
-   return runOnce(() ->{ fieldRel = !fieldRel;
-    if(fieldRel)swerveDrive.zeroGyro(); SmartDashboard.putBoolean("IsFieldRelative", fieldRel);});
-  }
+
 
   /**
    * Gets the current velocity (x, y and omega) of the robot

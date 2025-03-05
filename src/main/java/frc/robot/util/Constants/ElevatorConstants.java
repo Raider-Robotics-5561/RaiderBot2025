@@ -58,8 +58,7 @@ public class ElevatorConstants {
       L3(44.59),  // TODO: Configure me!
       L4(84),  // TODO: Configure me!
       Algae_1(32), // TODO: Configure me!
-      Algae_1_Test(69),
-      Algae_2(58.1), // TODO: Configure me!
+      Algae_2(69), // TODO: Configure me!
       FloorIntake(1);
       public final double position;
 

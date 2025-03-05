@@ -54,7 +54,7 @@ public class RobotContainer
                                                                                 "swerve"));
   public final ClimbSubsystem 
   m_climber = new ClimbSubsystem();
-
+  public boolean fieldRel;
 //======================Auton_Stuff=========================
 
   private final Command Leave;
@@ -235,10 +235,10 @@ NamedCommands.registerCommand("Algae_Hold", Commands.run(() -> {
         elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.Algae_1.getPos());
       }));
       OPController.povUp().whileTrue(Commands.run(() -> {
-        elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.Algae_1_Test.getPos());
+        elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.Algae_2.getPos());
       }));
       OPController.povDown().whileTrue(Commands.run(() -> {
-        sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.WRIST_Test2.getPos());
+        sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Intake2.getPos());
       }));
 
       OPController.povLeft().whileTrue(Commands.run(() -> {
@@ -274,10 +274,10 @@ NamedCommands.registerCommand("Algae_Hold", Commands.run(() -> {
       //~~~~~~~~~~~~~~~~~~Drive Control~~~~~~~~~~~~~~~~~~~~~~~~
       DriveController.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
 
-      // DriveController.leftBumper().whileTrue(drivebase.(c_driveRobotOriented))
+      // DriveController.leftBumper().whileTrue(Commands.run(drivebase.driveFieldOriented() = true)
       // .whileFalse(Commands.runOnce(() -> {
       //   drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
-      // }));
+      // })));
 
       // DriveController.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
 
@@ -289,6 +289,7 @@ NamedCommands.registerCommand("Algae_Hold", Commands.run(() -> {
       //Lock the drive
       // DriveController.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
 
+      // DriveController.leftBumper().whileTrue(fieldRel == false);
 
       //This is our boost control Right Trigger
       DriveController.axisGreaterThan(3, 0.1).onChange(Commands.runOnce(() -> {
