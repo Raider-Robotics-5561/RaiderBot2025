@@ -31,6 +31,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 // import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -72,6 +73,8 @@ public class SwerveSubsystem extends SubsystemBase
    * Enable vision odometry updates while driving.
    */
   private final boolean             visionDriveTest     = true;
+  boolean fieldRel;
+
   /**
    * PhotonVision class to keep an accurate odometry.
    */
@@ -677,6 +680,11 @@ public class SwerveSubsystem extends SubsystemBase
   public ChassisSpeeds getFieldVelocity()
   {
     return swerveDrive.getFieldVelocity();
+  }
+
+     public Command switchFieldRel(){
+   return runOnce(() ->{ fieldRel = !fieldRel;
+    if(fieldRel)swerveDrive.zeroGyro(); SmartDashboard.putBoolean("IsFieldRelative", fieldRel);});
   }
 
   /**
