@@ -241,9 +241,9 @@ NamedCommands.registerCommand("Algae_Hold", Commands.run(() -> {
         sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.WRIST_Test2.getPos());
       }));
 
-      // OPController.povLeft().whileTrue(Commands.run(() -> {
-      //   elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.L4.getPos());
-      // }));
+      OPController.povLeft().whileTrue(Commands.run(() -> {
+        elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.L4.getPos());
+      }));
 
       //Wrist Pos Control 
       OPController.y().whileTrue(Commands.run(() -> {
