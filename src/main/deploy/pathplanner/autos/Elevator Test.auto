@@ -9,6 +9,31 @@
           "data": {
             "pathName": "Auton Elevator Test"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Algae_Intake"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 5.0
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Algae_Level_1"
+                }
+              }
+            ]
+          }
         }
       ]
     }

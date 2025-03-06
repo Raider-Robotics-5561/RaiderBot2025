@@ -153,7 +153,7 @@ NamedCommands.registerCommand("Elevator_Return", Commands.run(() -> {
 }));
 NamedCommands.registerCommand("Algae_Level_1", Commands.run(() -> {
   elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.Algae_1.getPos());
-}));  
+}));
 NamedCommands.registerCommand("Algae_Level_2", Commands.run(() -> {
   elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.Algae_2.getPos());
 }));  

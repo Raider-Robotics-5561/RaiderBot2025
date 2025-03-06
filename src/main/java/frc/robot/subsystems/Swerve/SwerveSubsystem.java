@@ -103,7 +103,7 @@ public class SwerveSubsystem extends SubsystemBase
     }
     // fieldRel = true;
 
-    swerveDrive.setHeadingCorrection(false); // Heading correction should only be used while controlling the robot via angle.
+    swerveDrive.setHeadingCorrection(true); // Heading correction should only be used while controlling the robot via angle.
     swerveDrive.setCosineCompensator(false);//!SwerveDriveTelemetry.isSimulation); // Disables cosine compensation for simulations since it causes discrepancies not seen in real life.
     swerveDrive.setAngularVelocityCompensation(true,
                                                true,
@@ -206,7 +206,7 @@ public class SwerveSubsystem extends SubsystemBase
               // PPHolonomicController is the built in path following controller for holonomic drive trains
               new PIDConstants(0.05, 0.0, 0.0),
               // Translation PID constants
-              new PIDConstants(0.01, 0.0, 0.0)
+              new PIDConstants(0.0001, 0.0, 0.0)
               // Rotation PID constants
           ),
           config,
