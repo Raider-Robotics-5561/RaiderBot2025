@@ -59,6 +59,7 @@ public class RobotContainer
 
   private final Command Leave;
   private final Command algae_Left;
+  private final Command Elevator_Test;
 
   SendableChooser<Command> m_chooser;
 
@@ -167,12 +168,14 @@ NamedCommands.registerCommand("Algae_Hold", Commands.run(() -> {
 
     Leave = drivebase.getAutonomousCommand("Leave");
     algae_Left = drivebase.getAutonomousCommand("algae_Left");
+    Elevator_Test = drivebase.getAutonomousCommand("Elevator Test");
     
 
     m_chooser = new SendableChooser<Command>();
 
     m_chooser.addOption("Leave", Leave);
     m_chooser.addOption("algae_Left", algae_Left);
+    m_chooser.addOption("Elevator Test", Elevator_Test);
 
     SmartDashboard.putData(m_chooser);
 
