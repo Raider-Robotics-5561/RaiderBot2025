@@ -110,7 +110,7 @@ public class ClawConstants {
     public static final SparkMaxConfig kWristConfig = new SparkMaxConfig();
 
     public static final double WristPosElevatorSafeyThreshTop = 6.19;
-    public static final double WristPosElevatorSafeyThreshBottom = 4.83;
+    public static final double WristPosElevatorSafeyThreshBottom = 4.30;
 
     public static final double WristElevatorPosClearHightTop = 16;
     public static final double WristElevatorPosClearHightBottom = 27;
