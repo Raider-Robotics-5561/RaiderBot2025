@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import java.io.File;
+import java.security.KeyStore.TrustedCertificateEntry;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -101,7 +102,7 @@ public class RobotContainer
    * Clone's the angular velocity input stream and converts it to a robotRelative input stream.
    */
   SwerveInputStream driveRobotOriented = driveAngularVelocity.copy().robotRelative(false)
-                                                             .allianceRelativeControl(false);
+                                                             .allianceRelativeControl(true);
 
   SwerveInputStream driveAngularVelocityKeyboard = SwerveInputStream.of(drivebase.getSwerveDrive(),
                                                                       () -> -DriveController.getLeftY(),
