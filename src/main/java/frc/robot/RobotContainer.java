@@ -4,6 +4,8 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import com.pathplanner.lib.auto.CommandUtil;
+
+import edu.wpi.first.hal.FRCNetComm.tResourceType;
 // import com.pathplanner.lib.commands.;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -215,10 +217,10 @@ NamedCommands.registerCommand("Algae_Hold", Commands.run(() -> {
       OPController.back().whileTrue(new ClimberDownCommand(m_climber));
 
       OPController.axisGreaterThan(2, 0.01).whileTrue(Commands.run(() -> {
-        sub_claw.setRollerPower(((OPController.getRawAxis(2) * 0.75) * 12) * -1);
+        sub_claw.setRollerPower(((OPController.getRawAxis(2) * 0.85) * 12) * -1);
       }));
       OPController.axisGreaterThan(3, 0.01).whileTrue(Commands.run(() -> {
-        sub_claw.setRollerPower((OPController.getRawAxis(3) * 0.75) * 12);
+        sub_claw.setRollerPower((OPController.getRawAxis(3) * 0.85) * 12);
       }));
 
       OPController.axisLessThan(2, 0.01).and(OPController.axisLessThan(2,0.01)).whileTrue(Commands.run(() -> {
@@ -274,7 +276,7 @@ NamedCommands.registerCommand("Algae_Hold", Commands.run(() -> {
       //~~~~~~~~~~~~~~~~~~Drive Control~~~~~~~~~~~~~~~~~~~~~~~~
       DriveController.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
 
-      DriveController.leftBumper().whileTrue((drivebase.drive(driveRobotOriented)));
+      DriveController.rightBumper().whileTrue((drivebase.drive(driveRobotOriented)));
 
       // .whileFalse(((drivebase.drive(drive))));
       
@@ -292,7 +294,7 @@ NamedCommands.registerCommand("Algae_Hold", Commands.run(() -> {
       // DriveController.leftBumper().whileTrue(fieldRel == false);
 
       //This is our boost control Right Trigger
-      DriveController.axisGreaterThan(3, 0.1).onChange(Commands.runOnce(() -> {
+      DriveController.axisGreaterThan(3, 0.01).onChange(Commands.runOnce(() -> {
         driveAngularVelocity.scaleTranslation(DriveController.getRightTriggerAxis() + 0.25);
         driveAngularVelocity.scaleRotation((DriveController.getRightTriggerAxis() * miscConstants.RotationSpeedScale) + 0.25);
       }).repeatedly()).whileFalse(Commands.runOnce(() -> { 
