@@ -245,9 +245,10 @@ NamedCommands.registerCommand("Spit", Commands.run(() -> {
       }).repeatedly());
 
 
-      OPController.axisGreaterThan(0, 0.01).or(OPController.axisLessThan(0, 0.01)).whileTrue(Commands.run(() -> {
-        sub_claw.setWrist(OPController.getRawAxis(0) * (12 * 0.25));
-      })).whileFalse(Commands.run(() -> {
+      OPController.axisMagnitudeGreaterThan(1, 0.25).whileTrue(Commands.run(() -> {
+        sub_claw.setWrist(OPController.getRawAxis(1) * (12 * 0.25));
+        System.out.println("Wrist Bump");
+      })).whileFalse(Commands.runOnce(() -> {
         sub_claw.goToSetpoint(sub_claw.getEncoderMeasurement());
       }));
 
