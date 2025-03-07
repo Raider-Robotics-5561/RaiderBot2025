@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Middle Coral"
+            "pathName": "Middle_Coral"
           }
         },
         {
@@ -19,7 +19,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Algae_Intake_Rollers"
+            "name": "Spit"
           }
         }
       ]

@@ -80,8 +80,8 @@ public class RobotContainer
   private boolean RollerGoingIn = false;
 
   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
-                                                             () -> DriveController.getLeftY() * -1,
-                                                             () -> DriveController.getLeftX() * -1)
+                                                             () -> DriveController.getLeftY() * 1,
+                                                             () -> DriveController.getLeftX() * 1)
                                                             .withControllerRotationAxis(DriveController::getRightX)
                                                             .deadband(miscConstants.DEADBAND)
                                                             .scaleTranslation(0.25)
@@ -168,15 +168,17 @@ NamedCommands.registerCommand("Algae_Intake", Commands.run(() -> {
 NamedCommands.registerCommand("Algae_Intake_Rollers", Commands.run(() -> {
   sub_claw.setRollerPower(9); 
 }));
-NamedCommands.registerCommand("Algae_Hold", Commands.run(() -> {
-  sub_claw.setRollerPower(4); 
+NamedCommands.registerCommand("Stop", Commands.run(() -> {
+  sub_claw.setRollerPower(0); 
 }));
-     
+NamedCommands.registerCommand("Spit", Commands.run(() -> {
+  sub_claw.setRollerPower(-2); 
+}));
 
     Leave = drivebase.getAutonomousCommand("Leave");
     algae_Left = drivebase.getAutonomousCommand("algae_Left");
     Elevator_Test = drivebase.getAutonomousCommand("Elevator Test");
-    Middle_Coral = drivebase.getAutonomousCommand("Left coral");
+    Middle_Coral = drivebase.getAutonomousCommand("Middle_Coral");
     Right_Coral = drivebase.getAutonomousCommand("Right Coral");
     Left_Coral = drivebase.getAutonomousCommand("Left Coral");
     
