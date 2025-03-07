@@ -245,7 +245,11 @@ NamedCommands.registerCommand("Spit", Commands.run(() -> {
       }).repeatedly());
 
 
- 
+      OPController.axisGreaterThan(0, 0.01).or(OPController.axisLessThan(0, 0.01)).whileTrue(Commands.run(() -> {
+        sub_claw.setWrist(OPController.getRawAxis(0) * (12 * 0.25));
+      })).whileFalse(Commands.run(() -> {
+        sub_claw.goToSetpoint(sub_claw.getEncoderMeasurement());
+      }));
 
       // OPController.povUp().whileTrue(Commands.run(() -> {
       //   elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.Algae_1.getPos());
