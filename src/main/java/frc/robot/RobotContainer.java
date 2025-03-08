@@ -80,8 +80,8 @@ public class RobotContainer
   private boolean RollerGoingIn = false;
 
   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
-                                                             () -> DriveController.getLeftY() * 1,
-                                                             () -> DriveController.getLeftX() * 1)
+                                                             () -> DriveController.getLeftY() * -1,
+                                                             () -> DriveController.getLeftX() * -1)
                                                             .withControllerRotationAxis(DriveController::getRightX)
                                                             .deadband(miscConstants.DEADBAND)
                                                             .scaleTranslation(0.25)
@@ -172,7 +172,10 @@ NamedCommands.registerCommand("Stop", Commands.run(() -> {
   sub_claw.setRollerPower(0); 
 }));
 NamedCommands.registerCommand("Spit", Commands.run(() -> {
-  sub_claw.setRollerPower(-2); 
+  sub_claw.setRollerPower(-2);  
+}));
+NamedCommands.registerCommand("Auto_Tip", Commands.run(() -> {
+  sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Auto.getPos());
 }));
 
     Leave = drivebase.getAutonomousCommand("Leave");
@@ -246,7 +249,7 @@ NamedCommands.registerCommand("Spit", Commands.run(() -> {
 
 
       OPController.axisMagnitudeGreaterThan(1, 0.25).whileTrue(Commands.run(() -> {
-        sub_claw.setWrist(OPController.getRawAxis(1) * (12 * 0.25));
+        sub_claw.setWrist((OPController.getRawAxis(1) * (12 * 0.25)) * -1);
         System.out.println("Wrist Bump");
       })).whileFalse(Commands.runOnce(() -> {
         sub_claw.goToSetpoint(sub_claw.getEncoderMeasurement());
@@ -296,7 +299,7 @@ NamedCommands.registerCommand("Spit", Commands.run(() -> {
       }));
 
       //~~~~~~~~~~~~~~~~~~Drive Control~~~~~~~~~~~~~~~~~~~~~~~~
-      DriveController.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
+      DriveController.a().onTrue((Commands.runOnce(drivebase::zeroGyroWithAlliance)));
 
       DriveController.rightBumper().whileTrue((drivebase.drive(driveRobotOriented)));
 
@@ -317,7 +320,7 @@ NamedCommands.registerCommand("Spit", Commands.run(() -> {
 
       //This is our boost control Right Trigger
       DriveController.axisGreaterThan(3, 0.01).onChange(Commands.runOnce(() -> {
-        driveAngularVelocity.scaleTranslation(DriveController.getRightTriggerAxis() + 0.25);
+        driveAngularVelocity.scaleTranslation(DriveController.getRightTriggerAxis() + 0.35);
         driveAngularVelocity.scaleRotation((DriveController.getRightTriggerAxis() * miscConstants.RotationSpeedScale) + 0.25);
       }).repeatedly()).whileFalse(Commands.runOnce(() -> { 
         driveAngularVelocity.scaleTranslation(0.25);

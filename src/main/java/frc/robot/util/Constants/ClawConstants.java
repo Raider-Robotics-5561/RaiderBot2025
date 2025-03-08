@@ -142,7 +142,7 @@ public class ClawConstants {
       Floor(2.84),
       Intake(6.73),
       L1_L2_Coral(6.21),
-      Coral_updown(5.18),
+      Auto(5.6),
       Intake2(2.73),
       Algae_Drive(3.06),
       Max(5.8),

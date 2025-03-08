@@ -9,8 +9,8 @@
   "autoFolders": [
     "Algae Left"
   ],
-  "defaultMaxVel": 3.0,
-  "defaultMaxAccel": 3.0,
+  "defaultMaxVel": 2.0,
+  "defaultMaxAccel": 2.0,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
   "defaultNominalVoltage": 12.0,
@@ -18,7 +18,7 @@
   "robotMOI": 7.559,
   "robotTrackwidth": 0.546,
   "driveWheelRadius": 0.102,
-  "driveGearing": 21.429,
+  "driveGearing": 21.428,
   "maxDriveSpeed": 3.5,
   "driveMotorType": "krakenX60",
   "driveCurrentLimit": 40.0,
