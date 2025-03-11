@@ -65,11 +65,6 @@ public class Claw extends SubsystemBase {
     // m_forwardLimit = kRollerID.getForwardLimitSwitch(SparkLimitSwitch.class.);
     m_forwardLimit = kRollerID.getForwardLimitSwitch();
     m_reverseLimit = kRollerID.getReverseLimitSwitch();
-
-    wristP = new TunableNumber("Wrist/kP", ClawConstants.Wrist.kP);
-    wristD = new TunableNumber("Wrist/kD", ClawConstants.Wrist.kD);
-    wristV = new TunableNumber("Wrist/kVelocity", ClawConstants.Wrist.kV);
-    wristA = new TunableNumber("Wrist/kAcceleration", ClawConstants.Wrist.kA);
     tunablePosition = new TunableNumber("Wrist/Tunable Setpoint", 0);
     // wristP.setDefault(0.0);
     // wristD.setDefault(0.0);
@@ -195,7 +190,5 @@ public class Claw extends SubsystemBase {
     if (wristP.hasChanged()) ClawConstants.Wrist.kP = wristP.get();
     // SmartDashboard.putNumber("Tuning/Wrist/Current P", Wrist.kP);
     if (wristD.hasChanged()) ClawConstants.Wrist.kD = wristD.get();
-    if (wristV.hasChanged()) ClawConstants.Wrist.kMaxVelocity = wristV.get();
-    if (wristD.hasChanged()) ClawConstants.Wrist.kMaxAcceleration = wristA.get();
   }
 }

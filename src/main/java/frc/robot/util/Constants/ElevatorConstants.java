@@ -12,13 +12,11 @@ public class ElevatorConstants {
   public static int kFollowerMotorID = 11;
   public static MotorType kMotorType = MotorType.kBrushless;
   public static IdleMode kIdleMode = IdleMode.kCoast;
-  public static int kCurrentLimit = 40; // TODO: Configure me!
-  public static double kMinHeight = 0;  // TODO: Configure me!
-  public static double kMaxHeight = 0;  // TODO: Configure me!
-  public static double kP = 0.1; // TODO: Configure me!
-  public static double kI = 0.0;  // TODO: Configure me!
-  public static double kD = 0.08; // TODO: Configure me!
-  public static double kVelocityFF = 0.0; // TODO: Configure me!
+  public static int kCurrentLimit = 40;
+  public static double kP = 0.1;
+  public static double kI = 0.0;
+  public static double kD = 0.08;
+  public static double kVelocityFF = 0.0;
 
   public static double kMaxAcceleration = 250;
   public static double kMaxVelocity = 500;
@@ -27,8 +25,6 @@ public class ElevatorConstants {
   public static double kForwardSoftLimit = 84;
   public static double kReverseSoftLimit = 0;
 
-  // public static double kDrumDiameterM = Units.inchesToMeters(2.635); // Sprocket diameter
-  // public static double kDrumCircumference = kDrumDiameterM * Math.PI;
 
   public static double kGearRatio = 1 / 12;
 
@@ -53,7 +49,6 @@ public class ElevatorConstants {
       BOTTOM(1), 
       INTAKE(3.65), // TODO: Configure me!
       POSTINTAKE(6.7),  // TODO: Configure me!
-      L1(6.7),  // TODO: Configure me!
       L2(12.57),  // TODO: Configure me!
       L3(44.59),  // TODO: Configure me!
       L4(84),  // TODO: Configure me!
