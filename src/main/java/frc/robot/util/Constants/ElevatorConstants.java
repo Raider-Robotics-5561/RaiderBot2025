@@ -76,15 +76,8 @@ public class ElevatorConstants {
       .idleMode(kIdleMode)
       .smartCurrentLimit(kCurrentLimit);
 
-    System.out.println("KVCF "+kVelocityConversionFactor);
-    System.out.println("KPCF "+kPositionConversionFactor);
-
-
-    // kElevatorConfig
-    //     .absoluteEncoder
-    //     .positionConversionFactor(kPositionConversionFactor)
-    //     .velocityConversionFactor(kVelocityConversionFactor);
-
+    // System.out.println("KVCF "+kVelocityConversionFactor);
+    // System.out.println("KPCF "+kPositionConversionFactor);
       
 
     kElevatorConfig
@@ -93,12 +86,6 @@ public class ElevatorConstants {
         .pidf(kP, 0.0, kD, kVelocityFF)
         .outputRange(-0.45, 0.45);
 
-    // kElevatorConfig
-    //     .closedLoop
-    //     .maxMotion
-    //     .maxVelocity(kMaxVelocity)
-    //     .maxAcceleration(kMaxAcceleration)
-    //     .allowedClosedLoopError(kTolerance);
   }
 }
 }
