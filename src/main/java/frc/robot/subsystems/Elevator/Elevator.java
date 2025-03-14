@@ -1,10 +1,5 @@
 package frc.robot.subsystems.Elevator;
 
-
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
-
-import com.revrobotics.spark.SparkMaxAlternateEncoder;
-import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -12,8 +7,8 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkMax;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,7 +16,6 @@ import frc.robot.subsystems.Claw.Claw;
 import frc.robot.util.TunableNumber;
 import frc.robot.util.Constants.ClawConstants;
 import frc.robot.util.Constants.ElevatorConstants;
-import frc.robot.util.Constants.ClawConstants.Wrist;
 
 
 public class Elevator extends SubsystemBase {
@@ -30,8 +24,7 @@ public class Elevator extends SubsystemBase {
   private final SparkClosedLoopController mElevatorController;
   private final SparkAbsoluteEncoder elevatorAbsEncoder;
   private final RelativeEncoder elevatorRelEncoder;
-  // private final AbsoluteEncoder m_alternateEncoder;
-  // private final double kCPR = 8192;
+
   private Claw subClaw;
 
   private double motorVoltage = 0;
@@ -50,7 +43,6 @@ public class Elevator extends SubsystemBase {
     elevatorRelEncoder = mElevatorSparkMax.getEncoder();
     mElevatorController = mElevatorSparkMax.getClosedLoopController();
     elevatorAbsEncoder = mElevatorSparkMax.getAbsoluteEncoder();
-    //  m_alternateEncoder = mElevatorSparkMax.GetAlternateEncoder(kAltEncType, kCPR);
 
  
     ElevatorConstants.ElevatorConfigs.kElevatorFollowerConfig
@@ -84,7 +76,6 @@ public class Elevator extends SubsystemBase {
   }
 
   public void setMotorVoltage(double pVoltage) {
-    // if (pVoltage < 0.0) pVoltage *= 0.2; // Slows down downward movements
     mElevatorSparkMax.setVoltage(filterVoltage(pVoltage));
   }
 
