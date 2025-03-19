@@ -172,11 +172,15 @@ NamedCommands.registerCommand("Stop", Commands.run(() -> {
   sub_claw.setRollerPower(0); 
 }));
 NamedCommands.registerCommand("Spit", Commands.run(() -> {
-  sub_claw.setRollerPower(-2);  
+  sub_claw.setRollerPower(-8);  
 }));
 NamedCommands.registerCommand("Auto_Tip", Commands.run(() -> {
   sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Auto.getPos());
 }));
+NamedCommands.registerCommand("Climb_Up", Commands.run(() -> {
+  OPController.back().whileTrue(new ClimberUpCommand(m_climber));
+}));
+
 
     Leave = drivebase.getAutonomousCommand("Leave");
     algae_Left = drivebase.getAutonomousCommand("algae_Left");

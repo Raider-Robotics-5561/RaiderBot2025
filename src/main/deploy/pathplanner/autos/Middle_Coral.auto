@@ -31,18 +31,6 @@
         {
           "type": "named",
           "data": {
-            "name": "Stop"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.1
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "Auto_Tip"
           }
         }
