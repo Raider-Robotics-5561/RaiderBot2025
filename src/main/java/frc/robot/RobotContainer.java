@@ -66,7 +66,7 @@ public class RobotContainer
                                                              () -> DriveController.getLeftX() * -1)
                                                             .withControllerRotationAxis(DriveController::getRightX)
                                                             .deadband(miscConstants.DEADBAND)
-                                                            .scaleTranslation(0.25)
+                                                            .scaleTranslation(0.20)
                                                             .scaleRotation(0.15)
                                                             .allianceRelativeControl(true);
             
@@ -305,13 +305,14 @@ NamedCommands.registerCommand("Climb_Up", Commands.run(() -> {
       // DriveController.leftBumper().whileTrue(fieldRel == false);
 
       //This is our boost control Right Trigger
-      DriveController.axisGreaterThan(3, 0.01).onChange(Commands.runOnce(() -> {
-        driveAngularVelocity.scaleTranslation(DriveController.getRightTriggerAxis() + 0.35);
-        driveAngularVelocity.scaleRotation((DriveController.getRightTriggerAxis() * miscConstants.RotationSpeedScale) + 0.25);
-      }).repeatedly()).whileFalse(Commands.runOnce(() -> { 
-        driveAngularVelocity.scaleTranslation(0.25);
-        driveAngularVelocity.scaleRotation(0.15);
-      }).repeatedly());
+      //NOTE - This needs to be readded after our outreach day.
+      // DriveController.axisGreaterThan(3, 0.01).onChange(Commands.runOnce(() -> {
+      //   driveAngularVelocity.scaleTranslation(DriveController.getRightTriggerAxis() + 0.35);
+      //   driveAngularVelocity.scaleRotation((DriveController.getRightTriggerAxis() * miscConstants.RotationSpeedScale) + 0.25);
+      // }).repeatedly()).whileFalse(Commands.runOnce(() -> { 
+      //   driveAngularVelocity.scaleTranslation(0.25);
+      //   driveAngularVelocity.scaleRotation(0.15);
+      // }).repeatedly());
 
 
       // DriveController

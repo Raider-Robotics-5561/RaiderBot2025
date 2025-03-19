@@ -65,8 +65,9 @@ public class Claw extends SubsystemBase {
     // wristD.setDefault(0.0);
     // wristV.setDefault(0.0);
     // wristA.setDefault(0.0);
+    wristP = new TunableNumber("Wrist/kP", ClawConstants.Wrist.kP);
+    wristD = new TunableNumber("Wrist/kD", ClawConstants.Wrist.kD);
   }
-
   public boolean getForwardLimitSwitch1() {
     return m_forwardLimit.isPressed(); 
   }
