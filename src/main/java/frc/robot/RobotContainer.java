@@ -1,46 +1,29 @@
 package frc.robot;
 
-import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
-import com.pathplanner.lib.auto.CommandUtil;
-
-import edu.wpi.first.hal.FRCNetComm.tResourceType;
-// import com.pathplanner.lib.commands.;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import java.io.File;
-import java.security.KeyStore.TrustedCertificateEntry;
-
-import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
-
 import swervelib.SwerveInputStream;
-import swervelib.parser.json.modules.DriveConversionFactorsJson;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import frc.robot.commands.ClimberUpCommand;
 import frc.robot.commands.ClimberDownCommand;
 import frc.robot.subsystems.Claw.Claw;
 import frc.robot.subsystems.Climber.ClimbSubsystem;
 import frc.robot.subsystems.Elevator.Elevator;
-import frc.robot.subsystems.Elevator.ElevatorFFCommand;
-import frc.robot.subsystems.Elevator.ElevatorPIDCommand;
 import frc.robot.subsystems.Swerve.SwerveSubsystem;
 import frc.robot.util.Constants.ClawConstants;
 import frc.robot.util.Constants.ElevatorConstants;
 import frc.robot.util.Constants.miscConstants;
-import frc.robot.util.Constants.ClawConstants.Wrist.ClawRollerVolt;
-import frc.robot.util.Constants.ClawConstants.Wrist.WristPositions;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
@@ -77,7 +60,6 @@ public class RobotContainer
   // Dashboard inputs
   // private final LoggedDashboardChooser<Command> autoChooser;
 
-  private boolean RollerGoingIn = false;
 
   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
                                                              () -> DriveController.getLeftY() * -1,
@@ -149,6 +131,7 @@ public class RobotContainer
     DriverStation.silenceJoystickConnectionWarning(false);
     
 //========================Auton_Stuff===================================================
+//=======================Nammed_Commands================================================
 
 NamedCommands.registerCommand("Saftey", Commands.run(() -> {
   sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Elevator_Threh.getPos()); 
@@ -212,7 +195,6 @@ NamedCommands.registerCommand("Climb_Up", Commands.run(() -> {
         
 
  Command driveFieldOrientedAnglularVelocity = drivebase.driveFieldOriented(driveAngularVelocity);
- Command c_driveRobotOriented = drivebase.drive(driveRobotOriented);
 
  Command driveFieldOrientedDirectAngleKeyboard  = drivebase.driveFieldOriented(driveDirectAngleKeyboard);
 
