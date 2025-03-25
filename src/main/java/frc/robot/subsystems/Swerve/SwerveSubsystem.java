@@ -33,15 +33,19 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
+import frc.robot.subsystems.Swerve.Vision.Cameras;
 import frc.robot.util.Constants.SwerveConstants;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 import org.json.simple.parser.ParseException;
+import org.photonvision.targeting.PhotonPipelineResult;
+
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
@@ -55,9 +59,11 @@ import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 public class SwerveSubsystem extends SubsystemBase
 {
 
-  /**
-   * Swerve drive object.
-   */
+  private Vision vision;
+  //Odom?
+  private final boolean             visionDriveTest     = true;
+
+
   private final SwerveDrive         swerveDrive;
 
   /**
@@ -91,21 +97,18 @@ public class SwerveSubsystem extends SubsystemBase
     swerveDrive.setModuleEncoderAutoSynchronize(false,
                                                 1); // Enable if you want to resynchronize your absolute encoders and motor encoders periodically when they are not moving.
 //    swerveDrive.pushOffsetsToEncoders(); // Set the absolute encoder to be used over the internal encoder and push the offsets onto it. Throws warning if not possible
-    // if (visionDriveTest)
-    // {
-    //   setupPhotonVision();
-    //   // Stop the odometry thread if we are using vision that way we can synchronize updates better.
-    //   swerveDrive.stopOdometryThread();
-    // }
+    if (visionDriveTest)
+    {
+      setupPhotonVision();
+      // Stop the odometry thread if we are using vision that way we can synchronize updates better.
+      swerveDrive.stopOdometryThread();
+    }
     
     setupPathPlanner();
     RobotModeTriggers.autonomous().onTrue(Commands.runOnce(this::zeroGyroWithAlliance));
   }
 
-  // public Command switchFieldRel(){
-  //   return runOnce(() ->{ fieldRel = !fieldRel;
-  //    if(fieldRel)swerveDrive.zeroGyro(); SmartDashboard.putBoolean("IsFieldRelative", fieldRel);});
-  //  }
+
   /**
    * Construct the swerve drive.
    *
@@ -124,20 +127,20 @@ public class SwerveSubsystem extends SubsystemBase
   /**
    * Setup the photon vision class.
    */
-  // public void setupPhotonVision()
-  // {
-    // vision = new Vision(swerveDrive::getPose, swerveDrive.field);
-  // }
+  public void setupPhotonVision()
+  {
+    vision = new Vision(swerveDrive::getPose, swerveDrive.field);
+  }
 
   @Override
   public void periodic()
   {
     // When vision is enabled we must manually update odometry in SwerveDrive
-    // if (visionDriveTest)
-    // {
-    //   swerveDrive.updateOdometry();
-    //   vision.updatePoseEstimation(swerveDrive);
-    // }
+    if (visionDriveTest)
+    {
+      swerveDrive.updateOdometry();
+      vision.updatePoseEstimation(swerveDrive);
+    }
   }
 
   @Override
@@ -226,24 +229,24 @@ public class SwerveSubsystem extends SubsystemBase
    *
    * @return A {@link Command} which will run the alignment.
    */
-  // public Command aimAtTarget(Cameras camera)
-  // {
+  public Command aimAtTarget(Cameras camera)
+  {
 
-  //   return run(() -> {
-  //     Optional<PhotonPipelineResult> resultO = camera.getBestResult();
-  //     if (resultO.isPresent())
-  //     {
-  //       var result = resultO.get();
-  //       if (result.hasTargets())
-  //       {
-  //         drive(getTargetSpeeds(0,
-  //                               0,
-  //                               Rotation2d.fromDegrees(result.getBestTarget()
-  //                                                            .getYaw()))); // Not sure if this will work, more math may be required.
-  //       }
-  //     }
-  //   });
-  // }
+    return run(() -> {
+      Optional<PhotonPipelineResult> resultO = camera.getBestResult();
+      if (resultO.isPresent())
+      {
+        var result = resultO.get();
+        if (result.hasTargets())
+        {
+          drive(getTargetSpeeds(0,
+                                0,
+                                Rotation2d.fromDegrees(result.getBestTarget()
+                                                             .getYaw()))); // Not sure if this will work, more math may be required.
+        }
+      }
+    });
+  }
 
   /**
    * Get the path follower with events.
