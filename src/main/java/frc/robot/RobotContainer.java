@@ -64,10 +64,10 @@ public class RobotContainer
   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
                                                              () -> DriveController.getLeftY() * -1,
                                                              () -> DriveController.getLeftX() * -1)
-                                                            .withControllerRotationAxis(DriveController::getRightX)
+                                                            .withControllerRotationAxis(() -> DriveController.getRawAxis(2))
                                                             .deadband(miscConstants.DEADBAND)
-                                                            .scaleTranslation(0.25)
-                                                            .scaleRotation(0.15)
+                                                            .scaleTranslation(0.20)
+                                                            .scaleRotation(0.5)
                                                             .allianceRelativeControl(true);
             
  
@@ -155,11 +155,15 @@ NamedCommands.registerCommand("Stop", Commands.run(() -> {
   sub_claw.setRollerPower(0); 
 }));
 NamedCommands.registerCommand("Spit", Commands.run(() -> {
-  sub_claw.setRollerPower(-2);  
+  sub_claw.setRollerPower(-8);  
 }));
 NamedCommands.registerCommand("Auto_Tip", Commands.run(() -> {
   sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Auto.getPos());
 }));
+NamedCommands.registerCommand("Climb_Up", Commands.run(() -> {
+  OPController.back().whileTrue(new ClimberUpCommand(m_climber));
+}));
+
 
     Leave = drivebase.getAutonomousCommand("Leave");
     algae_Left = drivebase.getAutonomousCommand("algae_Left");
@@ -301,13 +305,14 @@ NamedCommands.registerCommand("Auto_Tip", Commands.run(() -> {
       // DriveController.leftBumper().whileTrue(fieldRel == false);
 
       //This is our boost control Right Trigger
-      DriveController.axisGreaterThan(3, 0.01).onChange(Commands.runOnce(() -> {
-        driveAngularVelocity.scaleTranslation(DriveController.getRightTriggerAxis() + 0.35);
-        driveAngularVelocity.scaleRotation((DriveController.getRightTriggerAxis() * miscConstants.RotationSpeedScale) + 0.25);
-      }).repeatedly()).whileFalse(Commands.runOnce(() -> { 
-        driveAngularVelocity.scaleTranslation(0.25);
-        driveAngularVelocity.scaleRotation(0.15);
-      }).repeatedly());
+      //NOTE - This needs to be readded after our outreach day.
+      // DriveController.axisGreaterThan(3, 0.01).onChange(Commands.runOnce(() -> {
+      //   driveAngularVelocity.scaleTranslation(DriveController.getRightTriggerAxis() + 0.35);
+      //   driveAngularVelocity.scaleRotation((DriveController.getRightTriggerAxis() * miscConstants.RotationSpeedScale) + 0.25);
+      // }).repeatedly()).whileFalse(Commands.runOnce(() -> { 
+      //   driveAngularVelocity.scaleTranslation(0.25);
+      //   driveAngularVelocity.scaleRotation(0.15);
+      // }).repeatedly());
 
 
       // DriveController
