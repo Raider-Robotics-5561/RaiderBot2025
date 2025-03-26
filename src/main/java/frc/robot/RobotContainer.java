@@ -4,6 +4,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -218,7 +219,7 @@ NamedCommands.registerCommand("Climb_Up", Commands.run(() -> {
   
       
       //~~~~~~~~~~~~~~~~~~OPControler~~~~~~~~~~~~~~~~~~~~~~~~
-      //Elevator Pos Control 
+      
       OPController.start().whileTrue(new ClimberUpCommand(m_climber));
       OPController.back().whileTrue(new ClimberDownCommand(m_climber));
 
@@ -240,10 +241,6 @@ NamedCommands.registerCommand("Climb_Up", Commands.run(() -> {
       })).whileFalse(Commands.runOnce(() -> {
         sub_claw.goToSetpoint(sub_claw.getEncoderMeasurement());
       }));
-
-      // OPController.povUp().whileTrue(Commands.run(() -> {
-      //   elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.Algae_1.getPos());
-      // }));
       OPController.povRight().whileTrue(Commands.run(() -> {
         elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.Algae_1.getPos());
       }));
@@ -289,38 +286,24 @@ NamedCommands.registerCommand("Climb_Up", Commands.run(() -> {
 
       DriveController.rightBumper().whileTrue((drivebase.drive(driveRobotOriented)));
 
-      // .whileFalse(((drivebase.drive(drive))));
-      
 
       // DriveController.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
 
       //Go to pos ?
+      //NOTE - DriveToPose is ready to be tested.
       // DriveController.y().whileTrue(
       // drivebase.driveToPose(new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0))));
 
 
-      //Lock the drive
-      // DriveController.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-
-      // DriveController.leftBumper().whileTrue(fieldRel == false);
-
       //This is our boost control Right Trigger
-      //NOTE - This needs to be readded after our outreach day.
-      // DriveController.axisGreaterThan(3, 0.01).onChange(Commands.runOnce(() -> {
-      //   driveAngularVelocity.scaleTranslation(DriveController.getRightTriggerAxis() + 0.35);
-      //   driveAngularVelocity.scaleRotation((DriveController.getRightTriggerAxis() * miscConstants.RotationSpeedScale) + 0.25);
-      // }).repeatedly()).whileFalse(Commands.runOnce(() -> { 
-      //   driveAngularVelocity.scaleTranslation(0.25);
-      //   driveAngularVelocity.scaleRotation(0.15);
-      // }).repeatedly());
+      DriveController.axisGreaterThan(3, 0.01).onChange(Commands.runOnce(() -> {
+        driveAngularVelocity.scaleTranslation(DriveController.getRightTriggerAxis() + 0.35);
+        driveAngularVelocity.scaleRotation((DriveController.getRightTriggerAxis() * miscConstants.RotationSpeedScale) + 0.25);
+      }).repeatedly()).whileFalse(Commands.runOnce(() -> { 
+        driveAngularVelocity.scaleTranslation(0.25);
+        driveAngularVelocity.scaleRotation(0.15);
+      }).repeatedly());
 
-
-      // DriveController
-      // .rightTrigger(miscConstants.DEADBAND)
-      // .whileTrue(Commands.runOnce(() -> {driveAngularVelocity.scaleTranslation(SwerveConstants.kMaxSpeedScalar);
-      // }))
-      // .whileFalse(Commands.runOnce(() -> {driveAngularVelocity.scaleTranslation(SwerveConstants.kUnboostScalar);
-      //  }));
        }
 
     
