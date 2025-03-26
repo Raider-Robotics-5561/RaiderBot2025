@@ -2,9 +2,14 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot;import edu.wpi.first.units.Units;
+package frc.robot;import org.littletonrobotics.urcl.URCL;
+
+import com.ctre.phoenix6.SignalLogger;
+
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -45,17 +50,24 @@ public class Robot extends TimedRobot
     return instance;
   }
 
-  /**
-   * This function is run when the robot is first started up and should be used for any initialization code.
-   */
+
   @Override
   public void robotInit()
   {
+      // Rev Logging
+      DataLogManager.start();
+      URCL.start();
+
+      //CTRE Logging
+      SignalLogger.setPath("/media/sda1/ctre-logs/");
+      SignalLogger.start();
+
     led = new AddressableLED (0);
     ledBuffer = new AddressableLEDBuffer(1500);
     led.setLength(1500);
     led.setLength(ledBuffer.getLength());
     led.start();
+
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
@@ -135,6 +147,7 @@ else if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
   @Override
   public void disabledInit()
   {
+    SignalLogger.stop();
     m_robotContainer.setMotorBrake(true);
     disabledTimer.reset();
     disabledTimer.start();
