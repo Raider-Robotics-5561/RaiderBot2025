@@ -337,13 +337,19 @@ public class Vision
    */
   enum Cameras
   {
-//TODO - CHANGE THE CAMERA!!!
-//NOTE: - This will need to be updated
-    CENTER_CAM("Microsoft_LifeCam_HD-3000",
-               new Rotation3d(0, Units.degreesToRadians(18), 0),
-               new Translation3d(Units.inchesToMeters(0),
-                                 Units.inchesToMeters(0),
-                                 Units.inchesToMeters(0)),
+//NOTE: - Camera are added to what I beleive are the correct properties but make sure to double check this please.
+    FrontRight_Cam("RoboCamRear",
+               new Rotation3d(0, Units.degreesToRadians(35), 30),
+               new Translation3d(Units.inchesToMeters(9.724),
+                                 Units.inchesToMeters(-11.74),
+                                 Units.inchesToMeters(7.839)),
+               VecBuilder.fill(4, 4, 8), VecBuilder.fill(0.5, 0.5, 1)),
+
+    FrontLeft_Cam("RoboCamFront",
+               new Rotation3d(0, Units.degreesToRadians(35), -30),
+               new Translation3d(Units.inchesToMeters( 9.724),
+                                 Units.inchesToMeters(11.742),
+                                 Units.inchesToMeters(7.339)),
                VecBuilder.fill(4, 4, 8), VecBuilder.fill(0.5, 0.5, 1));
 
     /**
