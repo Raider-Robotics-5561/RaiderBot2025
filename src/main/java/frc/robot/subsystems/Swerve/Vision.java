@@ -339,14 +339,15 @@ public class Vision
   {
 //NOTE: - Camera are added to what I beleive are the correct properties but make sure to double check this please.
     FrontRight_Cam("RoboCamRear",
-               new Rotation3d(0, Units.degreesToRadians(35), 30),
+    //35, 30
+               new Rotation3d(0, Units.degreesToRadians(30), 35),
                new Translation3d(Units.inchesToMeters(9.724),
                                  Units.inchesToMeters(-11.74),
                                  Units.inchesToMeters(7.839)),
                VecBuilder.fill(4, 4, 8), VecBuilder.fill(0.5, 0.5, 1)),
 
     FrontLeft_Cam("RoboCamFront",
-               new Rotation3d(0, Units.degreesToRadians(35), -30),
+               new Rotation3d(0, Units.degreesToRadians(30), -35),
                new Translation3d(Units.inchesToMeters( 9.724),
                                  Units.inchesToMeters(11.742),
                                  Units.inchesToMeters(7.339)),
@@ -429,7 +430,7 @@ public class Vision
       {
         SimCameraProperties cameraProp = new SimCameraProperties();
         // A 640 x 480 camera with a 100 degree diagonal FOV.
-        cameraProp.setCalibration(960, 720, Rotation2d.fromDegrees(100));
+        cameraProp.setCalibration(320, 240, Rotation2d.fromDegrees(70));
         // Approximate detection noise with average and standard deviation error in pixels.
         cameraProp.setCalibError(0.25, 0.08);
         // Set the camera image capture framerate (Note: this is limited by robot loop rate).

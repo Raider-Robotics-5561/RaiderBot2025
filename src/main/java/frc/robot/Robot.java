@@ -109,33 +109,33 @@ led.setData(ledBuffer);
 
 
 
-if (DriverStation.waitForDsConnection( 0.025) == false){
-  // GRB
-  LEDPattern base = LEDPattern.solid(new Color(7,255,0));
-  LEDPattern pattern = base.breathe(Units.Seconds.of(2.0));
+// if (DriverStation.waitForDsConnection( 0.025) == false){
+//   // GRB
+//   LEDPattern base = LEDPattern.solid(new Color(7,255,0));
+//   LEDPattern pattern = base.breathe(Units.Seconds.of(2.0));
   
-  // Apply the LED pattern to the data buffer
-  pattern.applyTo(ledBuffer);
+//   // Apply the LED pattern to the data buffer
+//   pattern.applyTo(ledBuffer);
   
-  // Write the data to the LED strip
-  led.setData(ledBuffer);
+//   // Write the data to the LED strip
+//   led.setData(ledBuffer);
   
-  }
   
-else if(DriverStation.getAlliance().get() == DriverStation.Alliance.Blue){
-  for (var i = 0; i < ledBuffer.getLength(); i++) {
-    // Sets the specified LED to the GRB values for red
-    ledBuffer.setRGB(i, 0, 15 ,255);
-    led.setData(ledBuffer);
-}
-}
-else if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
-  for (var i = 0; i < ledBuffer.getLength(); i++) {
-    // Sets the specified LED to the GRB values for red
-    ledBuffer.setRGB(i, 7, 255 ,0);
-    led.setData(ledBuffer);
-}
-}
+  
+// else if(DriverStation.getAlliance().get() == DriverStation.Alliance.Blue){
+//   for (var i = 0; i < ledBuffer.getLength(); i++) {
+//     // Sets the specified LED to the GRB values for red
+//     ledBuffer.setRGB(i, 0, 15 ,255);
+//     led.setData(ledBuffer);
+
+
+// else if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red){
+//   for (var i = 0; i < ledBuffer.getLength(); i++) {
+//     // Sets the specified LED to the GRB values for red
+//     ledBuffer.setRGB(i, 7, 255 ,0);
+//     led.setData(ledBuffer);
+
+
 
 
 

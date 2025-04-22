@@ -65,10 +65,11 @@ public class RobotContainer
   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
                                                              () -> DriveController.getLeftY() * -1,
                                                              () -> DriveController.getLeftX() * -1)
-                                                            .withControllerRotationAxis(() -> DriveController.getRawAxis(2))
+                                                            //.withControllerRotationAxis(() -> DriveController.getRawAxis(2))
+                                                            .withControllerRotationAxis(DriveController::getRightX)
                                                             .deadband(miscConstants.DEADBAND)
                                                             .scaleTranslation(0.20)
-                                                            .scaleRotation(0.5)
+                                                            .scaleRotation(0.15)
                                                             .allianceRelativeControl(true);
             
  
@@ -291,8 +292,8 @@ NamedCommands.registerCommand("Climb_Up", Commands.run(() -> {
 
       //Go to pos ?
       //NOTE - DriveToPose is ready to be tested.
-      // DriveController.y().whileTrue(
-      // drivebase.driveToPose(new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0))));
+      DriveController.y().whileTrue(
+      drivebase.driveToPose(new Pose2d(new Translation2d(16, 6.8), Rotation2d.fromDegrees(0))));
 
 
       //This is our boost control Right Trigger
