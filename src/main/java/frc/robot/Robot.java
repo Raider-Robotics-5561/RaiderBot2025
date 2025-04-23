@@ -94,18 +94,25 @@ public class Robot extends TimedRobot
   public void robotPeriodic()
   {
   
-if (DriverStation.waitForDsConnection( 0.025) == false){
-// GRB
-LEDPattern base = LEDPattern.solid(new Color(7,255,0));
-LEDPattern pattern = base.breathe(Units.Seconds.of(2.0));
+    
 
-// Apply the LED pattern to the data buffer
-pattern.applyTo(ledBuffer);
+    for (var i = 0; i < ledBuffer.getLength(); i++) {
+          // Sets the specified LED to the GRB values for red
+          ledBuffer.setRGB(i, 255, 255 ,255);
+          led.setData(ledBuffer);
+    }
+// if (DriverStation.waitForDsConnection( 0.025) == false){
+// // GRB
+// LEDPattern base = LEDPattern.solid(new Color(7,255,0));
+// LEDPattern pattern = base.breathe(Units.Seconds.of(2.0));
 
-// Write the data to the LED strip
-led.setData(ledBuffer);
+// // Apply the LED pattern to the data buffer
+// pattern.applyTo(ledBuffer);
 
-}
+// // Write the data to the LED strip
+// led.setData(ledBuffer);
+
+// }
 
 
 
@@ -148,6 +155,7 @@ led.setData(ledBuffer);
   @Override
   public void disabledInit()
   {
+    DataLogManager.stop();
     SignalLogger.stop();
     m_robotContainer.setMotorBrake(true);
     disabledTimer.reset();
