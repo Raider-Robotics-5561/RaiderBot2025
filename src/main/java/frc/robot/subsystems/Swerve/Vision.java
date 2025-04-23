@@ -294,6 +294,7 @@ public class Vision
     {
      try
      {
+      Desktop.getDesktop().browse(new URI("http://photonvision.local:5800/"));
        Desktop.getDesktop().browse(new URI("http://localhost:1182/"));
        Desktop.getDesktop().browse(new URI("http://localhost:1184/"));
        Desktop.getDesktop().browse(new URI("http://localhost:1186/"));
