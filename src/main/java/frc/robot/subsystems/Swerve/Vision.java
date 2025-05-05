@@ -24,10 +24,6 @@ import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import frc.robot.Robot;
 import java.awt.Desktop;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -54,8 +50,6 @@ public class Vision
 {
 
   /**
-   * //NOTE - The field has had issues so make sure the K"Field" is correct.
-   * 
    * April Tag Field Layout of the year.
    */
   public static final AprilTagFieldLayout fieldLayout                     = AprilTagFieldLayout.loadField(
@@ -292,16 +286,15 @@ public class Vision
   {
     if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE))
     {
-     try
-     {
-      Desktop.getDesktop().browse(new URI("http://photonvision.local:5800/"));
-       Desktop.getDesktop().browse(new URI("http://localhost:1182/"));
-       Desktop.getDesktop().browse(new URI("http://localhost:1184/"));
-       Desktop.getDesktop().browse(new URI("http://localhost:1186/"));
-     } catch (IOException | URISyntaxException e)
-     {
-       e.printStackTrace();
-     }
+//      try
+//      {
+//        Desktop.getDesktop().browse(new URI("http://localhost:1182/"));
+//        Desktop.getDesktop().browse(new URI("http://localhost:1184/"));
+//        Desktop.getDesktop().browse(new URI("http://localhost:1186/"));
+//      } catch (IOException | URISyntaxException e)
+//      {
+//        e.printStackTrace();
+//      }
     }
   }
 
@@ -336,8 +329,7 @@ public class Vision
 
     field2d.getObject("tracked targets").setPoses(poses);
   }
-
-  /**
+ /**
    * Camera Enum to select each camera
    */
   enum Cameras
@@ -357,7 +349,6 @@ public class Vision
                                  Units.inchesToMeters(11.742),
                                  Units.inchesToMeters(7.339)),
                VecBuilder.fill(4, 4, 8), VecBuilder.fill(0.5, 0.5, 1));
-
     /**
      * Latency alert to use when high latency is detected.
      */
@@ -389,7 +380,8 @@ public class Vision
     /**
      * Estimated robot pose.
      */
-    public        Optional<EstimatedRobotPose> estimatedRobotPose;
+    public Optional<EstimatedRobotPose> estimatedRobotPose = Optional.empty();
+
     /**
      * Simulated camera instance which only exists during simulations.
      */
@@ -435,7 +427,7 @@ public class Vision
       {
         SimCameraProperties cameraProp = new SimCameraProperties();
         // A 640 x 480 camera with a 100 degree diagonal FOV.
-        cameraProp.setCalibration(320, 240, Rotation2d.fromDegrees(70));
+        cameraProp.setCalibration(960, 720, Rotation2d.fromDegrees(100));
         // Approximate detection noise with average and standard deviation error in pixels.
         cameraProp.setCalibError(0.25, 0.08);
         // Set the camera image capture framerate (Note: this is limited by robot loop rate).
@@ -524,9 +516,7 @@ public class Vision
       {
         mostRecentTimestamp = Math.max(mostRecentTimestamp, result.getTimestampSeconds());
       }
-      if ((resultsList.isEmpty() || (currentTimestamp - mostRecentTimestamp >= debounceTime)) &&
-          (currentTimestamp - lastReadTimestamp) >= debounceTime)
-      {
+
         resultsList = Robot.isReal() ? camera.getAllUnreadResults() : cameraSim.getCamera().getAllUnreadResults();
         lastReadTimestamp = currentTimestamp;
         resultsList.sort((PhotonPipelineResult a, PhotonPipelineResult b) -> {
@@ -536,7 +526,7 @@ public class Vision
         {
           updateEstimatedGlobalPose();
         }
-      }
+
     }
 
     /**
