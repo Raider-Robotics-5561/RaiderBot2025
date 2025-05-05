@@ -22,6 +22,7 @@ import frc.robot.subsystems.Claw.Claw;
 import frc.robot.subsystems.Climber.ClimbSubsystem;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Swerve.SwerveSubsystem;
+import frc.robot.subsystems.Swerve.Vision;
 import frc.robot.util.Constants.ClawConstants;
 import frc.robot.util.Constants.ElevatorConstants;
 import frc.robot.util.Constants.miscConstants;
@@ -292,9 +293,9 @@ NamedCommands.registerCommand("Climb_Up", Commands.run(() -> {
 
       //Go to pos ?
       //NOTE - DriveToPose is ready to be tested.
-      DriveController.y().whileTrue(
-      drivebase.driveToPose(new Pose2d(new Translation2d(16, 6.8), Rotation2d.fromDegrees(0))));
-
+      
+      DriveController.x().whileTrue(
+        drivebase.driveToPose(new Pose2d(new Translation2d(3.09, 4.34), Rotation2d.fromDegrees(180))));
 
       //This is our boost control Right Trigger
       DriveController.axisGreaterThan(3, 0.01).onChange(Commands.runOnce(() -> {
