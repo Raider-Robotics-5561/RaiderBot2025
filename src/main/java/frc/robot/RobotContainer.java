@@ -295,7 +295,7 @@ NamedCommands.registerCommand("Climb_Up", Commands.run(() -> {
       //NOTE - DriveToPose is ready to be tested.
       
       DriveController.x().whileTrue(
-        drivebase.driveToPose(new Pose2d(new Translation2d(3.09, 4.34), Rotation2d.fromDegrees(180))));
+        drivebase.driveToPose(new Pose2d(new Translation2d(14.4, 4.0), Rotation2d.fromDegrees(180))));
 
       //This is our boost control Right Trigger
       DriveController.axisGreaterThan(3, 0.01).onChange(Commands.runOnce(() -> {
