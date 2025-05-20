@@ -136,8 +136,7 @@ public class SwerveSubsystem extends SubsystemBase
   /**
    * Setup the photon vision class.
    */
-  public void setupPhotonVision()
-  {
+  public void setupPhotonVision(){
     vision = new Vision(swerveDrive::getPose, swerveDrive.field);
   }
 
@@ -145,8 +144,7 @@ public class SwerveSubsystem extends SubsystemBase
   public void periodic()
   {
     // When vision is enabled we must manually update odometry in SwerveDrive
-    if (visionDriveTest)
-    {
+    if(visionDriveTest){
       swerveDrive.updateOdometry();
       vision.updatePoseEstimation(swerveDrive);
     }
