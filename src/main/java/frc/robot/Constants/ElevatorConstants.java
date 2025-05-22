@@ -1,4 +1,4 @@
-package frc.robot.util.Constants;
+package frc.robot.Constants;
 
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;

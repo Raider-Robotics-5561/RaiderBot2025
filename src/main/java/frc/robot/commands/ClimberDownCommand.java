@@ -4,8 +4,8 @@
 
 package frc.robot.commands;
 
+import frc.robot.Constants.miscConstants.ClimberConstants;
 import frc.robot.subsystems.Climber.ClimbSubsystem;
-import frc.robot.util.Constants.miscConstants.ClimberConstants;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */

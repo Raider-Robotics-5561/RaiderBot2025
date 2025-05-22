@@ -1,4 +1,4 @@
-package frc.robot.util.Constants;
+package frc.robot.Constants;
 
 public final class miscConstants
 {

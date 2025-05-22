@@ -1,4 +1,4 @@
-package frc.robot.util;
+package frc.robot.LocalUtil;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 

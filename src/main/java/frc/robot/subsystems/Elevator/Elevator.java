@@ -12,10 +12,10 @@ import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ClawConstants;
+import frc.robot.Constants.ElevatorConstants;
+import frc.robot.LocalUtil.TunableNumber;
 import frc.robot.subsystems.Claw.Claw;
-import frc.robot.util.TunableNumber;
-import frc.robot.util.Constants.ClawConstants;
-import frc.robot.util.Constants.ElevatorConstants;
 
 
 public class Elevator extends SubsystemBase {

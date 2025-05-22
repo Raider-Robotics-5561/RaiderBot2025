@@ -1,4 +1,4 @@
-package frc.robot.util;
+package frc.robot.LocalUtil;
 
 import com.revrobotics.REVLibError;
 import com.revrobotics.spark.SparkBase;
