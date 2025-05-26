@@ -11,12 +11,7 @@ public class ElevatorCommand extends Command{
     /** An example command that uses an example subsystem. */
 
       private final ElevatorSubsystem m_Elevator;
-      /**
-       * Runs the climber down, note that this can change 
-       * based on how the winch is wound.
-       *
-       * @param climber The subsystem used by this command.
-       */
+      
       public ElevatorCommand(ElevatorSubsystem Elevator) {
         m_Elevator = Elevator;
         addRequirements(Elevator);
@@ -32,7 +27,7 @@ public class ElevatorCommand extends Command{
         
       }
     
-      // Called once the command ends or is interrupted. Here we ensure the climber is not
+      // Called once the command ends or is interrupted. Here we ensure the Elevator is not
       // running once we let go of the button
       @Override
       public void end(boolean interrupted) {

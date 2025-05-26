@@ -52,7 +52,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         ElevatorConstants.ElevatorConfigs.kElevatorConfig,
         ResetMode.kResetSafeParameters,
         PersistMode.kNoPersistParameters);
-        SmartDashboard.putNumber("Elevator Target Position", 0);
+
+    SmartDashboard.putNumber("Elevator Target Position", 0);
     SmartDashboard.putNumber("Elevator Target Velocity", 0);
 
     elevatorFF = new TunableNumber("Elevator/Elevator FF");

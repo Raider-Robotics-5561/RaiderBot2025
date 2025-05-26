@@ -131,7 +131,7 @@ public class RobotContainer
 
 
     configureBindings();
-    DriverStation.silenceJoystickConnectionWarning(false);
+    DriverStation.silenceJoystickConnectionWarning(true);
     
 //========================Auton_Stuff===================================================
 //=======================Nammed_Commands================================================
