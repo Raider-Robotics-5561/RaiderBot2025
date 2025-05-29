@@ -53,7 +53,7 @@ public class Vision
    * April Tag Field Layout of the year.
    */
   public static final AprilTagFieldLayout fieldLayout                     = AprilTagFieldLayout.loadField(
-      AprilTagFields.k2025ReefscapeAndyMark);
+      AprilTagFields.k2025ReefscapeWelded);
   /**
    * Ambiguity defined as a value between (0,1). Used in {@link Vision#filterPose}.
    */
@@ -143,12 +143,17 @@ public class Vision
     for (Cameras camera : Cameras.values())
     {
       Optional<EstimatedRobotPose> poseEst = getEstimatedGlobalPose(camera);
+
       if (poseEst.isPresent())
       {
+        System.out.println("POSTEST FOUND");
         var pose = poseEst.get();
         swerveDrive.addVisionMeasurement(pose.estimatedPose.toPose2d(),
                                          pose.timestampSeconds,
                                          camera.curStdDevs);
+      } else {
+        System.out.print(camera.name());
+        System.out.println("PostEst is not present");
       }
     }
 
@@ -335,32 +340,19 @@ public class Vision
    */
   enum Cameras
   {
-    /**
-     * Left Camera
-     */
-    LEFT_CAM("left",
-             new Rotation3d(0, Math.toRadians(-24.094), Math.toRadians(30)),
-             new Translation3d(Units.inchesToMeters(12.056),
-                               Units.inchesToMeters(10.981),
-                               Units.inchesToMeters(8.44)),
-             VecBuilder.fill(4, 4, 8), VecBuilder.fill(0.5, 0.5, 1)),
-    /**
-     * Right Camera
-     */
-    RIGHT_CAM("right",
-              new Rotation3d(0, Math.toRadians(-24.094), Math.toRadians(-30)),
-              new Translation3d(Units.inchesToMeters(12.056),
-                                Units.inchesToMeters(-10.981),
-                                Units.inchesToMeters(8.44)),
-              VecBuilder.fill(4, 4, 8), VecBuilder.fill(0.5, 0.5, 1)),
-    /**
-     * Center Camera
-     */
-    CENTER_CAM("center",
-               new Rotation3d(0, Units.degreesToRadians(18), 0),
-               new Translation3d(Units.inchesToMeters(-4.628),
-                                 Units.inchesToMeters(-10.687),
-                                 Units.inchesToMeters(16.129)),
+    RoboCamRear("RoboCamRear",
+    //35, 30
+               new Rotation3d(0, Units.degreesToRadians(30), 35),
+               new Translation3d(Units.inchesToMeters(9.724),
+                                 Units.inchesToMeters(-11.74),
+                                 Units.inchesToMeters(7.839)),
+               VecBuilder.fill(4, 4, 8), VecBuilder.fill(0.5, 0.5, 1)),
+
+      RoboCamFront("RoboCamFront",
+               new Rotation3d(0, Units.degreesToRadians(-30), 35),
+               new Translation3d(Units.inchesToMeters( 9.724),
+                                 Units.inchesToMeters(11.742),
+                                 Units.inchesToMeters(7.339)),
                VecBuilder.fill(4, 4, 8), VecBuilder.fill(0.5, 0.5, 1));
 
     /**
