@@ -24,7 +24,7 @@ import frc.robot.Constants.SwerveConstants;
  */
 public class Robot extends TimedRobot
 {
-  AddressableLED led;
+  AddressableLED skibidiled;
   AddressableLEDBuffer ledBuffer;
 
   private static Robot   instance;
@@ -60,11 +60,11 @@ public class Robot extends TimedRobot
       SignalLogger.setPath("/media/sda1/ctre-logs/");
       SignalLogger.start();
 
-    led = new AddressableLED (0);
+    skibidiled = new AddressableLED (0);
     ledBuffer = new AddressableLEDBuffer(1500);
-    led.setLength(1500);
-    led.setLength(ledBuffer.getLength());
-    led.start();
+    skibidiled.setLength(1500);
+    skibidiled.setLength(ledBuffer.getLength());
+    skibidiled.start();
 
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
@@ -96,7 +96,7 @@ public class Robot extends TimedRobot
     for (var i = 0; i < ledBuffer.getLength(); i++) {
           // Sets the specified LED to the GRB values for red
           ledBuffer.setRGB(i, 255, 255 ,255);
-          led.setData(ledBuffer);
+          skibidiled.setData(ledBuffer);
     }
 // if (DriverStation.waitForDsConnection( 0.025) == false){
 // // GRB
