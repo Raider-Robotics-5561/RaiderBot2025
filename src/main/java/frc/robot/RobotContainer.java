@@ -293,9 +293,9 @@ NamedCommands.registerCommand("Climb_Up", Commands.run(() -> {
 
       //Go to pos ?
       //NOTE - DriveToPose is ready to be tested.
-      
-      DriveController.x().whileTrue(
-        drivebase.driveToPose(new Pose2d(new Translation2d(14.4, 4.0), Rotation2d.fromDegrees(180))));
+      //NOTE - Vision needs rewrite before ANY testing. Odom does not work and will throw the robot into a wall!!!!
+      // DriveController.x().whileTrue(
+      //   drivebase.driveToPose(new Pose2d(new Translation2d(14.4, 4.0), Rotation2d.fromDegrees(180))));
 
       //This is our boost control Right Trigger
       DriveController.axisGreaterThan(3, 0.01).onChange(Commands.runOnce(() -> {
