@@ -1,8 +1,22 @@
 To Do:
 
 -Add sim to everything
+    -Elevator -Started
+    -Drive base - DONE
+    -Claw / Wrist?
+
 -Make sure swerve lock is 'X' mode
--Rewrite Elevator - Yamgen.com
+    -Swervesubsystem.java - DONE
+
+-Rewrite Elevator
+    -add follower motor - DONE
+    -add to RoboContainer - Started, created it in robotcontainer but no controls yet
+
 -Rewrite Claw
+    -wrist and Claw
+    -wrist POS based
+    -Claw Velocity based
+    -add to RoboContainer.java
+
 -Look at vision / odom
--Drive to pose
+    -Drive to pose

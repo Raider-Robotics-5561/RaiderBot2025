@@ -2,6 +2,7 @@ package frc.robot.subsystems.Elevator;
 
 import edu.wpi.first.epilogue.Logged;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -25,7 +26,8 @@ import com.revrobotics.RelativeEncoder;
 @Logged(name = "ElevatorSubsystem")
 public class ElevatorSubsystem extends SubsystemBase {
   // Constants
-  private final int canID = 10;
+  private final int LeadID = 10;
+  private final int FollowerID = 11;
   private final double gearRatio = 12;
   private final double kP = 1;
   private final double kI = 0;
@@ -44,13 +46,14 @@ public class ElevatorSubsystem extends SubsystemBase {
   // Feedforward
   private final ElevatorFeedforward feedforward = new ElevatorFeedforward(
     0, // kS
-    0.34, // kG
+    0.69, // kG
     9.21, // kV
-    0.03  // kA
+    0.07  // kA
   );
   
   // Motor controller
-  private final SparkMax motor;
+  private final SparkMax m_Lead;
+  private final SparkMax m_Follower;
 private final RelativeEncoder encoder;
   
   // Control mode
@@ -74,13 +77,19 @@ private final RelativeEncoder encoder;
    * Creates a new Elevator Subsystem.
    */
   public ElevatorSubsystem() {
-    // Initialize motor controller
-    SparkMaxConfig motorConfig = new SparkMaxConfig();
-motor = new SparkMax(canID, MotorType.kBrushless);
+//Motor Controllers and Configs
+m_Follower = new SparkMax(FollowerID, MotorType.kBrushless);
+m_Lead = new SparkMax(LeadID, MotorType.kBrushless);
+
+SparkMaxConfig motorConfig = new SparkMaxConfig();
+SparkMaxConfig FollowerConfig = new SparkMaxConfig();
+
+FollowerConfig.follow(LeadID, true);
+
 motorConfig.idleMode(brakeMode ? IdleMode.kBrake : IdleMode.kCoast);
 
 // Configure encoder
-encoder = motor.getEncoder();
+encoder = m_Lead.getEncoder();
 encoder.setPosition(0);
 
 // Set ramp rates
@@ -92,11 +101,12 @@ encoder.setPosition(0);
 
 
 // Save configuration
-motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+m_Follower.configure(FollowerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+m_Lead.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     
     // Initialize simulation
     elevatorSim = new ElevatorSim(
-      DCMotor.getNEO(1), // Motor type
+      DCMotor.getNEO(2), // Motor type
       gearRatio,
       5, // Carriage mass (kg)
       drumRadius, // Drum radius (m)
@@ -138,7 +148,7 @@ motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersis
         
         // Apply the combined PID output and feedforward to the motor
         double velocityVoltage = velOutput + velFeedforwardOutput;
-        motor.setVoltage(velocityVoltage);
+        m_Lead.setVoltage(velocityVoltage);
         break;
         
       case OPEN_LOOP:
@@ -152,7 +162,7 @@ motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersis
    * Clean up resources when the subsystem is destroyed.
    */
   public void close() {
-     motor.close();
+    m_Lead.close();
    }
 
   
@@ -212,7 +222,7 @@ motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersis
    */
    @Logged(name = "Voltage")
   public double getVoltage() {
-    return motor.getAppliedOutput() * motor.getBusVoltage();
+    return m_Lead.getAppliedOutput() * m_Lead.getBusVoltage();
   }
   
   /**
@@ -221,7 +231,7 @@ motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersis
    */
    @Logged(name = "Current")
   public double getCurrent() {
-    return motor.getOutputCurrent();
+    return m_Lead.getOutputCurrent();
   }
   
   /**
@@ -230,7 +240,7 @@ motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersis
    */
    @Logged(name = "Temperature")
   public double getTemperature() {
-    return motor.getMotorTemperature();
+    return m_Lead.getMotorTemperature();
   }
   
   /**
@@ -297,7 +307,7 @@ motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersis
    */
   public void setVoltage(double voltage) {
     currentControlMode = ControlMode.OPEN_LOOP;
-    motor.setVoltage(voltage);
+    m_Lead.setVoltage(voltage);
   }
   
   /**

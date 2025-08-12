@@ -101,7 +101,7 @@ public class SwerveSubsystem extends SubsystemBase
     swerveDrive.setAngularVelocityCompensation(true,
                                                true,
                                                0.1); //Correct for skew that gets worse as angular velocity increases. Start with a coefficient of 0.1.
-    swerveDrive.setModuleEncoderAutoSynchronize(false,
+    swerveDrive.setModuleEncoderAutoSynchronize(true, //NOTE - Enabled for testing, may not work
                                                 1); // Enable if you want to resynchronize your absolute encoders and motor encoders periodically when they are not moving.
     // swerveDrive.pushOffsetsToEncoders(); // Set the absolute encoder to be used over the internal encoder and push the offsets onto it. Throws warning if not possible
     if (visionDriveTest)
@@ -137,6 +137,12 @@ public class SwerveSubsystem extends SubsystemBase
     vision = new Vision(swerveDrive::getPose, swerveDrive.field);
   }
 
+  public boolean isMoving(double tolerance) {
+    return
+            (getRobotVelocity().omegaRadiansPerSecond +
+                    getRobotVelocity().vyMetersPerSecond +
+                    getRobotVelocity().vxMetersPerSecond) / 3 > tolerance;
+}
   @Override
   public void periodic()
   {
@@ -146,6 +152,11 @@ public class SwerveSubsystem extends SubsystemBase
       swerveDrive.updateOdometry();
       vision.updatePoseEstimation(swerveDrive);
     }
+
+    if (!isMoving(0.01) && !DriverStation.isAutonomous()) {
+      lock();
+  }
+
   }
 
   @Override
