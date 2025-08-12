@@ -18,12 +18,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.commands.ClimberUpCommand;
 import frc.robot.Constants.ClawConstants;
-import frc.robot.Constants.ElevatorConstants;
+// import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.miscConstants;
 import frc.robot.commands.ClimberDownCommand;
 import frc.robot.subsystems.Claw.Claw;
 import frc.robot.subsystems.Climber.ClimbSubsystem;
-// import frc.robot.subsystems.Elevator.Elevator;
+import frc.robot.subsystems.Elevator.ElevatorSubsystem;
 import frc.robot.subsystems.Swerve.SwerveSubsystem;
 import frc.robot.subsystems.Swerve.Vision;
 
@@ -42,7 +42,6 @@ public class RobotContainer
                                                                                 "swerve"));
   public final ClimbSubsystem 
   m_climber = new ClimbSubsystem();
-  public boolean fieldRel;
 //======================Auton_Stuff=========================
 
   private final Command Leave;
@@ -58,7 +57,7 @@ public class RobotContainer
   //=======================================================
 
   private final Claw sub_claw;
-  // private final Elevator elevator;
+  private final ElevatorSubsystem elevator;
   // Dashboard inputs
   // private final LoggedDashboardChooser<Command> autoChooser;
 
@@ -126,7 +125,7 @@ public class RobotContainer
   public RobotContainer()
   {
     sub_claw = new Claw();
-    // elevator = new Elevator(sub_claw);
+    elevator = new ElevatorSubsystem();
 
 
 
@@ -147,7 +146,8 @@ public class RobotContainer
 // }));
 // NamedCommands.registerCommand("Algae_Level_2", Commands.run(() -> {
 //   elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.Algae_2.getPos());
-// }));  
+// }));
+
 NamedCommands.registerCommand("Algae_Intake", Commands.run(() -> {
   sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Algae_Drive.getPos());
 }));

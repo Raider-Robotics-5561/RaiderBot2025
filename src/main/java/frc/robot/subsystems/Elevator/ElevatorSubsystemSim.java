@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.math.util.Units;
 
+//NOTE - Sim is borked rn
+
 /**
 * Visualization for the elevator subsystem in simulation.
 */
