@@ -112,7 +112,7 @@ public class ClawConstants {
         return this.position;
       }
     };
-//TODO - NEED TO ADD SOFT LIMIT
+    
     static {
       kWristConfig
       .idleMode(kIdleMode)

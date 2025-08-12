@@ -143,17 +143,18 @@ public class Vision
     for (Cameras camera : Cameras.values())
     {
       Optional<EstimatedRobotPose> poseEst = getEstimatedGlobalPose(camera);
+// Note: Make sure to readd the system.out.println commands when testing on hardware again.
 
       if (poseEst.isPresent())
       {
-        System.out.println("POSTEST FOUND");
+        // System.out.println("POSTEST FOUND");
         var pose = poseEst.get();
         swerveDrive.addVisionMeasurement(pose.estimatedPose.toPose2d(),
                                          pose.timestampSeconds,
                                          camera.curStdDevs);
       } else {
-        System.out.print(camera.name());
-        System.out.println("PostEst is not present");
+        // System.out.print(camera.name());
+        // System.out.println("PostEst is not present");
       }
     }
 

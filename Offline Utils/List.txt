@@ -1,0 +1,8 @@
+To Do:
+
+-Add sim to everything
+-Make sure swerve lock is 'X' mode
+-Rewrite Elevator - Yamgen.com
+-Rewrite Claw
+-Look at vision / odom
+-Drive to pose

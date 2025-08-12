@@ -1,6 +1,6 @@
 package frc.robot.commands;
 
-import frc.robot.Constants.ElevatorConstants;
+// import frc.robot.Constants.ElevatorConstants;
 import frc.robot.subsystems.Elevator.ElevatorSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -10,7 +10,7 @@ public class ElevatorCommand extends Command{
     
     /** An example command that uses an example subsystem. */
 
-      private final ElevatorSubsystem m_Elevator;
+      // private final ElevatorSubsystem m_Elevator;
       /**
        * Runs the climber down, note that this can change 
        * based on how the winch is wound.
@@ -18,7 +18,7 @@ public class ElevatorCommand extends Command{
        * @param climber The subsystem used by this command.
        */
       public ElevatorCommand(ElevatorSubsystem Elevator) {
-        m_Elevator = Elevator;
+        // m_Elevator = Elevator;
         addRequirements(Elevator);
       }
     

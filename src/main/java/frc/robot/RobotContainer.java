@@ -23,7 +23,7 @@ import frc.robot.Constants.miscConstants;
 import frc.robot.commands.ClimberDownCommand;
 import frc.robot.subsystems.Claw.Claw;
 import frc.robot.subsystems.Climber.ClimbSubsystem;
-import frc.robot.subsystems.Elevator.Elevator;
+// import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Swerve.SwerveSubsystem;
 import frc.robot.subsystems.Swerve.Vision;
 
@@ -58,7 +58,7 @@ public class RobotContainer
   //=======================================================
 
   private final Claw sub_claw;
-  private final Elevator elevator;
+  // private final Elevator elevator;
   // Dashboard inputs
   // private final LoggedDashboardChooser<Command> autoChooser;
 
@@ -126,7 +126,7 @@ public class RobotContainer
   public RobotContainer()
   {
     sub_claw = new Claw();
-    elevator = new Elevator(sub_claw);
+    // elevator = new Elevator(sub_claw);
 
 
 
@@ -136,18 +136,18 @@ public class RobotContainer
 //========================Auton_Stuff===================================================
 //=======================Nammed_Commands================================================
 
-NamedCommands.registerCommand("Saftey", Commands.run(() -> {
-  sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Elevator_Threh.getPos()); 
-}));
-NamedCommands.registerCommand("Elevator_Return", Commands.run(() -> {
-  elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.BOTTOM.getPos());
-}));
-NamedCommands.registerCommand("Algae_Level_1", Commands.run(() -> {
-  elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.Algae_1.getPos());
-}));
-NamedCommands.registerCommand("Algae_Level_2", Commands.run(() -> {
-  elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.Algae_2.getPos());
-}));  
+// NamedCommands.registerCommand("Saftey", Commands.run(() -> {
+//   sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Elevator_Threh.getPos()); 
+// }));
+// NamedCommands.registerCommand("Elevator_Return", Commands.run(() -> {
+//   elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.BOTTOM.getPos());
+// }));
+// NamedCommands.registerCommand("Algae_Level_1", Commands.run(() -> {
+//   elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.Algae_1.getPos());
+// }));
+// NamedCommands.registerCommand("Algae_Level_2", Commands.run(() -> {
+//   elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.Algae_2.getPos());
+// }));  
 NamedCommands.registerCommand("Algae_Intake", Commands.run(() -> {
   sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Algae_Drive.getPos());
 }));
@@ -243,34 +243,38 @@ NamedCommands.registerCommand("Climb_Up", Commands.run(() -> {
       })).whileFalse(Commands.runOnce(() -> {
         sub_claw.goToSetpoint(sub_claw.getEncoderMeasurement());
       }));
-      OPController.povRight().whileTrue(Commands.run(() -> {
-        elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.Algae_1.getPos());
-      }));
-      OPController.povUp().whileTrue(Commands.run(() -> {
-        elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.Algae_2.getPos());
-      }));
-      OPController.povDown().whileTrue(Commands.run(() -> {
-        sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Intake2.getPos());
-      }));
 
-      OPController.povLeft().whileTrue(Commands.run(() -> {
-        elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.L4.getPos());
-      }));
+      // OPController.povRight().whileTrue(Commands.run(() -> {
+      //   elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.Algae_1.getPos());
+      // }));
+      // OPController.povUp().whileTrue(Commands.run(() -> {
+      //   elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.Algae_2.getPos());
+      // }));
+      // OPController.povDown().whileTrue(Commands.run(() -> {
+      //   sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Intake2.getPos());
+      // }));
+
+      // OPController.povLeft().whileTrue(Commands.run(() -> {
+      //   elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.L4.getPos());
+      // }));
 
       //Wrist Pos Control 
-      OPController.y().whileTrue(Commands.run(() -> {
-        sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Home.getPos());
-        elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.INTAKE.getPos());
-      }));
+      // OPController.y().whileTrue(Commands.run(() -> {
+      //   sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Home.getPos());
+      //   elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.INTAKE.getPos());
+      // }));
+
       OPController.x().whileTrue(Commands.run(() -> {
 
         sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.L1_L2_Coral.getPos());
         
       }));
-      OPController.b().whileTrue(Commands.run(() -> {
-        sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Floor.getPos());
-        elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.FloorIntake.getPos());
-      }));
+
+      // OPController.b().whileTrue(Commands.run(() -> {
+      //   sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Floor.getPos());
+      //   elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.FloorIntake.getPos());
+      // }));
+
       OPController.a().whileTrue(Commands.run(() -> {
         sub_claw.goToSetpoint(ClawConstants.Wrist.WristPositions.Elevator_Threh.getPos());
       }));
@@ -292,7 +296,6 @@ NamedCommands.registerCommand("Climb_Up", Commands.run(() -> {
       // DriveController.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
 
       //Go to pos ?
-      //NOTE - DriveToPose is ready to be tested.
        //NOTE - Vision needs rewrite before ANY testing. Odom does not work and will throw the robot into a wall!!!!
       // DriveController.x().whileTrue(
       //   drivebase.driveToPose(new Pose2d(new Translation2d(14.4, 4.0), Rotation2d.fromDegrees(180))));

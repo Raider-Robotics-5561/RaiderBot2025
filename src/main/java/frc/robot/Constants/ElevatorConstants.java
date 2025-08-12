@@ -43,17 +43,16 @@ public class ElevatorConstants {
 
     public static final SparkMaxConfig kElevatorConfig = new SparkMaxConfig();
     public static final SparkMaxConfig kElevatorFollowerConfig = new SparkMaxConfig();
-    //77
-    //WRIST - 2.73
+ //NOTE - These will be wrong with the new ElevatorSubsytem.java rewrite.
     public enum Positions {
       BOTTOM(1), 
-      INTAKE(3.65), // TODO: Configure me!
-      POSTINTAKE(6.7),  // TODO: Configure me!
-      L2(12.57),  // TODO: Configure me!
-      L3(44.59),  // TODO: Configure me!
-      L4(84),  // TODO: Configure me!
-      Algae_1(32), // TODO: Configure me!
-      Algae_2(69), // TODO: Configure me!
+      INTAKE(3.65),
+      POSTINTAKE(6.7),
+      L2(12.57),
+      L3(44.59),
+      L4(84),
+      Algae_1(32),
+      Algae_2(69),
       FloorIntake(1);
       public final double position;
 
