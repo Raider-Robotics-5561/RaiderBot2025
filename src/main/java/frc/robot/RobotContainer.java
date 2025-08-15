@@ -26,7 +26,7 @@ import frc.robot.subsystems.Climber.ClimbSubsystem;
 import frc.robot.subsystems.Elevator.ElevatorSubsystem;
 import frc.robot.subsystems.Swerve.SwerveSubsystem;
 import frc.robot.subsystems.Swerve.Vision;
-
+import frc.robot.subsystems.Elevator.ElevatorSubsystemSim;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
  * little robot logic should actually be handled in the {@link Robot} periodic methods (other than the scheduler calls).
@@ -58,6 +58,7 @@ public class RobotContainer
 
   private final Claw sub_claw;
   private final ElevatorSubsystem elevator;
+  private final ElevatorSubsystemSim elevatorsim;
   // Dashboard inputs
   // private final LoggedDashboardChooser<Command> autoChooser;
 
@@ -126,12 +127,15 @@ public class RobotContainer
   {
     sub_claw = new Claw();
     elevator = new ElevatorSubsystem();
+    elevatorsim = new ElevatorSubsystemSim(elevator);
+
 
 
 
     configureBindings();
     DriverStation.silenceJoystickConnectionWarning(false);
-    
+
+
 //========================Auton_Stuff===================================================
 //=======================Nammed_Commands================================================
 

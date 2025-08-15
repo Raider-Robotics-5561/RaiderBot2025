@@ -10,7 +10,10 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.math.util.Units;
 
-//NOTE - Sim is borked rn
+//NOTE - Add these to Robotcontainer.java
+// private final ElevatorSubsystemSim elevatorsim; - This should be where you define your other subsystems.
+// elevatorsim = new ElevatorSubsystemSim(elevator); - this goes in the actual RobotContainer function.
+
 
 /**
 * Visualization for the elevator subsystem in simulation.
@@ -73,7 +76,8 @@ public ElevatorSubsystemSim(ElevatorSubsystem elevatorSubsystem) {
 @Override
 public void periodic() {
   // Update elevator height
-  double currentHeight = elevator.getSimulation().getPositionMeters();
+  double currentHeight = SmartDashboard.getNumber("Elevator Height (m)", 0);
+  // elevator.getSimulation().getPositionMeters();
   double displayHeight = BASE_HEIGHT + (currentHeight - minHeight) * visualScaleFactor;
   elevatorMech.setLength(displayHeight);
   
