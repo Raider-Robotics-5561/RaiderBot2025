@@ -59,8 +59,6 @@ public class RobotContainer
   private final Claw sub_claw;
   private final ElevatorSubsystem elevator;
   private final ElevatorSubsystemSim elevatorsim;
-  // Dashboard inputs
-  // private final LoggedDashboardChooser<Command> autoChooser;
 
 
   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
@@ -194,8 +192,6 @@ NamedCommands.registerCommand("Climb_Up", Commands.run(() -> {
 
 //======================================================================================
 
-    // SmartDashboard.putData(autoChooser);
-
   }
   private void configureBindings()
   {
@@ -247,6 +243,9 @@ NamedCommands.registerCommand("Climb_Up", Commands.run(() -> {
       })).whileFalse(Commands.runOnce(() -> {
         sub_claw.goToSetpoint(sub_claw.getEncoderMeasurement());
       }));
+
+//      OPController.povRight().onTrue(Commands.runOnce(() -> {elevator.setHeightCommand(0.5);}));
+      OPController.povUp().onTrue(Commands.run(() -> {elevator.setPosition(0.5);}));
 
       // OPController.povRight().whileTrue(Commands.run(() -> {
       //   elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.Algae_1.getPos());
