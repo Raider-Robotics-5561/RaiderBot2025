@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import java.io.File;
+
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import swervelib.SwerveInputStream;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -239,13 +241,13 @@ NamedCommands.registerCommand("Climb_Up", Commands.run(() -> {
 
       OPController.axisMagnitudeGreaterThan(1, 0.25).whileTrue(Commands.run(() -> {
         sub_claw.setWrist((OPController.getRawAxis(1) * (12 * 0.25)) * -1);
-        System.out.println("Wrist Bump");
+//        System.out.println("Wrist Bump");
       })).whileFalse(Commands.runOnce(() -> {
         sub_claw.goToSetpoint(sub_claw.getEncoderMeasurement());
       }));
 
-//      OPController.povRight().onTrue(Commands.runOnce(() -> {elevator.setHeightCommand(0.5);}));
-      OPController.povUp().onTrue(Commands.run(() -> {elevator.setPosition(0.5);}));
+
+      OPController.povUp().onTrue(elevator.setHeightCommand(0.5));
 
       // OPController.povRight().whileTrue(Commands.run(() -> {
       //   elevator.goToSetpoint(ElevatorConstants.ElevatorConfigs.Positions.Algae_1.getPos());

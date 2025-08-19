@@ -1,7 +1,7 @@
 To Do:
 
 -Add sim to everything
-    -Elevator -Started
+    -Elevator -Started - no inputs / outputs
     -Drive base - DONE
     -Claw / Wrist?
 
