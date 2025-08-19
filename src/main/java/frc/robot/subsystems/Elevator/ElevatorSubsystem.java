@@ -31,7 +31,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private final double gearRatio = 12;
   private final double kP = 1;
   private final double kI = 0;
-  private final double kD = 0;
+  private final double kD = 0.09;
   private final double maxVelocity = 1; // meters per second
   private final double maxAcceleration = 1; // meters per second squared
   private final boolean brakeMode = true;
@@ -39,16 +39,16 @@ public class ElevatorSubsystem extends SubsystemBase {
   private final int statorCurrentLimit = 40;
   private final boolean enableSupplyLimit = false;
   private final double supplyCurrentLimit = 40;
-  private final double drumRadius = 0.0254; // meters
+  private final double drumRadius = 0.0381; // meters
   private final double minheight = 0;
-  private final double maxheight = 1; 
+  private final double maxheight = 1.1684;
   
   // Feedforward
-  private final ElevatorFeedforward feedforward = new ElevatorFeedforward(
-    0, // kS
-    0.69, // kG
-    9.21, // kV
-    0.07  // kA
+  private final ElevatorFeedforward feedforward = new ElevatorFeedforward(      //NOTE: - FF IS BROKEN!!!!!!! DO NOT CHANGE.
+    0,                  // kS
+    0,              //0.69, // kG
+    0,              //9.21, // kV
+    0               //0.07  // kA
   );
   
   // Motor controller

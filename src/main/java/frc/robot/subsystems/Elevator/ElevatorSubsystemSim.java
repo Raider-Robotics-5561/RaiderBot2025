@@ -76,8 +76,8 @@ public ElevatorSubsystemSim(ElevatorSubsystem elevatorSubsystem) {
 @Override
 public void periodic() {
   // Update elevator height
-  double currentHeight = SmartDashboard.getNumber("Elevator Height (m)", 0);
-  // elevator.getSimulation().getPositionMeters();
+  double currentHeight = elevator.getSimulation().getPositionMeters();
+  //SmartDashboard.getNumber("Elevator Height (m)", 0);
   double displayHeight = BASE_HEIGHT + (currentHeight - minHeight) * visualScaleFactor;
   elevatorMech.setLength(displayHeight);
   
