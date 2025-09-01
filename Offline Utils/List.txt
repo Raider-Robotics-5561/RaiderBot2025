@@ -19,4 +19,5 @@ To Do:
     -add to RoboContainer.java
 
 -Look at vision / odom
+    -add accurate but basic odom
     -Drive to pose
